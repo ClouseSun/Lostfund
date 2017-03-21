@@ -4,10 +4,8 @@ import cn.bit.ui.component.MenuBar;
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 /**
  * Created by KlousesSun on 2017/3/19.
