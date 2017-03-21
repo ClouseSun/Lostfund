@@ -10,17 +10,19 @@ import javax.swing.*;
  * Created by zhehua on 19/03/2017.
  */
 public class Main {
-    private JPanel panel1;
+    private JPanel mainPanel;
+
 
     public static void main(String[] args) {
-            MenuBarGson menuBarGson = new MenuBarGson("/json/menubar_hierachy");
-            MenuBar menuBar = menuBarGson.parse();
-            MenuBarBuilder menuBarBuilder = new MenuBarBuilder(menuBar);
+        MenuBarGson menuBarGson = new MenuBarGson("/json/menubar_hierachy");
+        MenuBar menuBar = menuBarGson.parse();
+        MenuBarBuilder menuBarBuilder = new MenuBarBuilder(menuBar);
 
-            JFrame f = new JFrame();
-            f.setBounds(300, 100, 400, 300);
-            f.setSize(800,600);
-            menuBarBuilder.build(f);
-            f.setVisible(true);
-        }
+        JFrame frame = new JFrame("Main");
+        frame.setContentPane(new Main().mainPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        menuBarBuilder.build(frame);
+        frame.setVisible(true);
+    }
 }
