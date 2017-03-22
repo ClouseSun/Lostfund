@@ -1,10 +1,10 @@
 package cn.bit.ui;
 
-import cn.bit.parser.MenuBarGson;
-import cn.bit.ui.builder.MenuBarBuilder;
-import cn.bit.ui.component.MenuBar;
+import cn.bit.ui.component.JsonMenuBar;
+import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
+import java.io.IOException;
 
 /**
  * Created by zhehua on 19/03/2017.
@@ -14,15 +14,23 @@ public class Main {
 
 
     public static void main(String[] args) {
-        MenuBarGson menuBarGson = new MenuBarGson("/json/menubar_hierachy");
-        MenuBar menuBar = menuBarGson.parse();
-        MenuBarBuilder menuBarBuilder = new MenuBarBuilder(menuBar);
+        Main mainObj = new Main();
+        JMenuBar menuBar = null;
 
         JFrame frame = new JFrame("Main");
-        frame.setContentPane(new Main().mainPanel);
+        frame.setContentPane(mainObj.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        menuBarBuilder.build(frame);
+
+        // build menubar from resource
+        try {
+            String jsonString = IOUtils.toString(mainObj.getClass().getResourceAsStream("/json/menubar_hierachy"), "UTF8");
+            menuBar = new JsonMenuBar(jsonString);
+            frame.setJMenuBar(menuBar);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
         frame.setVisible(true);
     }
 }

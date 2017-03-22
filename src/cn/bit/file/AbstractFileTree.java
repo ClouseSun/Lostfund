@@ -6,9 +6,11 @@ import javax.swing.tree.TreeNode;
 /**
  * Created by zhehua on 21/03/2017.
  */
-public class AbstractFileTree extends DefaultTreeModel {
+public class AbstractFileTree {
 
-    public AbstractFileTree(TreeNode root) {
-        super(root);
+    DefaultTreeModel fileTreeModel;
+
+    public AbstractFileTree(DefaultTreeModel fileTreeModel) {
+        this.fileTreeModel = fileTreeModel;
     }
 }
