@@ -11,6 +11,9 @@ import java.io.IOException;
  */
 public class Main {
     private JPanel mainPanel;
+    private JTree tree1;
+    private JTree tree2;
+    private JTree tree3;
 
 
     public static void main(String[] args) {
