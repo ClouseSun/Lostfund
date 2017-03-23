@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectModel>
+    <userMapping>
+        <mappingEntry abstractPath="a/a1" absolutePath="A/B"/>
+        <mappingEntry abstractPath="a/a2/a21" absolutePath="A/B/C"/>
+        <mappingEntry abstractPath="a/a2/a22" absolutePath="A/B/D"/>
+        <mappingEntry abstractPath="a/a3/a31" absolutePath="A/B/E"/>
+        <mappingEntry abstractPath="b/b1" absolutePath="A/B/F"/>
+        <mappingEntry abstractPath="b/b2" absolutePath="A/B/C/F"/>
+        <mappingEntry abstractPath="b/b3/b31" absolutePath="A/B/D/E"/>
+        <mappingEntry abstractPath="b/b3/b32/b321" absolutePath="A/B/D/F"/>
+        <mappingEntry abstractPath="c/c1/c11" absolutePath="B/C"/>
+        <mappingEntry abstractPath="c/c2" absolutePath="B/E"/>
+        <mappingEntry abstractPath="c/c3/c31" absolutePath="B/A/C"/>
+        <mappingEntry abstractPath="c/c3/c32" absolutePath="B/D/E/F"/>
+        <mappingEntry abstractPath="c/c4/c41" absolutePath="B/E/C"/>
+        <mappingEntry abstractPath="c/c4/c42/c421" absolutePath="B/E/F"/>
+        <mappingEntry abstractPath="c/c4/c43" absolutePath="B/E/D/D"/>
+        <mappingEntry abstractPath="c/c4/c44/c441" absolutePath="C/B"/>
+        <mappingEntry abstractPath="d/d1/d11" absolutePath="C/B/A"/>
+        <mappingEntry abstractPath="d/d2/d21/d211" absolutePath="D/B"/>
+        <mappingEntry abstractPath="123" absolutePath="456"/>
+    </userMapping>
+</projectModel>
