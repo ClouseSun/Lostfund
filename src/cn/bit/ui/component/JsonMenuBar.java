@@ -1,10 +1,8 @@
 package cn.bit.ui.component;
 
 import com.google.gson.Gson;
-import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
-import java.io.IOException;
 
 /**
  * Created by KlousesSun on 2017/3/19.
