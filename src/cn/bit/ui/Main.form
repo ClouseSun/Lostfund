@@ -34,7 +34,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="cf130" class="javax.swing.JTree" binding="tree1" default-binding="true">
+                  <component id="72f58" class="javax.swing.JTree" binding="tree1" default-binding="true">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="50"/>
@@ -42,22 +42,16 @@
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="6034e" class="javax.swing.JTree" binding="tree2" default-binding="true">
+                  <hspacer id="956cc">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="50"/>
-                      </grid>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
-                  </component>
-                  <component id="acbf2" class="javax.swing.JTree" binding="tree3" default-binding="true">
+                  </hspacer>
+                  <vspacer id="b86ff">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="50"/>
-                      </grid>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
-                  </component>
+                  </vspacer>
                 </children>
               </grid>
             </children>
