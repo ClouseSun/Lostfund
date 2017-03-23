@@ -57,4 +57,9 @@ public class FileNodeEntity {
             return abstractFileName.equals(obj);
         return false;
     }
+
+    @Override
+    public String toString() {
+        return abstractFileName;
+    }
 }
