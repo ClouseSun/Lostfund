@@ -38,7 +38,7 @@ public class AbstractFileTreeTest {
         fileMap.put("b/d", "pathc");
         fileMap.put("e/a", "pathd");
 
-        fileTree.build(fileMap);
+        fileTree.addAll(fileMap);
 
         FileTreeModel model = fileTree.model();
         DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) model.getRoot();
@@ -60,7 +60,7 @@ public class AbstractFileTreeTest {
         fileMap.put("c/e", "pathb");
         fileMap.put("d/f", "pathc");
 
-        fileTree.build(fileMap);
+        fileTree.addAll(fileMap);
 
         FileTreeModel model = fileTree.model();
         DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) model.getRoot();

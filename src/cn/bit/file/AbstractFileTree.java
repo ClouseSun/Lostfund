@@ -26,9 +26,8 @@ public class AbstractFileTree {
                 new DefaultMutableTreeNode(new FileNodeEntity(FileNodeEntity.NODE_TYPE_ROOT)));
     }
 
-    public void build(Map<String, String> fileMap) {
-        for (Map.Entry<String, String> entry : fileMap.entrySet()) {
-            String abstractPath = entry.getKey() + '#';
+    public void addChild(String abstractPath, String realPath, int nodeType) {
+            abstractPath += '#';
 
             List<String> pathList = new LinkedList<>();
             StringBuilder dirName = new StringBuilder();
@@ -46,9 +45,22 @@ public class AbstractFileTree {
             }
             TreePath treePath = new TreePath(pathList.toArray());
 
-            FileNodeEntity entity = new FileNodeEntity(pathList.get(pathList.size() - 1), entry.getValue());
-            entity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
+            FileNodeEntity entity = new FileNodeEntity(pathList.get(pathList.size() - 1), realPath);
+            entity.setNodeType(nodeType);
             fileTreeModel.valueForPathChanged(treePath, entity);
+    }
+
+    public void addChild(String abstractPath, String realPath) {
+        addChild(abstractPath, realPath, FileNodeEntity.NODE_TYPE_FILE);
+    }
+
+    public void addAll(Map<String, String> fileMap) {
+       addAll(fileMap, FileNodeEntity.NODE_TYPE_FILE);
+    }
+
+    public void addAll(Map<String, String> fileMap, int nodeType) {
+        for (Map.Entry<String, String> entry : fileMap.entrySet()) {
+            addChild(entry.getKey(), entry.getValue(), nodeType);
         }
     }
 

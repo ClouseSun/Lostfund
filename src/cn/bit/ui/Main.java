@@ -15,17 +15,16 @@ public class Main {
     private JPanel mainPanel;
     private JTree tree1;
 
-
     public static void main(String[] args) {
         Main mainObj = new Main();
         JMenuBar menuBar = null;
 
         JFrame frame = new JFrame("Main");
-       // frame.setContentPane(mainObj.mainPanel);
+        frame.setContentPane(mainObj.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
 
-        // build menubar from resource
+        // addAll menubar from resource
         try {
             String jsonString = IOUtils.toString(mainObj.getClass().getResourceAsStream("/json/menubar_hierachy"), "UTF8");
             menuBar = new JsonMenuBar(jsonString);
@@ -37,10 +36,9 @@ public class Main {
         UserMapping userMapping = new UserMapping();
         userMapping.build("/Users/KlousesSun/Desktop/XMLtest1");
         AbstractFileTree abstractFileTree = new AbstractFileTree();
-        abstractFileTree.build(userMapping);
+        abstractFileTree.addAll(userMapping);
 
-        JTree jTree = new JTree(abstractFileTree.model());
-        frame.add(jTree);
+        mainObj.tree1.setModel(abstractFileTree.model());
 
         frame.setVisible(true);
     }
