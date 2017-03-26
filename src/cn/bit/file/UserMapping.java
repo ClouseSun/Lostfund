@@ -37,6 +37,10 @@ public class UserMapping extends HashMap<String, String>{
             for (Element element:elementList) {
                 this.put(element.attributeValue("abstractPath"), element.attributeValue("absolutePath"));
             }
+            elementList = document.getRootElement().element("defaultMapping").elements("mappingEntry");
+            for (Element element:elementList) {
+                this.put(element.attributeValue("abstractPath"), element.attributeValue("absolutePath"));
+            }
         } catch (DocumentException e) {
             e.printStackTrace();
         }

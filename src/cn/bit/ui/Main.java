@@ -13,6 +13,9 @@ import java.io.IOException;
  */
 public class Main {
     private JPanel mainPanel;
+    private JScrollPane PrjPane;
+    private JPanel panel1;
+
     private JTree tree1;
 
 
@@ -21,7 +24,7 @@ public class Main {
         JMenuBar menuBar = null;
 
         JFrame frame = new JFrame("Main");
-       // frame.setContentPane(mainObj.mainPanel);
+        frame.setContentPane(mainObj.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
 
@@ -35,15 +38,23 @@ public class Main {
         }
 
         UserMapping userMapping = new UserMapping();
-        userMapping.build("/Users/KlousesSun/Desktop/XMLtest1");
+        userMapping.build("/Users/KlousesSun/IdeaProjects/ITE315/res/raw/test_project");
         AbstractFileTree abstractFileTree = new AbstractFileTree();
         abstractFileTree.build(userMapping);
 
         JTree jTree = new JTree(abstractFileTree.model());
-        frame.add(jTree);
 
         frame.setVisible(true);
     }
 
 
+    private void createUIComponents() {
+        UserMapping userMapping = new UserMapping();
+        userMapping.build("/Users/KlousesSun/IdeaProjects/ITE315/res/raw/test_project");
+        AbstractFileTree abstractFileTree = new AbstractFileTree();
+        abstractFileTree.build(userMapping);
+
+        tree1 = new JTree(abstractFileTree.model());
+
+    }
 }

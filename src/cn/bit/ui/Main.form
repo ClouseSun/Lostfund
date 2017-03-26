@@ -23,10 +23,12 @@
             <constraints>
               <splitpane position="left"/>
             </constraints>
-            <properties/>
+            <properties>
+              <dividerLocation value="243"/>
+            </properties>
             <border type="none"/>
             <children>
-              <grid id="13b1c" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="e189b" binding="panel1" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <splitpane position="left"/>
@@ -34,24 +36,49 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="72f58" class="javax.swing.JTree" binding="tree1" default-binding="true">
+                  <scrollpane id="2cb47" binding="PrjPane">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="50"/>
-                      </grid>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
-                  </component>
-                  <hspacer id="956cc">
+                    <border type="none"/>
+                    <children>
+                      <component id="5c999" class="javax.swing.JTree" binding="tree1" custom-create="true" default-binding="true">
+                        <constraints/>
+                        <properties>
+                          <rootVisible value="false"/>
+                          <showsRootHandles value="true"/>
+                        </properties>
+                        <clientProperties>
+                          <JTree.lineStyle class="java.lang.String" value=""/>
+                        </clientProperties>
+                      </component>
+                    </children>
+                  </scrollpane>
+                  <scrollpane id="98bfb">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                  </hspacer>
-                  <vspacer id="b86ff">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </scrollpane>
+                  <scrollpane id="a4d8f">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                  </vspacer>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </scrollpane>
+                  <scrollpane id="4ddc1">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </scrollpane>
                 </children>
               </grid>
             </children>
