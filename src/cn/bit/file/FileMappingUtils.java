@@ -1,54 +1,50 @@
 package cn.bit.file;
 
+import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by KlousesSun on 2017/3/23.
  */
-public class UserMapping extends HashMap<String, String>{
+public class FileMappingUtils {
 
-    String XMLPath;
+    public static  Map<String, String> build(InputStream xmlStream) {
+        Map<String, String> fileMap = new HashMap<>();
 
-    public UserMapping() {
-        super();
-    }
-
-    public void build(String XMLPath) {
-        this.XMLPath = XMLPath;
         try {
-            Document document = null;
-            try {
-                document = new SAXReader().read(new FileInputStream(XMLPath), "UTF8");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            Document document = new SAXReader().read(xmlStream);
             List<Element> elementList = document.getRootElement().element("userMapping").elements("mappingEntry");
             for (Element element:elementList) {
-                this.put(element.attributeValue("abstractPath"), element.attributeValue("absolutePath"));
-            }
-            elementList = document.getRootElement().element("defaultMapping").elements("mappingEntry");
-            for (Element element:elementList) {
-                this.put(element.attributeValue("abstractPath"), element.attributeValue("absolutePath"));
+                fileMap.put(element.attributeValue("abstractPath"), element.attributeValue("absolutePath"));
             }
         } catch (DocumentException e) {
             e.printStackTrace();
         }
+        return fileMap;
     }
 
-    public void insertNewMapping(String abstractFilePath, String realFilePath) {
-        this.put(abstractFilePath, realFilePath);
+    public static Map<String, String> build(String xmlFilePath) {
+        try {
+            return build(new FileInputStream(xmlFilePath));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return new HashMap<>();
+    }
 
+    public static void insertNewMapping(Map<String, String> fileMap,
+                                 String XMLPath,
+                                 String abstractFilePath,
+                                 String realFilePath) {
         try {
             Document document = null;
             try {
@@ -70,5 +66,7 @@ public class UserMapping extends HashMap<String, String>{
         } catch (DocumentException e) {
             e.printStackTrace();
         }
+
+        fileMap.put(abstractFilePath, realFilePath);
     }
 }

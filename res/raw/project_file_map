@@ -1,5 +1,0 @@
-file/network Network
-file/network/im IM
-file/network/slack IM/Slack
-bin Executable
-bin/platform Platform/OS

@@ -18,11 +18,9 @@ import static org.junit.Assert.assertTrue;
 public class XML2AbsFileTreeTest {
     String XMLPath1 = "/Users/KlousesSun/Desktop/XMLtest1";
     String XMLPath2 = "/Users/KlousesSun/Desktop/XMLtest2";
-    UserMapping userMapping;
     AbstractFileTree fileTree;
     @Before
     public void setUp() throws Exception {
-        userMapping = new UserMapping();
         fileTree = new AbstractFileTree();
     }
 
@@ -35,8 +33,7 @@ public class XML2AbsFileTreeTest {
     @Test
     public void buildTest1() throws Exception {
 
-        userMapping.build(XMLPath1);
-        fileTree.addAll(userMapping);
+        fileTree.addAll(FileMappingUtils.build(XMLPath1));
 
         FileTreeModel model = fileTree.model();
         DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) model.getRoot();
@@ -54,8 +51,7 @@ public class XML2AbsFileTreeTest {
 
     @Test
     public void buildTest2() throws Exception {
-        userMapping.build(XMLPath2);
-        fileTree.addAll(userMapping);
+        fileTree.addAll(FileMappingUtils.build(XMLPath2));
 
         FileTreeModel model = fileTree.model();
         DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) model.getRoot();

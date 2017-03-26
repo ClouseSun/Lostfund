@@ -1,7 +1,7 @@
 package cn.bit.ui;
 
 import cn.bit.file.AbstractFileTree;
-import cn.bit.file.UserMapping;
+import cn.bit.file.FileMappingUtils;
 import cn.bit.ui.component.JsonMenuBar;
 import org.apache.commons.io.IOUtils;
 
@@ -36,25 +36,13 @@ public class Main {
         } catch(IOException e) {
             e.printStackTrace();
         }
-
-        UserMapping userMapping = new UserMapping();
-        userMapping.build("res/raw/test_project");
         AbstractFileTree abstractFileTree = new AbstractFileTree();
-        abstractFileTree.addAll(userMapping);
+        abstractFileTree.addAll(FileMappingUtils.build("res/raw/test_project"));
 
-        JTree jTree = new JTree(abstractFileTree.model());
+        mainObj.tree1.setModel(abstractFileTree.model());
 
         frame.setVisible(true);
     }
 
 
-    private void createUIComponents() {
-        UserMapping userMapping = new UserMapping();
-        userMapping.build("/Users/KlousesSun/IdeaProjects/ITE315/res/raw/test_project");
-        AbstractFileTree abstractFileTree = new AbstractFileTree();
-        abstractFileTree.addAll(userMapping);
-
-        tree1 = new JTree(abstractFileTree.model());
-
-    }
 }
