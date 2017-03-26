@@ -15,6 +15,7 @@
           </grid>
         </constraints>
         <properties>
+          <continuousLayout value="true"/>
           <orientation value="0"/>
         </properties>
         <border type="none"/>
@@ -24,7 +25,8 @@
               <splitpane position="left"/>
             </constraints>
             <properties>
-              <dividerLocation value="243"/>
+              <continuousLayout value="true"/>
+              <dividerLocation value="367"/>
             </properties>
             <border type="none"/>
             <children>

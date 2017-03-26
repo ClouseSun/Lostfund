@@ -38,9 +38,9 @@ public class Main {
         }
 
         UserMapping userMapping = new UserMapping();
-        userMapping.build("/Users/KlousesSun/IdeaProjects/ITE315/res/raw/test_project");
+        userMapping.build("res/raw/test_project");
         AbstractFileTree abstractFileTree = new AbstractFileTree();
-        abstractFileTree.build(userMapping);
+        abstractFileTree.addAll(userMapping);
 
         JTree jTree = new JTree(abstractFileTree.model());
 
@@ -52,7 +52,7 @@ public class Main {
         UserMapping userMapping = new UserMapping();
         userMapping.build("/Users/KlousesSun/IdeaProjects/ITE315/res/raw/test_project");
         AbstractFileTree abstractFileTree = new AbstractFileTree();
-        abstractFileTree.build(userMapping);
+        abstractFileTree.addAll(userMapping);
 
         tree1 = new JTree(abstractFileTree.model());
 
