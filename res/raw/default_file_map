@@ -1,0 +1,7 @@
+<defaultMap>
+    <mappingEntry abstractPath="Network/" absolutePath="file/network/" default="true" type="dir"/>
+    <mappingEntry abstractPath="IM/" absolutePath="file/network/im/" default="true" type="dir"/>
+    <mappingEntry abstractPath="IM/Slack/" absolutePath="file/network/slack/" default="true" type="dir"/>
+    <mappingEntry abstractPath="Executable/" absolutePath="bin/" default="true" type="dir"/>
+    <mappingEntry abstractPath="Platform/OS/" absolutePath="bin/platform/" default="true" type="dir"/>
+</defaultMap>

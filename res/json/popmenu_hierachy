@@ -1,0 +1,29 @@
+{
+    "menuList": [
+        {
+            "title": "添加",
+            "menuList": [
+                {
+                    "title": "文件"
+                },
+                {
+                    "title": "文件夹"
+                }
+            ]
+        },
+        {
+            "title": "添加并复制",
+            "menuList": [
+                {
+                    "title": "文件"
+                },
+                {
+                    "title": "文件夹"
+                }
+            ]
+        },
+        {
+            "title": "删除"
+        }
+    ]
+}

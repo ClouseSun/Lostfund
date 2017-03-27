@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <projectModel>
-    <userMapping>
+    <userMapping abstractPath="Platform/OS/" absolutePath="bin/platform/" default="true" type="dir">
         <mappingEntry abstractPath="Network/a1" absolutePath="A/B"/>
         <mappingEntry abstractPath="Network/a2/a21" absolutePath="A/B/C"/>
         <mappingEntry abstractPath="Network/a2/a22" absolutePath="A/B/D"/>
@@ -20,10 +21,10 @@
         <mappingEntry abstractPath="Executable/d2/d21/d211" absolutePath="D/B"/>
         <mappingEntry abstractPath="Platform/OS/e1/e11" absolutePath="C/B"/>
         <mappingEntry abstractPath="Platform/OS/e2" absolutePath="C/E"/>
-        <mappingEntry abstractPath="Network" absolutePath="file/network" default="true"/>
-        <mappingEntry abstractPath="IM" absolutePath="file/network/im" default="true"/>
-        <mappingEntry abstractPath="IM/Slack" absolutePath="file/network/slack" default="true"/>
-        <mappingEntry abstractPath="Executable" absolutePath="bin" default="true"/>
-        <mappingEntry abstractPath="Platform/OS" absolutePath="bin/platform" default="true"/>
+        <mappingEntry abstractPath="Network/" absolutePath="file/network/"/>
+        <mappingEntry abstractPath="IM/" absolutePath="file/network/im/"/>
+        <mappingEntry abstractPath="IM/Slack/" absolutePath="file/network/slack/"/>
+        <mappingEntry abstractPath="Executable/" absolutePath="bin/"/>
+        <mappingEntry abstractPath="Platform/OS/" absolutePath="bin/platform/"/>
     </userMapping>
 </projectModel>
