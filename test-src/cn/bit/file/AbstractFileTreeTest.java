@@ -37,6 +37,8 @@ public class AbstractFileTreeTest {
         fileMap.put("b/c", "pathb");
         fileMap.put("b/d", "pathc");
         fileMap.put("e/a", "pathd");
+        fileMap.put("e/k/", "dir");
+        fileMap.put("e/k//m", "pathm");
 
         fileTree.addAll(fileMap);
 

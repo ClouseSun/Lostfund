@@ -26,18 +26,26 @@ public class AbstractFileTree {
                 new DefaultMutableTreeNode(new FileNodeEntity(FileNodeEntity.NODE_TYPE_ROOT)));
     }
 
-    public void addChild(String abstractPath, String realPath, int nodeType) {
+    public void addChild(String abstractPath, String realPath) {
             abstractPath += '#';
+            int nodeType = FileNodeEntity.NODE_TYPE_FILE;
 
             List<String> pathList = new LinkedList<>();
             StringBuilder dirName = new StringBuilder();
             for (int i = 0;i < abstractPath.length(); i ++) {
                 switch(abstractPath.charAt(i)) {
-                    case '/':
                     case '#':
-                        pathList.add(dirName.toString());
-                        dirName.setLength(0);
-                        break;
+                        if (dirName.length() == 0) {
+                            nodeType = FileNodeEntity.NODE_TYPE_DIR;
+                        }
+                    case '/':
+                        if (dirName.length() > 0) {
+                            pathList.add(dirName.toString());
+                            dirName.setLength(0);
+                            break;
+                        } else {
+                            continue;
+                        }
                     default:
                         dirName.append(abstractPath.charAt(i));
                         break;
@@ -50,17 +58,9 @@ public class AbstractFileTree {
             fileTreeModel.valueForPathChanged(treePath, entity);
     }
 
-    public void addChild(String abstractPath, String realPath) {
-        addChild(abstractPath, realPath, FileNodeEntity.NODE_TYPE_FILE);
-    }
-
     public void addAll(Map<String, String> fileMap) {
-       addAll(fileMap, FileNodeEntity.NODE_TYPE_FILE);
-    }
-
-    public void addAll(Map<String, String> fileMap, int nodeType) {
         for (Map.Entry<String, String> entry : fileMap.entrySet()) {
-            addChild(entry.getKey(), entry.getValue(), nodeType);
+            addChild(entry.getKey(), entry.getValue());
         }
     }
 
