@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by zhehua on 21/03/2017.
+ * This "tree" is a holder of {@link FileTreeModel} to conveniently build it by abstract/real path mappings.
  */
 public class AbstractFileTree {
 
@@ -26,7 +26,9 @@ public class AbstractFileTree {
                 new DefaultMutableTreeNode(new FileNodeEntity(FileNodeEntity.NODE_TYPE_ROOT)));
     }
 
-
+    /**
+     * Add child given abstract/real path as Strings.
+     */
     public void addChild(String abstractPath, String realPath) {
             abstractPath += '#';
             int nodeType = FileNodeEntity.NODE_TYPE_FILE;
@@ -59,12 +61,20 @@ public class AbstractFileTree {
             fileTreeModel.valueForPathChanged(treePath, entity);
     }
 
+    /**
+     * Add all abstract/real path to tree model.
+     * @param fileMap Key-value pair representing abstract/real.
+     */
     public void addAll(Map<String, String> fileMap) {
         for (Map.Entry<String, String> entry : fileMap.entrySet()) {
             addChild(entry.getKey(), entry.getValue());
         }
     }
 
+    /**
+     * Get tree model.
+     * @return tree model
+     */
     public FileTreeModel model() {
         return fileTreeModel;
     }

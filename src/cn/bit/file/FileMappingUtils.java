@@ -104,7 +104,7 @@ public class FileMappingUtils {
     public static String path2String(TreeNode[] pathNodes) {
         StringBuilder path = new StringBuilder();
         for(int i = 0; i < pathNodes.length; i++) {
-            String dir = ((FileNodeEntity) ((DefaultMutableTreeNode) pathNodes[i]).getUserObject()).getAbstractFileName();
+            String dir = ((FileNodeEntity) ((DefaultMutableTreeNode) pathNodes[i]).getUserObject()).getAbstractName();
             if(dir != null) {
                 path.append(dir + "/");
             }

@@ -1,41 +1,73 @@
 package cn.bit.model;
 
 /**
- * Created by zhehua on 22/03/2017.
+ * Entity class defining a tree node model in project tree.
+ * Each contains abstract file/folder name and corresponding real name.
+ * Besides, {@link #nodeType} defines its type as directory/file/root(project name).
+ *
+ * The {@link #abstractName} doesn't contain the full path in the project tree but the name of the node.
+ * But the {@link #realName} is full path on machine.
+ * For example, if a node's abstract path in project is "a/b/c", and the corresponding real path is "/home/user/hello",
+ * The {@link #abstractName} is "c", and {@link #realName} is "/home/user/hello", as shown below:
+ *
+ *      a
+ *      |_b
+ *      | |_c {abstractName = c, realName = /home/user/hello}
+ *      | |_...
+ *      |_...
+ *
+ * If the middle nodes on the path(node "a" and "b") have no corresponding real path, the variable {@link #realName}
+ * would be null.
  */
 public class FileNodeEntity {
     public static final int NODE_TYPE_DIR = 0;
     public static final int NODE_TYPE_FILE = 1;
     public static final int NODE_TYPE_ROOT = 2;
 
-    private String abstractFileName;
-    private String realFileName;
+    private String abstractName;
+    private String realName;
     private int nodeType = NODE_TYPE_DIR;
 
-
-    public FileNodeEntity(String abstractFileName, String realFileName) {
-        this.abstractFileName = abstractFileName;
-        this.realFileName = realFileName;
+    /**
+     * Construct entity object with abstract file/folder name and its real name.
+     * Take attention that the node type is not specified.
+     */
+    public FileNodeEntity(String abstractName, String realName) {
+        this.abstractName = abstractName;
+        this.realName = realName;
     }
 
+    /**
+     * Construct entity object abstract file/folder name, real name
+     * and its note type of dir/file/root(project name).
+     */
+    public FileNodeEntity(String abstractName, String realName, int nodeType) {
+        this(abstractName, realName);
+        this.nodeType = nodeType;
+    }
+
+    /**
+     * Construct entity object with node type of dir/file/root(project name).
+     * Take attention that the abstract and real file/dir name are null by default.
+     */
     public FileNodeEntity(int nodeType) {
         this.nodeType = nodeType;
     }
 
-    public String getAbstractFileName() {
-        return abstractFileName;
+    public String getAbstractName() {
+        return abstractName;
     }
 
-    public void setAbstractFileName(String abstractFileName) {
-        this.abstractFileName = abstractFileName;
+    public void setAbstractName(String abstractName) {
+        this.abstractName = abstractName;
     }
 
-    public String getRealFileName() {
-        return realFileName;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setRealFileName(String realFileName) {
-        this.realFileName = realFileName;
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public int getNodeType() {
@@ -51,14 +83,14 @@ public class FileNodeEntity {
         if (obj == null)
             return false;
         if (obj instanceof FileNodeEntity)
-            return abstractFileName.equals(((FileNodeEntity) obj).getAbstractFileName());
+            return abstractName.equals(((FileNodeEntity) obj).getAbstractName());
         else if (obj instanceof String)
-            return abstractFileName.equals(obj);
+            return abstractName.equals(obj);
         return false;
     }
 
     @Override
     public String toString() {
-        return abstractFileName;
+        return abstractName;
     }
 }

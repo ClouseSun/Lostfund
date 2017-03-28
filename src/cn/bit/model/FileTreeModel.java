@@ -7,7 +7,12 @@ import javax.swing.tree.TreePath;
 import java.util.Enumeration;
 
 /**
- * Created by zhehua on 22/03/2017.
+ * Tree model for JTree built for project tree UI.
+ * In the tree model, each node as {@link DefaultMutableTreeNode} represents a UI node of project tree.
+ * And necessary information for a UI node stores in the {@link DefaultMutableTreeNode#userObject}
+ * as {@link FileNodeEntity} including its abstract file/folder name, real name and type(dir/file/project root).
+ *
+ * @see FileNodeEntity
  */
 public class FileTreeModel extends DefaultTreeModel {
     public FileTreeModel(TreeNode root) {
