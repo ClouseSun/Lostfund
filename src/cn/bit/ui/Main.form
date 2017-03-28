@@ -15,7 +15,7 @@
           </grid>
         </constraints>
         <properties>
-          <continuousLayout value="true"/>
+          <continuousLayout value="false"/>
           <orientation value="0"/>
         </properties>
         <border type="none"/>

@@ -5,10 +5,12 @@ package cn.bit.ui.component;
  */
 public class MenuList {
     private String title;
+    private String name;
     private MenuList menuList[];
 
-    public MenuList(String title, MenuList menuList[]) {
+    public MenuList(String title, String name, MenuList[] menuList) {
         this.title = title;
+        this.name = name;
         this.menuList = menuList;
     }
 
@@ -29,5 +31,13 @@ public class MenuList {
 
     public void setMenuList(MenuList[] menuList) {
         this.menuList = menuList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -26,6 +26,7 @@ public class AbstractFileTree {
                 new DefaultMutableTreeNode(new FileNodeEntity(FileNodeEntity.NODE_TYPE_ROOT)));
     }
 
+
     public void addChild(String abstractPath, String realPath) {
             abstractPath += '#';
             int nodeType = FileNodeEntity.NODE_TYPE_FILE;
