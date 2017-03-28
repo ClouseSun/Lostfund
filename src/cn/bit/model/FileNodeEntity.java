@@ -14,7 +14,6 @@ public class FileNodeEntity {
 
 
     public FileNodeEntity(String abstractFileName, String realFileName) {
-        nodeType = NODE_TYPE_FILE;
         this.abstractFileName = abstractFileName;
         this.realFileName = realFileName;
     }
