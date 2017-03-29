@@ -23,7 +23,7 @@ public class AbstractFileTree {
 
     public AbstractFileTree() {
         fileTreeModel = new FileTreeModel(
-                new DefaultMutableTreeNode(new FileNodeEntity(FileNodeEntity.NODE_TYPE_ROOT)));
+                new DefaultMutableTreeNode(new FileNodeEntity(FileNodeEntity.NODE_TYPE_ROOT)), true);
     }
 
     /**

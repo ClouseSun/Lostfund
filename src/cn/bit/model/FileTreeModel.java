@@ -45,10 +45,12 @@ public class FileTreeModel extends DefaultTreeModel {
             }
             if (!isFoundChild) {
                 DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(new FileNodeEntity((String)nodeName, null));
+                currentTreeNode.setAllowsChildren(true);
                 currentTreeNode.add(newNode);
                 currentTreeNode = newNode;
             }
         }
+        currentTreeNode.setAllowsChildren(((FileNodeEntity) newValue).getNodeType() != FileNodeEntity.NODE_TYPE_FILE);
         currentTreeNode.setUserObject(newValue);
         nodeChanged(currentTreeNode);
     }
