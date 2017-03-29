@@ -38,7 +38,7 @@ public class Main extends JFrame{
 
         JMenuBar menuBar = null;
 
-        // fileMappingXml2Map menubar from resource
+        // loadAbs2RealMap menubar from resource
         try {
             String jsonMenuBarString = IOUtils.toString(getClass().getResourceAsStream("/json/menubar_hierachy"), "UTF8");
             menuBar = new JsonMenuBar(jsonMenuBarString);
@@ -47,7 +47,7 @@ public class Main extends JFrame{
             e.printStackTrace();
         }
         AbstractFileTree abstractFileTree = new AbstractFileTree();
-        Map<String, String> abstractFileMap = FileMappingUtils.fileMappingXml2Map("res/raw/test_project");
+        Map<String, String> abstractFileMap = FileMappingUtils.loadFileMapping("res/raw/test_project", true);
         abstractFileTree.addAll(abstractFileMap);
 
         tree1.setModel(abstractFileTree.model());

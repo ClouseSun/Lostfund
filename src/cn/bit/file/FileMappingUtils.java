@@ -19,14 +19,18 @@ import java.util.Map;
  */
 public class FileMappingUtils {
 
-    public static  Map<String, String> fileMappingXml2Map(InputStream xmlStream) {
+    public static Map<String, String> loadFileMapping(InputStream xmlStream, boolean isAbs2Real) {
         Map<String, String> fileMap = new LinkedHashMap<>();
 
         try {
             Document document = new SAXReader().read(xmlStream);
             List<Element> elementList = document.getRootElement().element("userMapping").elements("mappingEntry");
             for (Element element:elementList) {
-                fileMap.put(element.attributeValue("abstractPath"), element.attributeValue("absolutePath"));
+                if (isAbs2Real) {
+                    fileMap.put(element.attributeValue("abstractPath"), element.attributeValue("absolutePath"));
+                } else {
+                    fileMap.put(element.attributeValue("absolutePath"), element.attributeValue("abstractPath"));
+                }
             }
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -34,9 +38,9 @@ public class FileMappingUtils {
         return fileMap;
     }
 
-    public static Map<String, String> fileMappingXml2Map(String xmlFilePath) {
+    public static Map<String, String> loadFileMapping(String xmlFilePath, boolean isAbs2Real) {
         try {
-            return fileMappingXml2Map(new FileInputStream(xmlFilePath));
+            return loadFileMapping(new FileInputStream(xmlFilePath), true);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
