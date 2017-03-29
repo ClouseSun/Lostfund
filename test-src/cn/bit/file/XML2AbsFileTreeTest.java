@@ -33,7 +33,7 @@ public class XML2AbsFileTreeTest {
     @Test
     public void buildTest1() throws Exception {
 
-        fileTree.addAll(FileMappingUtils.build(XMLPath1));
+        fileTree.addAll(FileMappingUtils.fileMappingXml2Map(XMLPath1));
 
         FileTreeModel model = fileTree.model();
         DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) model.getRoot();
@@ -51,7 +51,7 @@ public class XML2AbsFileTreeTest {
 
     @Test
     public void buildTest2() throws Exception {
-        fileTree.addAll(FileMappingUtils.build(XMLPath2));
+        fileTree.addAll(FileMappingUtils.fileMappingXml2Map(XMLPath2));
 
         FileTreeModel model = fileTree.model();
         DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) model.getRoot();

@@ -80,27 +80,34 @@ public class JsonTreePopMenu extends JPopupMenu{
         }
     }
 
+    private void addFile(File newFile, JTree jTree, Map newFilesMap) {
+        if (newFile.isDirectory()) {
+            // TODO Add the whole directory recursively.
+        } else {
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), newFile.getName());
+            fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
+            ((DefaultTreeModel) jTree.getModel())
+                 .insertNodeInto(new DefaultMutableTreeNode(fileNodeEntity),
+                         (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent(),
+                         ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getChildCount());
+            String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath()) + newFile.getName();
+            newFilesMap.put(abstractPath, newFile.getPath());
+            return ;
+        }
+    }
+
     public void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
         jMenuItem.addActionListener((ActionEvent e) -> {
             JFileChooser jFileChooser = new JFileChooser();
             switch (jMenuItem.getName()) {
                 case "menuitem_addExisting":
-                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                     jFileChooser.setMultiSelectionEnabled(true);
                     if (jFileChooser.showOpenDialog(null) != 1) {
                         File[] newFiles = jFileChooser.getSelectedFiles();
                         Map<String, String> newFilesMap = new HashMap<>();
-                        for (File newFile:newFiles) {
-                            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), newFile.getName());
-
-                            fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
-                            ((DefaultTreeModel)jTree.getModel())
-                                    .insertNodeInto(new DefaultMutableTreeNode(fileNodeEntity),
-                                            (DefaultMutableTreeNode)jTree.getLastSelectedPathComponent(),
-                                            ((DefaultMutableTreeNode)jTree.getLastSelectedPathComponent()).getChildCount());
-
-                            String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode)jTree.getLastSelectedPathComponent()).getPath()) + newFile.getName();
-                            newFilesMap.put(abstractPath, newFile.getPath());
+                        for (File newFile : newFiles) {
+                            addFile(newFile, jTree, newFilesMap);
                         }
                         FileMappingUtils.insertNewMapping("res/raw/test_project", newFilesMap);
                     } else {

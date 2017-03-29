@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class FileMappingUtils {
 
-    public static  Map<String, String> build(InputStream xmlStream) {
+    public static  Map<String, String> fileMappingXml2Map(InputStream xmlStream) {
         Map<String, String> fileMap = new LinkedHashMap<>();
 
         try {
@@ -34,9 +34,9 @@ public class FileMappingUtils {
         return fileMap;
     }
 
-    public static Map<String, String> build(String xmlFilePath) {
+    public static Map<String, String> fileMappingXml2Map(String xmlFilePath) {
         try {
-            return build(new FileInputStream(xmlFilePath));
+            return fileMappingXml2Map(new FileInputStream(xmlFilePath));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

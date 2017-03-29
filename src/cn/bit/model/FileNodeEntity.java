@@ -5,8 +5,8 @@ package cn.bit.model;
  * Each contains abstract file/folder name and corresponding real name.
  * Besides, {@link #nodeType} defines its type as directory/file/root(project name).
  *
- * The {@link #abstractName} doesn't contain the full path in the project tree but the name of the node.
- * But the {@link #realName} is full path on machine.
+ * The {@link #abstractName} doesn't contain the full path in the project tree but the name of the node,
+ * while the {@link #realName} is full path on machine.
  * For example, if a node's abstract path in project is "a/b/c", and the corresponding real path is "/home/user/hello",
  * The {@link #abstractName} is "c", and {@link #realName} is "/home/user/hello", as shown below:
  *
