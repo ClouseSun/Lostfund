@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectModel>
     <userMapping>
-        
         <mappingEntry abstractPath="Network/a2/a21" absolutePath="A/B/C"/>
         <mappingEntry abstractPath="Network/a2/a22" absolutePath="A/B/D"/>
         <mappingEntry abstractPath="Network/a3/a31" absolutePath="A/B/E"/>

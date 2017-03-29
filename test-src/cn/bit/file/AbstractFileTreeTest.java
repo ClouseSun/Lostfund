@@ -1,7 +1,6 @@
 package cn.bit.file;
 
 import cn.bit.model.FileNodeEntity;
-import cn.bit.model.FileTreeModel;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,29 +1,54 @@
 package cn.bit.file;
 
 import cn.bit.model.FileNodeEntity;
-import cn.bit.model.FileTreeModel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
+import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 /**
- * This "tree" is a holder of {@link FileTreeModel} to conveniently build it by abstract/real path mappings.
+ * This "tree" is a holder of projects' root to conveniently build it by abstract/real path mappings.
  */
 public class AbstractFileTree {
 
-    private FileTreeModel fileTreeModel;
+    private DefaultMutableTreeNode projectTreeRoot;
 
-    public AbstractFileTree(FileTreeModel fileTreeModel) {
-        this();
-        this.fileTreeModel = fileTreeModel;
+    public AbstractFileTree(DefaultMutableTreeNode projectTreeRoot) {
+        this.projectTreeRoot = projectTreeRoot;
     }
 
-    public AbstractFileTree() {
-        fileTreeModel = new FileTreeModel(
-                new DefaultMutableTreeNode(new FileNodeEntity(FileNodeEntity.NODE_TYPE_ROOT)), true);
+    public AbstractFileTree(String projectName, String projectPath) {
+        FileNodeEntity entity = new FileNodeEntity(FileNodeEntity.NODE_TYPE_ROOT);
+        entity.setAbstractName(projectName);
+        entity.setRealName(projectPath);
+        projectTreeRoot = new DefaultMutableTreeNode(entity);
+    }
+
+    private void buildPath(TreePath path, Object newValue) {
+        DefaultMutableTreeNode currentTreeNode = projectTreeRoot;
+        for (Object nodeName : path.getPath()) {
+            Enumeration children = currentTreeNode.children();
+            boolean isFoundChild = false;
+            while(children.hasMoreElements()) {
+                DefaultMutableTreeNode aChildNode = (DefaultMutableTreeNode)children.nextElement();
+                if((aChildNode.getUserObject()).equals(nodeName)) {
+                    isFoundChild = true;
+                    currentTreeNode = aChildNode;
+                    break;
+                }
+            }
+            if (!isFoundChild) {
+                DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(new FileNodeEntity((String)nodeName, null));
+                currentTreeNode.setAllowsChildren(true);
+                currentTreeNode.add(newNode);
+                currentTreeNode = newNode;
+            }
+        }
+        currentTreeNode.setAllowsChildren(((FileNodeEntity) newValue).getNodeType() != FileNodeEntity.NODE_TYPE_FILE);
+        currentTreeNode.setUserObject(newValue);
     }
 
     /**
@@ -58,7 +83,8 @@ public class AbstractFileTree {
 
             FileNodeEntity entity = new FileNodeEntity(pathList.get(pathList.size() - 1), realPath);
             entity.setNodeType(nodeType);
-            fileTreeModel.valueForPathChanged(treePath, entity);
+
+            buildPath(treePath, entity);
     }
 
     /**
@@ -71,11 +97,7 @@ public class AbstractFileTree {
         }
     }
 
-    /**
-     * Get tree model.
-     * @return tree model
-     */
-    public FileTreeModel model() {
-        return fileTreeModel;
+    public DefaultMutableTreeNode getProjectTreeRoot() {
+        return projectTreeRoot;
     }
 }

@@ -74,8 +74,7 @@ public class JsonTreePopMenu extends JPopupMenu{
             jMenuItem.setName(menuList.getName());
             root.add(jMenuItem);
             bindMenuItemListener(jMenuItem, jTree);
-        }
-        else {
+        } else {
             JMenu jMenu = new JMenu(menuList.getTitle());
             for (MenuList ml:menuList.getMenuList()) {
                 buildMenuByList(jMenu, ml, jTree);
