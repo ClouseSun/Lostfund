@@ -26,5 +26,6 @@
         <mappingEntry abstractPath="IM/Slack/" absolutePath="file/network/slack/"/>
         <mappingEntry abstractPath="Executable/" absolutePath="bin/"/>
         <mappingEntry abstractPath="Platform/OS/" absolutePath="bin/platform/"/>
+        <mappingEntry abstractPath="CopyTest/" absolutePath="/Users/KlousesSun/"/>
     </userMapping>
 </projectModel>

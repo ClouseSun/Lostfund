@@ -12,6 +12,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -100,6 +102,33 @@ public class JsonTreePopMenu extends JPopupMenu{
         }
     }
 
+    private void addCopyFile(File sourceFile, JTree jTree, Map newFilesMap) {
+        if (sourceFile.isDirectory()) {
+            // TODO Add the whole directory recursively.
+        } else {
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), sourceFile.getName());
+            fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
+            newNode.setAllowsChildren(false);
+            ((DefaultTreeModel) jTree.getModel())
+                    .insertNodeInto(newNode,
+                            (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent(),
+                            ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getChildCount());
+            String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), FileNodeEntity.NODE_TYPE_DIR) + sourceFile.getName();
+            String dirPathToInsert = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getRealName();
+            newFilesMap.put(abstractPath, sourceFile.getPath());
+
+            File newFile = new File(dirPathToInsert + sourceFile.getName());
+            try {
+                IOUtils.copy(new FileInputStream(sourceFile), new FileOutputStream(newFile));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return ;
+        }
+    }
+
     public void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
 
         jMenuItem.addActionListener((ActionEvent e) -> {
@@ -112,7 +141,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                         File[] newFiles = jFileChooser.getSelectedFiles();
                         Map<String, String> newFilesMap = new HashMap<>();
                         for (File newFile : newFiles) {
-                            addFile(newFile, jTree, newFilesMap);
+                            addCopyFile(newFile, jTree, newFilesMap);
                         }
                         FileMappingUtils.insertNewMapping(Context.XML_PATH, newFilesMap);
                     } else {
@@ -120,6 +149,18 @@ public class JsonTreePopMenu extends JPopupMenu{
                     }
                     break;
                 case "menuitem_addCopyExisting":
+                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    jFileChooser.setMultiSelectionEnabled(true);
+                    if (jFileChooser.showOpenDialog(null) != 1) {
+                        File[] sourceFiles = jFileChooser.getSelectedFiles();
+                        Map<String, String> newFilesMap = new HashMap<>();
+                        for (File sourceFile : sourceFiles) {
+                            addCopyFile(sourceFile, jTree, newFilesMap);
+                        }
+                        FileMappingUtils.insertNewMapping(Context.XML_PATH, newFilesMap);
+                    } else {
+                        return;
+                    }
                     break;
                 case "menuitem_delete":
                     int itemType = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getNodeType();
