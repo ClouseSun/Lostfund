@@ -11,6 +11,8 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by KlousesSun on 2017/3/27.
@@ -80,35 +82,34 @@ public class JsonTreePopMenu extends JPopupMenu{
 
     public void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
         jMenuItem.addActionListener((ActionEvent e) -> {
+            JFileChooser jFileChooser = new JFileChooser();
             switch (jMenuItem.getName()) {
-                case "menuitem_addExist_file":
-                    JFileChooser jFileChooser = new JFileChooser();
-                    jFileChooser.setFileSelectionMode(0);
+                case "menuitem_addExisting":
+                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                    jFileChooser.setMultiSelectionEnabled(true);
                     if (jFileChooser.showOpenDialog(null) != 1) {
-                        File newFile = jFileChooser.getSelectedFile();
-                        FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), newFile.getName());
-                        fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
-                        ((DefaultTreeModel)jTree.getModel())
-                                .insertNodeInto(new DefaultMutableTreeNode(fileNodeEntity),
-                                        (DefaultMutableTreeNode)jTree.getLastSelectedPathComponent(),
-                                        ((DefaultMutableTreeNode)jTree.getLastSelectedPathComponent()).getChildCount());
+                        File[] newFiles = jFileChooser.getSelectedFiles();
+                        Map<String, String> newFilesMap = new HashMap<>();
+                        for (File newFile:newFiles) {
+                            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), newFile.getName());
 
-                        String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode)jTree.getLastSelectedPathComponent()).getPath()) + newFile.getName();
-                        FileMappingUtils.insertNewMapping("res/raw/test_project", abstractPath, newFile.getPath());
+                            fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
+                            ((DefaultTreeModel)jTree.getModel())
+                                    .insertNodeInto(new DefaultMutableTreeNode(fileNodeEntity),
+                                            (DefaultMutableTreeNode)jTree.getLastSelectedPathComponent(),
+                                            ((DefaultMutableTreeNode)jTree.getLastSelectedPathComponent()).getChildCount());
+
+                            String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode)jTree.getLastSelectedPathComponent()).getPath()) + newFile.getName();
+                            newFilesMap.put(abstractPath, newFile.getPath());
+                        }
+                        FileMappingUtils.insertNewMapping("res/raw/test_project", newFilesMap);
                     } else {
                         return;
                     }
                     break;
-
-                case "menuitem_addExist_folder":
+                case "menuitem_addCopyExisting":
                     break;
-                case "menuitem_addCopy_file":
-                    break;
-                case "menuitem_addCopy_folder":
-                    break;
-                case "menuitem_delete_folder":
-                    break;
-                case "menuitem_delete_file":
+                case "menuitem_delete":
                     break;
             }
         });

@@ -28,7 +28,7 @@
         },
         {
             "title": "删除",
-            "name": "delete"
+            "name": "menuitem_delete"
         }
     ]
 }

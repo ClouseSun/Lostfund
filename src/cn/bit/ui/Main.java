@@ -62,7 +62,7 @@ public class Main extends JFrame{
                 tree1.setSelectionPath(treePath);
 
 
-                if (e.getButton() == 3) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
                     DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree1.getLastSelectedPathComponent();
                     new JsonTreePopMenu(tree1).show(tree1, e.getX(), e.getY());
                 }

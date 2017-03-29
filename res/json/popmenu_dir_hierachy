@@ -2,33 +2,15 @@
     "menuList": [
         {
             "title": "添加现有",
-            "menuList": [
-                {
-                    "title": "文件",
-                    "name": "menuitem_addExist_file"
-                },
-                {
-                    "title": "文件夹",
-                    "name": "menuitem_addExist_folder"
-                }
-            ]
+            "name": "menuitem_addExisting"
         },
         {
             "title": "添加并复制",
-            "menuList": [
-                {
-                    "title": "文件",
-                    "name": "menuitem_addCopy_file"
-                },
-                {
-                    "title": "文件夹",
-                    "name": "menuitem_addCopy_folder"
-                }
-            ]
+            "name": "menuitem_addCopyExisting"
         },
         {
             "title": "删除",
-            "name": "menuitem_delete_folder"
+            "name": "menuitem_delete"
         }
     ]
 }

@@ -2,7 +2,7 @@
     "menuList": [
         {
             "title": "删除",
-            "name": "menuitem_delete_file"
+            "name": "menuitem_delete"
         }
     ]
 }

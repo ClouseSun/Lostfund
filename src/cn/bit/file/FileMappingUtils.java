@@ -73,10 +73,7 @@ public class FileMappingUtils {
         }
     }
 
-    public static void insertNewMapping(
-                                        String XMLPath,
-                                        String abstractFilePath,
-                                        String realFilePath) {
+    public static void insertNewMapping(String XMLPath, Map<String, String> fileMapping) {
         try {
             Document document = null;
             try {
@@ -85,9 +82,12 @@ public class FileMappingUtils {
                 e.printStackTrace();
             }
             Element userMap = document.getRootElement().element("userMapping");
-            Element newMappingEntry = userMap.addElement("mappingEntry");
-            newMappingEntry.addAttribute("abstractPath", abstractFilePath);
-            newMappingEntry.addAttribute("absolutePath", realFilePath);
+            fileMapping.entrySet().stream().forEach((entry) -> {
+                Element newMappingEntry = userMap.addElement("mappingEntry");
+                newMappingEntry.addAttribute("abstractPath", entry.getKey());
+                newMappingEntry.addAttribute("absolutePath", entry.getValue());
+            });
+
             try {
                 XMLWriter xmlWriter = new XMLWriter(new FileWriter(XMLPath));
                 xmlWriter.write(document);
