@@ -102,17 +102,57 @@ public class FileMappingUtils {
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-
     }
 
-    public static String path2String(TreeNode[] pathNodes) {
+    public static void removeMappingFromXml(String XmlPath, Map<Integer, String> removeMap) {
+        try {
+            Document document = null;
+            try {
+                document = new SAXReader().read(new FileInputStream(XmlPath), "UTF8");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            List<Element> userMappings = document.getRootElement().element("userMapping").elements();
+
+            Document finalDocument = document;
+
+            removeMap.entrySet().stream().forEach((integerStringEntry -> {
+                if(integerStringEntry.getKey() == FileNodeEntity.NODE_TYPE_FILE) {
+                    userMappings.stream()
+                            .filter(element -> removeMap.containsValue(element.attributeValue("abstractPath")))
+                            .forEach(element -> finalDocument.getRootElement().element("userMapping").remove(element));
+                }
+                else if(integerStringEntry.getKey() == FileNodeEntity.NODE_TYPE_DIR) {
+                }
+            }
+            ));
+
+            try {
+                XMLWriter xmlWriter = new XMLWriter(new FileWriter(XmlPath));
+                xmlWriter.write(document);
+                xmlWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String path2String(TreeNode[] pathNodes, int nodeType) {
         StringBuilder path = new StringBuilder();
         for(int i = 0; i < pathNodes.length; i++) {
             String dir = ((FileNodeEntity) ((DefaultMutableTreeNode) pathNodes[i]).getUserObject()).getAbstractName();
-            if(dir != null) {
-                path.append(dir + "/");
+            if (dir != null) {
+                path.append(dir);
+                if (i != pathNodes.length - 1) {
+                    path.append('/');
+                }
             }
         }
+        if(nodeType == FileNodeEntity.NODE_TYPE_DIR)
+            path.append("/");
+
         return path.toString();
     }
 }

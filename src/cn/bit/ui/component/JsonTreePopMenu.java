@@ -11,8 +11,8 @@ import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by KlousesSun on 2017/3/27.
@@ -90,13 +90,14 @@ public class JsonTreePopMenu extends JPopupMenu{
                  .insertNodeInto(new DefaultMutableTreeNode(fileNodeEntity),
                          (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent(),
                          ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getChildCount());
-            String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath()) + newFile.getName();
+            String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), FileNodeEntity.NODE_TYPE_FILE) + newFile.getName();
             newFilesMap.put(abstractPath, newFile.getPath());
             return ;
         }
     }
 
     public void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
+
         jMenuItem.addActionListener((ActionEvent e) -> {
             JFileChooser jFileChooser = new JFileChooser();
             switch (jMenuItem.getName()) {
@@ -117,6 +118,12 @@ public class JsonTreePopMenu extends JPopupMenu{
                 case "menuitem_addCopyExisting":
                     break;
                 case "menuitem_delete":
+                    int itemType = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getNodeType();
+                    Map<Integer, String> removeMap = new HashMap<Integer, String>();
+                    DefaultMutableTreeNode removedNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
+                    removeMap.put(itemType, FileMappingUtils.path2String((removedNode).getPath(), itemType));
+                    FileMappingUtils.removeMappingFromXml("res/raw/test_project", removeMap);
+                    ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent((removedNode));
                     break;
             }
         });

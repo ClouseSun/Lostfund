@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectModel>
     <userMapping abstractPath="Platform/OS/" absolutePath="bin/platform/" default="true" type="dir">
-        <mappingEntry abstractPath="Network/a1" absolutePath="A/B"/>
+        
         <mappingEntry abstractPath="Network/a2/a21" absolutePath="A/B/C"/>
         <mappingEntry abstractPath="Network/a2/a22" absolutePath="A/B/D"/>
         <mappingEntry abstractPath="Network/a3/a31" absolutePath="A/B/E"/>
