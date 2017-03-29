@@ -1,5 +1,6 @@
 package cn.bit.ui;
 
+import cn.bit.Context;
 import cn.bit.file.AbstractFileTree;
 import cn.bit.file.FileMappingUtils;
 import cn.bit.ui.component.JsonMenuBar;
@@ -47,7 +48,7 @@ public class Main extends JFrame{
             e.printStackTrace();
         }
         AbstractFileTree abstractFileTree = new AbstractFileTree();
-        Map<String, String> abstractFileMap = FileMappingUtils.loadFileMapping("res/raw/test_project", true);
+        Map<String, String> abstractFileMap = FileMappingUtils.loadFileMapping(Context.XML_PATH, true);
         abstractFileTree.addAll(abstractFileMap);
 
         tree1.setModel(abstractFileTree.model());

@@ -95,6 +95,7 @@ public class FileMappingUtils {
             try {
                 XMLWriter xmlWriter = new XMLWriter(new FileWriter(XMLPath));
                 xmlWriter.write(document);
+                xmlWriter.flush();
                 xmlWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -111,15 +112,22 @@ public class FileMappingUtils {
              List<Element> userMappings = document.getRootElement().element("userMapping").elements();
 
             Element userMappingElement = document.getRootElement().element("userMapping");
-            for (String abstractPath : removedList) {
-                for (Element element : userMappings) {
-                    if (element.attributeValue("abstractPath").startsWith(abstractPath)) {
-                        userMappingElement.remove(element);
-                    }
-                }
-            }
+            //for (String abstractPath : removedList) {
+            //    for (Element element : userMappings) {
+            //        if (element.attributeValue("abstractPath").startsWith(abstractPath)) {
+            //            userMappingElement.remove(element);
+            //        }
+            //    }
+            //}
+
+            removedList.stream().forEach(abstractPath -> {
+                userMappings.stream()
+                        .filter(element -> element.attributeValue("abstractPath").startsWith(abstractPath))
+                        .forEach(element -> userMappingElement.remove(element));
+            });
             XMLWriter xmlWriter = new XMLWriter(new FileWriter(XmlPath));
             xmlWriter.write(document);
+            xmlWriter.flush();
             xmlWriter.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

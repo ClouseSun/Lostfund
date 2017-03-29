@@ -1,5 +1,6 @@
 package cn.bit.ui.component;
 
+import cn.bit.Context;
 import cn.bit.file.FileMappingUtils;
 import cn.bit.model.FileNodeEntity;
 import com.google.gson.Gson;
@@ -8,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
@@ -86,11 +88,13 @@ public class JsonTreePopMenu extends JPopupMenu{
         } else {
             FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), newFile.getName());
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
+            newNode.setAllowsChildren(false);
             ((DefaultTreeModel) jTree.getModel())
-                 .insertNodeInto(new DefaultMutableTreeNode(fileNodeEntity),
+                 .insertNodeInto(newNode,
                          (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent(),
                          ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getChildCount());
-            String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), FileNodeEntity.NODE_TYPE_FILE) + newFile.getName();
+            String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), FileNodeEntity.NODE_TYPE_DIR) + newFile.getName();
             newFilesMap.put(abstractPath, newFile.getPath());
             return ;
         }
@@ -110,7 +114,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                         for (File newFile : newFiles) {
                             addFile(newFile, jTree, newFilesMap);
                         }
-                        FileMappingUtils.insertNewMapping("res/raw/test_project", newFilesMap);
+                        FileMappingUtils.insertNewMapping(Context.XML_PATH, newFilesMap);
                     } else {
                         return;
                     }
@@ -123,7 +127,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                     List<String> removedList = new LinkedList<>();
                     DefaultMutableTreeNode removedNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
                     removedList.add(FileMappingUtils.path2String((removedNode).getPath(), itemType));
-                    FileMappingUtils.removeMappingFromXml("res/raw/test_project", removedList);
+                    FileMappingUtils.removeMappingFromXml(Context.XML_PATH, removedList);
                     ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent((removedNode));
                     break;
             }
