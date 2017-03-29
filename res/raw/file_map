@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectModel>
+    <userMapping>
+        <mappingEntry abstractPath="规则检查文件夹/" absolutePath=""/>
+        <mappingEntry abstractPath="规则检查文件夹/规则检查文件" absolutePath=""/>
+        <mappingEntry abstractPath="跨时钟域检查文件夹/" absolutePath=""/>
+        <mappingEntry abstractPath="跨时钟域检查文件夹/文件directive" absolutePath=""/>
+        <mappingEntry abstractPath="跨时钟域检查文件夹/文件modelsim" absolutePath=""/>
+        <mappingEntry abstractPath="功能时序仿真文件夹/测试平台TB/" absolutePath=""/>
+        <mappingEntry abstractPath="功能时序仿真文件夹/验证VIP/" absolutePath=""/>
+        <mappingEntry abstractPath="功能时序仿真文件夹/库文件LIB/" absolutePath=""/>
+        <mappingEntry abstractPath="功能时序仿真文件夹/库文件LIB/a" absolutePath=""/>
+        <mappingEntry abstractPath="功能时序仿真文件夹/库文件LIB/b" absolutePath=""/>
+        <mappingEntry abstractPath="功能时序仿真文件夹/测试用例TC/" absolutePath=""/>
+        <mappingEntry abstractPath="功能时序仿真文件夹/工具配置文件" absolutePath=""/>
+        <mappingEntry abstractPath="静态时序分析文件夹/" absolutePath=""/>
+        <mappingEntry abstractPath="静态时序分析文件夹/源文件SRC/" absolutePath=""/>
+        <mappingEntry abstractPath="静态时序分析文件夹/工具配置文件" absolutePath=""/>
+        <mappingEntry abstractPath="一致性检查文件夹/" absolutePath=""/>
+        <mappingEntry abstractPath="一致性检查文件夹/源文件SRC/" absolutePath=""/>
+        <mappingEntry abstractPath="一致性检查文件夹/工具配置文件" absolutePath=""/>
+    </userMapping>
+</projectModel>
