@@ -104,36 +104,27 @@ public class FileMappingUtils {
         }
     }
 
-    public static void removeMappingFromXml(String XmlPath, Map<Integer, String> removeMap) {
+    public static void removeMappingFromXml(String XmlPath, List<String> removedList) {
+        Document document = null;
         try {
-            Document document = null;
-            try {
-                document = new SAXReader().read(new FileInputStream(XmlPath), "UTF8");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            List<Element> userMappings = document.getRootElement().element("userMapping").elements();
+            document = new SAXReader().read(new FileInputStream(XmlPath), "UTF8");
+             List<Element> userMappings = document.getRootElement().element("userMapping").elements();
 
-            Document finalDocument = document;
-
-            removeMap.entrySet().stream().forEach((integerStringEntry -> {
-                if(integerStringEntry.getKey() == FileNodeEntity.NODE_TYPE_FILE) {
-                    userMappings.stream()
-                            .filter(element -> removeMap.containsValue(element.attributeValue("abstractPath")))
-                            .forEach(element -> finalDocument.getRootElement().element("userMapping").remove(element));
-                }
-                else if(integerStringEntry.getKey() == FileNodeEntity.NODE_TYPE_DIR) {
+            Element userMappingElement = document.getRootElement().element("userMapping");
+            for (String abstractPath : removedList) {
+                for (Element element : userMappings) {
+                    if (element.attributeValue("abstractPath").startsWith(abstractPath)) {
+                        userMappingElement.remove(element);
+                    }
                 }
             }
-            ));
-
-            try {
-                XMLWriter xmlWriter = new XMLWriter(new FileWriter(XmlPath));
-                xmlWriter.write(document);
-                xmlWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            XMLWriter xmlWriter = new XMLWriter(new FileWriter(XmlPath));
+            xmlWriter.write(document);
+            xmlWriter.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         } catch (DocumentException e) {
             e.printStackTrace();
         }

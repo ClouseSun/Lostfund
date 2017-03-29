@@ -119,10 +119,11 @@ public class JsonTreePopMenu extends JPopupMenu{
                     break;
                 case "menuitem_delete":
                     int itemType = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getNodeType();
-                    Map<Integer, String> removeMap = new HashMap<Integer, String>();
+                    //Map<Integer, String> removeMap = new HashMap<Integer, String>();
+                    List<String> removedList = new LinkedList<>();
                     DefaultMutableTreeNode removedNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
-                    removeMap.put(itemType, FileMappingUtils.path2String((removedNode).getPath(), itemType));
-                    FileMappingUtils.removeMappingFromXml("res/raw/test_project", removeMap);
+                    removedList.add(FileMappingUtils.path2String((removedNode).getPath(), itemType));
+                    FileMappingUtils.removeMappingFromXml("res/raw/test_project", removedList);
                     ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent((removedNode));
                     break;
             }
