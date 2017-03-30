@@ -7,4 +7,12 @@ import cn.bit.file.AbstractFileTree;
  */
 public class IteProject {
    AbstractFileTree projectTree;
+
+   public IteProject(AbstractFileTree projectTree) {
+      this.projectTree = projectTree;
+   }
+
+   public AbstractFileTree getProjectTree() {
+      return projectTree;
+   }
 }

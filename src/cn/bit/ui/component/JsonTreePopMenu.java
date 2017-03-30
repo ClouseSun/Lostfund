@@ -91,11 +91,13 @@ public class JsonTreePopMenu extends JPopupMenu{
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(false);
-            ((DefaultTreeModel) jTree.getModel())
-                 .insertNodeInto(newNode,
-                         (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent(),
-                         ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getChildCount());
-            String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), FileNodeEntity.NODE_TYPE_DIR) + newFile.getName();
+            ((DefaultTreeModel) jTree.getModel()).insertNodeInto(newNode
+                    , (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()
+                    , ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getChildCount());
+
+            TreeNode[] newPath = Arrays.copyOfRange(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), 2, ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath().length);
+
+            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR) + newFile.getName();
             newFilesMap.put(abstractPath, newFile.getPath());
             return ;
         }
@@ -113,7 +115,10 @@ public class JsonTreePopMenu extends JPopupMenu{
                     .insertNodeInto(newNode,
                             (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent(),
                             ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getChildCount());
-            String abstractPath = FileMappingUtils.path2String(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), FileNodeEntity.NODE_TYPE_DIR) + sourceFile.getName();
+
+            TreeNode[] newPath = Arrays.copyOfRange(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), 2, ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath().length);
+
+            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR) + sourceFile.getName();
             String dirPathToInsert = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getRealName();
             newFilesMap.put(abstractPath, sourceFile.getPath());
 
@@ -132,17 +137,21 @@ public class JsonTreePopMenu extends JPopupMenu{
 
         jMenuItem.addActionListener((ActionEvent e) -> {
             JFileChooser jFileChooser = new JFileChooser();
+            String projectName = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath()[1].toString();
+            String xmlPath = Context.getProjectFilePath(projectName);
             switch (jMenuItem.getName()) {
                 case "menuitem_addExisting":
                     jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                     jFileChooser.setMultiSelectionEnabled(true);
+
                     if (jFileChooser.showOpenDialog(null) != 1) {
                         File[] newFiles = jFileChooser.getSelectedFiles();
                         Map<String, String> newFilesMap = new HashMap<>();
                         for (File newFile : newFiles) {
-                            addCopyFile(newFile, jTree, newFilesMap);
+                            addFile(newFile, jTree, newFilesMap);
                         }
-                        FileMappingUtils.insertNewMapping(Context.XML_PATH, newFilesMap);
+
+                        FileMappingUtils.insertNewMapping(xmlPath, newFilesMap);
                     } else {
                         return;
                     }
@@ -156,7 +165,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                         for (File sourceFile : sourceFiles) {
                             addCopyFile(sourceFile, jTree, newFilesMap);
                         }
-                        FileMappingUtils.insertNewMapping(Context.XML_PATH, newFilesMap);
+                        FileMappingUtils.insertNewMapping(xmlPath, newFilesMap);
                     } else {
                         return;
                     }
@@ -166,8 +175,11 @@ public class JsonTreePopMenu extends JPopupMenu{
                     //Map<Integer, String> removeMap = new HashMap<Integer, String>();
                     List<String> removedList = new LinkedList<>();
                     DefaultMutableTreeNode removedNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
-                    removedList.add(FileMappingUtils.path2String((removedNode).getPath(), itemType));
-                    FileMappingUtils.removeMappingFromXml(Context.XML_PATH, removedList);
+
+                    TreeNode[] delPath = Arrays.copyOfRange(removedNode.getPath(), 2, ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath().length);
+
+                    removedList.add(FileMappingUtils.path2String(delPath, itemType));
+                    FileMappingUtils.removeMappingFromXml(xmlPath, removedList);
                     ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent((removedNode));
                     break;
             }

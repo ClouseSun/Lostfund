@@ -16,7 +16,13 @@
         </constraints>
         <properties>
           <continuousLayout value="false"/>
+          <dividerLocation value="300"/>
+          <dividerSize value="3"/>
+          <doubleBuffered value="false"/>
+          <inheritsPopupMenu value="true"/>
+          <oneTouchExpandable value="true"/>
           <orientation value="0"/>
+          <resizeWeight value="0.0"/>
         </properties>
         <border type="none"/>
         <children>

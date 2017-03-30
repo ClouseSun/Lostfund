@@ -25,6 +25,7 @@ public class AbstractFileTree {
         entity.setAbstractName(projectName);
         entity.setRealName(projectPath);
         projectTreeRoot = new DefaultMutableTreeNode(entity);
+        projectTreeRoot.setAllowsChildren(true);
     }
 
     private void buildPath(TreePath path, Object newValue) {
