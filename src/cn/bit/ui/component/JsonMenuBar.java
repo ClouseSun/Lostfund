@@ -16,10 +16,12 @@ public class JsonMenuBar extends JMenuBar {
         for (MenuList ml:menuList.getMenuList()) {
             if(ml.getMenuList() == null) {
                 JMenuItem jMenuItem = new JMenuItem(menuList.getTitle());
+                jMenuItem.setEnabled(menuList.isEnable());
                 add(jMenuItem);
             }
             else {
                 JMenu jMenu = new JMenu(ml.getTitle());
+                jMenu.setEnabled(ml.isEnable());
                 add(jMenu);
                 if (ml.getMenuList() != null) {
                     for (MenuList mll : ml.getMenuList()) {
@@ -37,10 +39,12 @@ public class JsonMenuBar extends JMenuBar {
     protected void buildMenuByList(JMenu root, MenuList menuList) {
         if(menuList.getMenuList() == null) {
             JMenuItem jMenuItem = new JMenuItem(menuList.getTitle());
+            jMenuItem.setEnabled(menuList.isEnable());
             root.add(jMenuItem);
         }
         else {
             JMenu jMenu = new JMenu(menuList.getTitle());
+            jMenu.setEnabled(menuList.isEnable());
             for (MenuList ml:menuList.getMenuList()) {
                 buildMenuByList(jMenu, ml);
             }

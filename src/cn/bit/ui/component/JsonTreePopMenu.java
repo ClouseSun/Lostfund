@@ -27,16 +27,16 @@ public class JsonTreePopMenu extends JPopupMenu{
         String jsonPopMenuPath;
         switch (((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getNodeType()) {
             case FileNodeEntity.NODE_TYPE_DIR:
-                jsonPopMenuPath = "/json/popmenu_dir_hierachy";
+                jsonPopMenuPath = Context.getJsonDirPopMenuPath();
                 break;
             case FileNodeEntity.NODE_TYPE_FILE:
-                jsonPopMenuPath = "/json/popmenu_file_hierachy";
+                jsonPopMenuPath = Context.getJsonFilePopMenuPath();
                 break;
             case FileNodeEntity.NODE_TYPE_ROOT:
-                jsonPopMenuPath = "/json/popmenu_project_hierachy";
+                jsonPopMenuPath = Context.getJsonProjectPopMenuPath();
                 break;
             default:
-                jsonPopMenuPath = "/json/popmenu_file_hierachy";
+                jsonPopMenuPath = Context.getJsonFilePopMenuPath();
         }
         String jsonPopMenuString = null;
         try {
@@ -144,7 +144,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                     jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                     jFileChooser.setMultiSelectionEnabled(true);
 
-                    if (jFileChooser.showOpenDialog(null) != 1) {
+                    if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
                         File[] newFiles = jFileChooser.getSelectedFiles();
                         Map<String, String> newFilesMap = new HashMap<>();
                         for (File newFile : newFiles) {

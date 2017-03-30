@@ -1,0 +1,294 @@
+{
+    "menuList": [
+        {
+            "title": "工程",
+            "isEnable": true,
+            "menuList": [
+                {
+                    "title": "新建工程",
+                    "isEnable": true
+                },
+                {
+                    "title": "打开工程",
+                    "isEnable": false
+                },
+                                {
+                    "title": "关闭工程",
+                    "isEnable": false
+                },
+                                {
+                    "title": "保存工程",
+                    "isEnable": false
+                },
+                                {
+                    "title": "工程退出",
+                    "isEnable": false
+                },
+                                {
+                    "title": "最近工程",
+                    "isEnable": false
+                },
+                                {
+                    "title": "清除工程",
+                    "isEnable": false
+                },
+                                {
+                    "title": "版本管理",
+                    "isEnable": false
+                },
+                                {
+                    "title": "工程属性",
+                    "isEnable": false
+                }
+            ]
+        },
+        {
+            "title": "文件",
+            "isEnable": false,
+            "menuList": [
+                {
+                    "title": "新建文件",
+                    "isEnable": false
+                },
+                {
+                    "title": "打开文件",
+                    "isEnable": false
+                },
+                {
+                    "title": "关闭文件",
+                    "isEnable": false
+                },
+                {
+                    "title": "保存文件",
+                    "isEnable": false
+                },
+                {
+                    "title": "另存文件",
+                    "isEnable": false
+                }
+            ]
+        },
+        {
+            "title": "编辑",
+            "isEnable": false,
+            "menuList": [
+                {
+                    "title": "后退",
+                    "isEnable": false
+                },
+                {
+                    "title": "重做",
+                    "isEnable": false
+                },
+                {
+                    "title": "剪切",
+                    "isEnable": false
+                },
+                {
+                    "title": "拷贝",
+                    "isEnable": false
+                },
+                {
+                    "title": "粘贴",
+                    "isEnable": false
+                },
+                {
+                    "title": "删除",
+                    "isEnable": false
+                },
+                {
+                    "title": "查找",
+                    "isEnable": false
+                },
+                {
+                    "title": "查找下一处",
+                    "isEnable": false
+                },
+                {
+                    "title": "查找上一处",
+                    "isEnable": false
+                },
+                {
+                    "title": "全选",
+                    "isEnable": false
+                }
+            ]
+        },
+        {
+            "title": "视图",
+            "isEnable": false,
+            "menuList": [
+                {
+                    "title": "工程界面",
+                    "isEnable": false
+                },
+                {
+                    "title": "进程界面",
+                    "isEnable": false
+                },
+                {
+                    "title": "报告界面",
+                    "isEnable": false
+                },
+                {
+                    "title": "测试状态界面",
+                    "isEnable": false
+                },
+                {
+                    "title": "信息界面",
+                    "isEnable": false,
+                    "menuList": [
+                       {
+                            "title": "系统控制台",
+                            "isEnable": false
+                       },
+                       {
+                            "title": "系统控制台错误",
+                            "isEnable": false
+                       },
+                       {
+                            "title": "系统控制台警告",
+                            "isEnable": false
+                       },
+                       {
+                            "title": "测试控制台错误",
+                            "isEnable": false
+                       },
+                       {
+                            "title": "测试控制台警告",
+                            "isEnable": false
+                       }
+                    ]
+                },
+                {
+                    "title": "工具栏",
+                    "isEnable": false
+                },
+                {
+                    "title": "状态栏",
+                    "isEnable": false
+                },
+                {
+                    "title": "文件路径",
+                    "isEnable": false,
+                    "menuList": [
+                       {
+                            "title": "文件全路径显示",
+                            "isEnable": false
+                       },
+                       {
+                            "title": "相对路径显示",
+                            "isEnable": false
+                       }
+                    ]
+                },
+                {
+                    "title": "视图布局保存",
+                    "isEnable": false
+                },
+                {
+                    "title": "视图布局载入",
+                    "isEnable": false
+                },
+                {
+                    "title": "字体",
+                    "isEnable": false
+                }
+            ]
+        },
+        {
+            "title": "执行",
+            "isEnable": false,
+            "menuList": [
+                {
+                    "title": "规则检查",
+                    "isEnable": false
+                },
+                {
+                    "title": "跨时钟域检查",
+                    "isEnable": false
+                },
+                {
+                    "title": "静态时序分析",
+                    "isEnable": false
+                },
+                {
+                    "title": "一致性检查",
+                    "isEnable": false
+                },
+                {
+                    "title": "测试平台创建",
+                    "isEnable": false
+                },
+                {
+                    "title": "测试用例创建",
+                    "isEnable": false
+                },
+                {
+                    "title": "功能仿真",
+                    "isEnable": false
+                },
+                {
+                    "title": "时序仿真",
+                    "isEnable": false
+                },
+                {
+                    "title": "Verdi",
+                    "isEnable": false
+                },
+                {
+                    "title": "代码行数统计",
+                    "isEnable": false
+                },
+                {
+                    "title": "截屏",
+                    "isEnable": false
+                },
+                {
+                    "title": "计算器",
+                    "isEnable": false
+                }
+            ]
+        },
+        {
+            "title": "窗口",
+            "isEnable": false,
+            "menuList": [
+                {
+                    "title": "关闭窗口",
+                    "isEnable": false
+                },
+                {
+                    "title": "最小化窗口",
+                    "isEnable": false
+                },
+                {
+                    "title": "水平分布窗口",
+                    "isEnable": false
+                },
+                {
+                    "title": "垂直分布窗口",
+                    "isEnable": false
+                }
+            ]
+        },
+        {
+            "title": "帮助",
+            "isEnable": false,
+            "menuList": [
+                {
+                    "title": "帮助主题",
+                    "isEnable": false
+                },
+                {
+                    "title": "关于",
+                    "isEnable": false
+                },
+                {
+                    "title": "license文件管理",
+                    "isEnable": false
+                }
+            ]
+        }
+    ]
+}

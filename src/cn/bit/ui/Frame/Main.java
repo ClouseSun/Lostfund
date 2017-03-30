@@ -1,29 +1,19 @@
-package cn.bit.ui;
+package cn.bit.ui.Frame;
 
 import cn.bit.Context;
-import cn.bit.file.AbstractFileTree;
-import cn.bit.file.FileMappingUtils;
-import cn.bit.model.IteProject;
 import cn.bit.ui.component.JsonMenuBar;
 import cn.bit.ui.component.JsonTreePopMenu;
 import org.apache.commons.io.IOUtils;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zhehua on 19/03/2017.
@@ -39,7 +29,6 @@ public class Main extends JFrame{
 
     public static void main(String[] args) {
         Main mainObj = new Main();
-
         mainObj.setVisible(true);
     }
 
@@ -47,18 +36,13 @@ public class Main extends JFrame{
     public Main() {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1440, 900);
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = toolkit.getScreenSize();
+        setSize((int)screenSize.getWidth(), (int)screenSize.getWidth());
 
         JMenuBar menuBar = null;
 
         // loadAbs2RealMap menubar from resource
-        try {
-            String jsonMenuBarString = IOUtils.toString(getClass().getResourceAsStream("/json/menubar_hierachy"), "UTF8");
-            menuBar = new JsonMenuBar(jsonMenuBarString);
-            setJMenuBar(menuBar);
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
 
         DefaultTreeModel iteTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode());
 
@@ -69,6 +53,14 @@ public class Main extends JFrame{
             , ((DefaultMutableTreeNode) iteTreeModel.getRoot())
                     , ((DefaultMutableTreeNode) iteTreeModel.getRoot()).getChildCount());
         });
+
+        try {
+            String jsonMenuBarString = IOUtils.toString(new FileInputStream(Context.getJsonMenuBarPath()));
+            menuBar = new JsonMenuBar(jsonMenuBarString);
+            setJMenuBar(menuBar);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
 
         tree1.setModel(iteTreeModel);
         tree1.addMouseListener(new MouseAdapter() {

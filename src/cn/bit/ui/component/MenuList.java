@@ -6,11 +6,13 @@ package cn.bit.ui.component;
 public class MenuList {
     private String title;
     private String name;
+    private boolean isEnable;
     private MenuList menuList[];
 
-    public MenuList(String title, String name, MenuList[] menuList) {
+    public MenuList(String title, String name, boolean isEnable, MenuList[] menuList) {
         this.title = title;
         this.name = name;
+        this.isEnable = isEnable;
         this.menuList = menuList;
     }
 
@@ -39,5 +41,13 @@ public class MenuList {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isEnable() {
+        return isEnable;
+    }
+
+    public void setEnable(boolean enable) {
+        isEnable = enable;
     }
 }

@@ -4,16 +4,16 @@ import cn.bit.file.AbstractFileTree;
 import cn.bit.file.FileMappingUtils;
 import cn.bit.model.FileNodeEntity;
 import cn.bit.model.IteProject;
-import cn.bit.ui.Main;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhehua on 29/03/2017.
@@ -21,6 +21,11 @@ import java.util.*;
 public class Context {
     Map<String, IteProject> openProjects;
     static Context context;
+
+    public static String jsonMenuBarPath = "res/json/MenuBar/menubar_hierachy";
+    public static String jsonDirPopMenuPath = "res/json/TreePopupMenu/popmenu_dir_hierachy";
+    public static String jsonFilePopMenuPath = "res/json/TreePopupMenu/popmenu_file_hierachy";
+    public static String jsonProjectPopMenuPath = "res/json/TreePopupMenu/popmenu_project_hierachy";
 
     public static Context getContext() {
         if (context != null) {
@@ -34,7 +39,7 @@ public class Context {
         Document document = null;
         try {
             document = new SAXReader().read(new FileInputStream(configPath));
-            Map<String, IteProject> openProjects = new HashMap<>();
+            Map<String, IteProject> openProjects = new LinkedHashMap<>();
             List<Element> prjConfigList = document.getRootElement().elements();
             for (Element prjConfig: prjConfigList) {
                 AbstractFileTree abstractFileTree = new AbstractFileTree(prjConfig.attributeValue("projectName")
@@ -61,6 +66,38 @@ public class Context {
     public static String getProjectFilePath(String projectName) {
         if (context != null) {
             return ((FileNodeEntity) context.openProjects.get(projectName).getProjectTree().getProjectTreeRoot().getUserObject()).getRealName();
+        } else {
+            throw new IllegalStateException("Context not initialized.");
+        }
+    }
+
+    public static String getJsonMenuBarPath() {
+        if (context != null) {
+            return jsonMenuBarPath;
+        } else {
+            throw new IllegalStateException("Context not initialized.");
+        }
+    }
+
+    public static String getJsonDirPopMenuPath() {
+        if (context != null) {
+            return jsonDirPopMenuPath;
+        } else {
+            throw new IllegalStateException("Context not initialized.");
+        }
+    }
+
+    public static String getJsonFilePopMenuPath() {
+        if (context != null) {
+            return jsonFilePopMenuPath;
+        } else {
+            throw new IllegalStateException("Context not initialized.");
+        }
+    }
+
+    public static String getJsonProjectPopMenuPath() {
+        if (context != null) {
+            return jsonProjectPopMenuPath;
         } else {
             throw new IllegalStateException("Context not initialized.");
         }
