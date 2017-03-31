@@ -1,0 +1,5 @@
+<ITEProperties>
+    <ActiveProject projectName="prj1" projectFilePath="src/main/resources/raw/test_project" />
+    <ActiveProject projectName="prj2" projectFilePath="src/main/resources/raw/test_project2" />
+    <ActiveProject projectName="StandardProject" projectFilePath="src/main/resources/raw/file_map" />
+</ITEProperties>

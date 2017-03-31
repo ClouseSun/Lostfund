@@ -19,7 +19,6 @@ import java.io.IOException;
  * Created by zhehua on 19/03/2017.
  */
 public class Main extends JFrame {
-    public static String configureFilePath = "res/raw/configure";
 
     private JPanel mainPanel;
     private JScrollPane PrjPane;
@@ -39,14 +38,13 @@ public class Main extends JFrame {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         setSize((int) screenSize.getWidth(), (int) screenSize.getWidth());
-
         JMenuBar menuBar = null;
 
         // loadAbs2RealMap menubar from resource
 
         DefaultTreeModel iteTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode());
 
-        Context.init(configureFilePath);
+        Context.init(Context.configureFilePath);
 
         Context.getContext().getOpenProjects().entrySet().stream().forEach(stringIteProjectEntry -> {
             iteTreeModel.insertNodeInto(stringIteProjectEntry.getValue().getProjectTree().getProjectTreeRoot()

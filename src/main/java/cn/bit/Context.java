@@ -22,10 +22,12 @@ public class Context {
     Map<String, IteProject> openProjects;
     static Context context;
 
-    public static String jsonMenuBarPath = "res/json/MenuBar/menubar_hierachy";
-    public static String jsonDirPopMenuPath = "res/json/TreePopupMenu/popmenu_dir_hierachy";
-    public static String jsonFilePopMenuPath = "res/json/TreePopupMenu/popmenu_file_hierachy";
-    public static String jsonProjectPopMenuPath = "res/json/TreePopupMenu/popmenu_project_hierachy";
+    public final static String RES_ROOT = "src/main/resources/";
+    public static String configureFilePath = RES_ROOT + "raw/configure";
+    public static String jsonMenuBarPath = RES_ROOT + "json/MenuBar/menubar_hierachy";
+    public static String jsonDirPopMenuPath = RES_ROOT + "json/TreePopupMenu/popmenu_dir_hierachy";
+    public static String jsonFilePopMenuPath = RES_ROOT + "json/TreePopupMenu/popmenu_file_hierachy";
+    public static String jsonProjectPopMenuPath = RES_ROOT + "json/TreePopupMenu/popmenu_project_hierachy";
 
     public static Context getContext() {
         if (context != null) {
