@@ -16,7 +16,7 @@
         </constraints>
         <properties>
           <continuousLayout value="false"/>
-          <dividerLocation value="700"/>
+          <dividerLocation value="393"/>
           <dividerSize value="3"/>
           <doubleBuffered value="false"/>
           <inheritsPopupMenu value="true"/>
