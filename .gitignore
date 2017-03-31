@@ -32,3 +32,5 @@ out
 gen
 .DS_Store
 *.iml
+/build
+/.gradle
