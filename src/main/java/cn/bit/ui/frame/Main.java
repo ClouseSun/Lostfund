@@ -25,6 +25,7 @@ public class Main extends JFrame {
     private JPanel panel1;
 
     private JTree tree1;
+    private JSplitPane consoleSpiltPane;
 
     public static void main(String[] args) {
         Main mainObj = new Main();
@@ -38,6 +39,7 @@ public class Main extends JFrame {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         setSize((int) screenSize.getWidth(), (int) screenSize.getWidth());
+
         JMenuBar menuBar = null;
 
         // loadAbs2RealMap menubar from resource

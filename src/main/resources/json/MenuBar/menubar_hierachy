@@ -6,6 +6,7 @@
             "menuList": [
                 {
                     "title": "新建工程",
+                    "name": "newProject",
                     "isEnable": true
                 },
                 {

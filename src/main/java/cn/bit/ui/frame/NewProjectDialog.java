@@ -20,6 +20,7 @@ import java.util.List;
 public class NewProjectDialog extends JDialog {
 
     private final Logger logger = LoggerFactory.getLogger(NewProjectDialog.class);
+    private WizardSettings settings;
 
     public static void main(String[] args) {
         // create the dialog, and show it:
@@ -27,14 +28,24 @@ public class NewProjectDialog extends JDialog {
         test.setVisible(true);
     }
 
+    public WizardSettings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(WizardSettings settings) {
+        this.settings = settings;
+    }
+
     public NewProjectDialog() {
 
         setLocationRelativeTo(null);
+        setModalityType(ModalityType.APPLICATION_MODAL);
 
         final WizardContainer wc =
                 new WizardContainer(new PageFactory(),
                         new TitledPageTemplate(),
                         new StackWizardSettings());
+
 
         wc.addWizardListener(new WizardListener() {
 
@@ -46,8 +57,10 @@ public class NewProjectDialog extends JDialog {
 
             @Override
             public void onFinished(List<WizardPage> path, WizardSettings settings) {
+                setSettings(settings);
                 NewProjectDialog.this.dispose();
             }
+
 
             @Override
             public void onCanceled(List<WizardPage> path, WizardSettings settings) {
@@ -57,6 +70,7 @@ public class NewProjectDialog extends JDialog {
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         getContentPane().add(wc);
+        setVisible(true);
     }
 
     private class PageFactory extends APageFactory {
@@ -330,5 +344,7 @@ public class NewProjectDialog extends JDialog {
                 setNextEnabled(false);
             }
         }
+
+
     }
 }

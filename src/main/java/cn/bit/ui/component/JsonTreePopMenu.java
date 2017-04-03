@@ -41,8 +41,7 @@ public class JsonTreePopMenu extends JPopupMenu{
         String jsonPopMenuString = null;
         try {
                 jsonPopMenuString = IOUtils.
-                    toString(getClass().
-                            getResourceAsStream (jsonPopMenuPath), "UTF8");
+                    toString(new FileInputStream(jsonPopMenuPath));
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -133,8 +132,7 @@ public class JsonTreePopMenu extends JPopupMenu{
         }
     }
 
-    public void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
-
+    private void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
         jMenuItem.addActionListener((ActionEvent e) -> {
             JFileChooser jFileChooser = new JFileChooser();
             String projectName = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath()[1].toString();

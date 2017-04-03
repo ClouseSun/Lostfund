@@ -1,5 +1,7 @@
 package cn.bit.ui.component;
 
+import cn.bit.ui.frame.NewProjectDialog;
+import com.github.cjwizard.WizardSettings;
 import com.google.gson.Gson;
 
 import javax.swing.*;
@@ -17,6 +19,8 @@ public class JsonMenuBar extends JMenuBar {
             if(ml.getMenuList() == null) {
                 JMenuItem jMenuItem = new JMenuItem(menuList.getTitle());
                 jMenuItem.setEnabled(menuList.isEnable());
+                jMenuItem.setName(menuList.getName());
+                bindMenuItemListener(jMenuItem);
                 add(jMenuItem);
             }
             else {
@@ -40,6 +44,8 @@ public class JsonMenuBar extends JMenuBar {
         if(menuList.getMenuList() == null) {
             JMenuItem jMenuItem = new JMenuItem(menuList.getTitle());
             jMenuItem.setEnabled(menuList.isEnable());
+            jMenuItem.setName(menuList.getName());
+            bindMenuItemListener(jMenuItem);
             root.add(jMenuItem);
         }
         else {
@@ -52,6 +58,15 @@ public class JsonMenuBar extends JMenuBar {
         }
     }
 
-
+    private void bindMenuItemListener(JMenuItem jMenuItem) {
+        jMenuItem.addActionListener(e -> {
+            switch (jMenuItem.getName()) {
+                case "newProject":
+                    NewProjectDialog newProjectDialog = new NewProjectDialog();
+                    WizardSettings settings = newProjectDialog.getSettings();
+                    break;
+            }
+        });
+    }
 
 }
