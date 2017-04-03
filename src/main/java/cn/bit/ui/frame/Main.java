@@ -44,7 +44,7 @@ public class Main extends JFrame {
 
         // loadAbs2RealMap menubar from resource
 
-        DefaultTreeModel iteTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode());
+        DefaultTreeModel iteTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
 
         Context.init(Context.configureFilePath);
 
