@@ -2,15 +2,9 @@ package cn.bit.ui.frame;
 
 import com.github.cjwizard.*;
 import com.github.cjwizard.pagetemplates.TitledPageTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.util.List;
 
@@ -19,13 +13,16 @@ import java.util.List;
  */
 public class NewProjectDialog extends JDialog {
 
-    private final Logger logger = LoggerFactory.getLogger(NewProjectDialog.class);
     private WizardSettings settings;
+    private boolean finished = false;
 
     public static void main(String[] args) {
-        // create the dialog, and show it:
         NewProjectDialog test = new NewProjectDialog();
         test.setVisible(true);
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 
     public WizardSettings getSettings() {
@@ -46,7 +43,6 @@ public class NewProjectDialog extends JDialog {
                         new TitledPageTemplate(),
                         new StackWizardSettings());
 
-
         wc.addWizardListener(new WizardListener() {
 
             @Override
@@ -58,6 +54,7 @@ public class NewProjectDialog extends JDialog {
             @Override
             public void onFinished(List<WizardPage> path, WizardSettings settings) {
                 setSettings(settings);
+                finished = true;
                 NewProjectDialog.this.dispose();
             }
 
@@ -82,226 +79,187 @@ public class NewProjectDialog extends JDialog {
         private WizardPage buildPage(int pageIndex, final WizardSettings settings) {
             switch (pageIndex) {
                 case 0:
-                    return new WizardPage("填写工程名及路径", "工程基本信息") {
-                        {
-                            setPreferredSize(new Dimension(400, 175));
-                            JTextField prjNameField = new JTextField();
-                            prjNameField.setName("prjNameField");
-                            JTextField prjPathField = new JTextField();
-                            prjPathField.setName("prjPathField");
-                            prjNameField.setPreferredSize(new Dimension(317, 20));
-                            prjPathField.setPreferredSize(new Dimension(280, 20));
-                            JLabel prjNameLabel = new JLabel("项目名:");
-                            JLabel prjPathLabel = new JLabel("项目路径:");
-                            JButton prjPathButton = new JButton("...");
-                            prjPathButton.setPreferredSize(new Dimension(30, 20));
-                            prjPathButton.addActionListener(e -> {
-                                JFileChooser jFileChooser = new JFileChooser();
-                                jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                                jFileChooser.setMultiSelectionEnabled(false);
-                                if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
-                                    prjPathField.setText(jFileChooser.getSelectedFile().getPath() + "/" + prjNameField.getText() + "/");
-                                }
-                            });
-
-                            setLayout(new GridLayout(2, 1));
-                            JPanel jPanel1 = new JPanel();
-                            FlowLayout flowLayout1 = new FlowLayout(FlowLayout.LEFT);
-                            flowLayout1.setHgap(12);
-                            jPanel1.setLayout(flowLayout1);
-
-                            jPanel1.add(prjNameLabel);
-                            jPanel1.add(prjNameField);
-                            JPanel jPanel2 = new JPanel();
-                            jPanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
-                            jPanel2.add(prjPathLabel);
-                            jPanel2.add(prjPathField);
-                            jPanel2.add(prjPathButton);
-                            add(jPanel1);
-                            add(jPanel2);
-                            setBorder(new EmptyBorder(5, 5, 10, 5));
-                        }
-                    };
-                case 1:
-                    return new WizardPage("选择创建方式", "创建方式") {
-                        {
-                            setPreferredSize(new Dimension(470, 230));
-                            JCheckBox createByTemplateCheckBox = new JCheckBox("从模板导入");
-                            createByTemplateCheckBox.setName("createByTemplateCheckBox");
-                            JLabel templatePathLabel = new JLabel("模板路径：");
-                            templatePathLabel.setEnabled(false);
-                            JTextField templatePathField = new JTextField();
-                            templatePathField.setName("templatePathField");
-                            templatePathField.setEnabled(false);
-                            templatePathField.setPreferredSize(new Dimension(280, 20));
-                            JButton templatePathButton = new JButton("...");
-                            templatePathButton.setPreferredSize(new Dimension(30, 20));
-                            templatePathButton.setEnabled(false);
-
-                            createByTemplateCheckBox.addActionListener(e -> {
-                                if (createByTemplateCheckBox.isSelected()) {
-                                    templatePathLabel.setEnabled(true);
-                                    templatePathField.setEnabled(true);
-                                    templatePathButton.setEnabled(true);
-                                } else {
-                                    templatePathLabel.setEnabled(false);
-                                    templatePathField.setEnabled(false);
-                                    templatePathButton.setEnabled(false);
-                                }
-                            });
-                            templatePathButton.addActionListener(e -> {
-                                JFileChooser jFileChooser = new JFileChooser();
-                                jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                                jFileChooser.setMultiSelectionEnabled(false);
-                                if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
-                                    templatePathField.setText(jFileChooser.getSelectedFile().getPath());
-                                }
-                            });
-
-                            setLayout(new GridLayout(2, 1));
-                            JPanel jPanel1 = new JPanel();
-                            FlowLayout flowLayout1 = new FlowLayout(FlowLayout.LEFT);
-                            jPanel1.setLayout(flowLayout1);
-                            jPanel1.add(createByTemplateCheckBox);
-
-                            JPanel jPanel2 = new JPanel();
-                            FlowLayout flowLayout2 = new FlowLayout(FlowLayout.CENTER);
-                            flowLayout2.setVgap(5);
-                            jPanel2.setLayout(flowLayout2);
-                            jPanel2.add(templatePathLabel);
-                            jPanel2.add(templatePathField);
-                            jPanel2.add(templatePathButton);
-                            add(jPanel1);
-                            add(jPanel2);
-                            setBorder(new EmptyBorder(5, 5, 15, 5));
-                        }
-                    };
-                case 2:
-                    return new WizardPage("填写工程相关信息", "工程配置") {
-                        {
-
-                            setPreferredSize(new Dimension(480, 450));
-                            setBorder(new EmptyBorder(10, 20, 10, 20));
-                            JTextField[] jTextFields = new JTextField[10];
-                            JLabel[] jLabels = {
-                                    new JLabel("被测软件版本:"),
-                                    new JLabel("芯片厂商:"),
-                                    new JLabel("软件开发单位:"),
-                                    new JLabel("软件开发版本:"),
-                                    new JLabel("所属型号:"),
-                                    new JLabel("软件代号:"),
-                                    new JLabel("被测软件顶层名称:"),
-                                    new JLabel("开发语言:"),
-                                    new JLabel("开发环境:"),
-                                    new JLabel("第三方EDA名称:")
-                            };
-
-                            setLayout(new GridLayout(11, 1));
-
-                            for (int i = 0; i < 10; i++) {
-                                jTextFields[i] = new JTextField();
-                                jTextFields[i].setPreferredSize(new Dimension(300, 20));
-                                JPanel jPanel = new JPanel();
-                                jPanel.setLayout(new BorderLayout());
-                                jPanel.add(jLabels[i], BorderLayout.LINE_START);
-                                JPanel jPanel2 = new JPanel();
-                                jPanel2.setLayout(new FlowLayout());
-                                jPanel2.add(jTextFields[i]);
-                                jPanel.add(jPanel2, BorderLayout.LINE_END);
-                                add(jPanel);
-                            }
-
-                            JButton additionButton = new JButton("+");
-                            additionButton.setSize(20, 20);
-                            JPanel jPanel = new JPanel();
-                            jPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-                            jPanel.add(additionButton);
-                            add(jPanel);
-
-                        }
-                    };
-                case 3:
-                    return new WizardPage("添加配置文件", "工具配置") {
-                        {
-                            setPreferredSize(new Dimension(580, 230));
-                            setBorder(new EmptyBorder(10, 20, 10, 20));
-                            JTextField[] jTextFields = new JTextField[4];
-                            JLabel[] jLabels = {
-                                    new JLabel("规则检查配置文件:"),
-                                    new JLabel("跨时钟域检查配置文件:"),
-                                    new JLabel("仿真配置文件:"),
-                                    new JLabel("静态检查配置文件:")
-                            };
-                            setLayout(new GridLayout(4, 1));
-
-                            for (int i = 0; i < 4; i++) {
-                                jTextFields[i] = new JTextField();
-                                jTextFields[i].setPreferredSize(new Dimension(300, 20));
-                                jTextFields[i].setName(jLabels[i].getText());
-                                JPanel jPanel = new JPanel();
-                                jPanel.setLayout(new BorderLayout());
-                                jPanel.add(jLabels[i], BorderLayout.LINE_START);
-                                JButton pathButton = new JButton("...");
-                                int finalI = i;
-                                pathButton.addActionListener(e -> {
-                                    JFileChooser jFileChooser = new JFileChooser();
-                                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                                    jFileChooser.setMultiSelectionEnabled(false);
-                                    if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
-                                        jTextFields[finalI].setText(jFileChooser.getSelectedFile().getPath());
-                                    }
-                                });
-                                JPanel jPanel2 = new JPanel();
-                                jPanel2.setLayout(new FlowLayout());
-                                jPanel2.add(jTextFields[i]);
-                                jPanel2.add(pathButton);
-                                jPanel.add(jPanel2, BorderLayout.LINE_END);
-                                add(jPanel);
-                            }
-                        }
-                    };
-                case 4:
-                    return new WizardPage("添加代码文件", "文件配置") {
-                        {
-                            setPreferredSize(new Dimension(540, 260));
-                            setBorder(new EmptyBorder(10, 20, 10, 20));
-                            JTextField[] jTextFields = new JTextField[5];
-                            JLabel[] jLabels = {
-                                    new JLabel("被测件源码:"),
-                                    new JLabel("芯片库文件:"),
-                                    new JLabel("测试方应用平台:"),
-                                    new JLabel("测试用例:"),
-                                    new JLabel("验证VIP:"),
-                            };
-                            setLayout(new GridLayout(5, 1));
-
-                            for (int i = 0; i < 5; i++) {
-                                jTextFields[i] = new JTextField();
-                                jTextFields[i].setPreferredSize(new Dimension(300, 20));
-                                JPanel jPanel = new JPanel();
-                                jPanel.setLayout(new BorderLayout());
-                                jPanel.add(jLabels[i], BorderLayout.LINE_START);
-                                JButton pathButton = new JButton("...");
-                                int finalI = i;
-                                pathButton.addActionListener(e -> {
-                                    JFileChooser jFileChooser = new JFileChooser();
-                                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                                    jFileChooser.setMultiSelectionEnabled(false);
-                                    if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
-                                        jTextFields[finalI].setText(jFileChooser.getSelectedFile().getPath());
-                                    }
-                                });
-                                JPanel jPanel2 = new JPanel();
-                                jPanel2.setLayout(new FlowLayout());
-                                jPanel2.add(jTextFields[i]);
-                                jPanel2.add(pathButton);
-                                jPanel.add(jPanel2, BorderLayout.LINE_END);
-                                add(jPanel);
-                            }
-                        }
-                    };
-                case 5:
-                    return new ConfirmPage(settings);
+                    return new NewProjectBasicPage("填写工程名及路径", "工程基本信息");
+//                case 1:
+//                    return new WizardPage("选择创建方式", "创建方式") {
+//                        {
+//                            setPreferredSize(new Dimension(470, 230));
+//                            JCheckBox createByTemplateCheckBox = new JCheckBox("从模板导入");
+//                            createByTemplateCheckBox.setName("createByTemplateCheckBox");
+//                            JLabel templatePathLabel = new JLabel("模板路径：");
+//                            templatePathLabel.setEnabled(false);
+//                            JTextField templatePathField = new JTextField();
+//                            templatePathField.setName("templatePathField");
+//                            templatePathField.setEnabled(false);
+//                            templatePathField.setPreferredSize(new Dimension(280, 20));
+//                            JButton templatePathButton = new JButton("...");
+//                            templatePathButton.setPreferredSize(new Dimension(30, 20));
+//                            templatePathButton.setEnabled(false);
+//
+//                            createByTemplateCheckBox.addActionListener(e -> {
+//                                if (createByTemplateCheckBox.isSelected()) {
+//                                    templatePathLabel.setEnabled(true);
+//                                    templatePathField.setEnabled(true);
+//                                    templatePathButton.setEnabled(true);
+//                                } else {
+//                                    templatePathLabel.setEnabled(false);
+//                                    templatePathField.setEnabled(false);
+//                                    templatePathButton.setEnabled(false);
+//                                }
+//                            });
+//                            templatePathButton.addActionListener(e -> {
+//                                JFileChooser jFileChooser = new JFileChooser();
+//                                jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//                                jFileChooser.setMultiSelectionEnabled(false);
+//                                if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
+//                                    templatePathField.setText(jFileChooser.getSelectedFile().getPath());
+//                                }
+//                            });
+//
+//                            setLayout(new GridLayout(2, 1));
+//                            JPanel jPanel1 = new JPanel();
+//                            FlowLayout flowLayout1 = new FlowLayout(FlowLayout.LEFT);
+//                            jPanel1.setLayout(flowLayout1);
+//                            jPanel1.add(createByTemplateCheckBox);
+//
+//                            JPanel jPanel2 = new JPanel();
+//                            FlowLayout flowLayout2 = new FlowLayout(FlowLayout.CENTER);
+//                            flowLayout2.setVgap(5);
+//                            jPanel2.setLayout(flowLayout2);
+//                            jPanel2.add(templatePathLabel);
+//                            jPanel2.add(templatePathField);
+//                            jPanel2.add(templatePathButton);
+//                            add(jPanel1);
+//                            add(jPanel2);
+//                            setBorder(new EmptyBorder(5, 5, 15, 5));
+//                        }
+//                    };
+//                case 2:
+//                    return new WizardPage("填写工程相关信息", "工程配置") {
+//                        {
+//
+//                            setPreferredSize(new Dimension(480, 450));
+//                            setBorder(new EmptyBorder(10, 20, 10, 20));
+//                            JTextField[] jTextFields = new JTextField[10];
+//                            JLabel[] jLabels = {
+//                                    new JLabel("被测软件版本:"),
+//                                    new JLabel("芯片厂商:"),
+//                                    new JLabel("软件开发单位:"),
+//                                    new JLabel("软件开发版本:"),
+//                                    new JLabel("所属型号:"),
+//                                    new JLabel("软件代号:"),
+//                                    new JLabel("被测软件顶层名称:"),
+//                                    new JLabel("开发语言:"),
+//                                    new JLabel("开发环境:"),
+//                                    new JLabel("第三方EDA名称:")
+//                            };
+//
+//                            setLayout(new GridLayout(11, 1));
+//
+//                            for (int i = 0; i < 10; i++) {
+//                                jTextFields[i] = new JTextField();
+//                                jTextFields[i].setPreferredSize(new Dimension(300, 20));
+//                                JPanel jPanel = new JPanel();
+//                                jPanel.setLayout(new BorderLayout());
+//                                jPanel.add(jLabels[i], BorderLayout.LINE_START);
+//                                JPanel jPanel2 = new JPanel();
+//                                jPanel2.setLayout(new FlowLayout());
+//                                jPanel2.add(jTextFields[i]);
+//                                jPanel.add(jPanel2, BorderLayout.LINE_END);
+//                                add(jPanel);
+//                            }
+//
+//                            JButton additionButton = new JButton("+");
+//                            additionButton.setSize(20, 20);
+//                            JPanel jPanel = new JPanel();
+//                            jPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+//                            jPanel.add(additionButton);
+//                            add(jPanel);
+//
+//                        }
+//                    };
+//                case 3:
+//                    return new WizardPage("添加配置文件", "工具配置") {
+//                        {
+//                            setPreferredSize(new Dimension(580, 230));
+//                            setBorder(new EmptyBorder(10, 20, 10, 20));
+//                            JTextField[] jTextFields = new JTextField[4];
+//                            JLabel[] jLabels = {
+//                                    new JLabel("规则检查配置文件:"),
+//                                    new JLabel("跨时钟域检查配置文件:"),
+//                                    new JLabel("仿真配置文件:"),
+//                                    new JLabel("静态检查配置文件:")
+//                            };
+//                            setLayout(new GridLayout(4, 1));
+//
+//                            for (int i = 0; i < 4; i++) {
+//                                jTextFields[i] = new JTextField();
+//                                jTextFields[i].setPreferredSize(new Dimension(300, 20));
+//                                jTextFields[i].setName(jLabels[i].getText());
+//                                JPanel jPanel = new JPanel();
+//                                jPanel.setLayout(new BorderLayout());
+//                                jPanel.add(jLabels[i], BorderLayout.LINE_START);
+//                                JButton pathButton = new JButton("...");
+//                                int finalI = i;
+//                                pathButton.addActionListener(e -> {
+//                                    JFileChooser jFileChooser = new JFileChooser();
+//                                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+//                                    jFileChooser.setMultiSelectionEnabled(false);
+//                                    if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
+//                                        jTextFields[finalI].setText(jFileChooser.getSelectedFile().getPath());
+//                                    }
+//                                });
+//                                JPanel jPanel2 = new JPanel();
+//                                jPanel2.setLayout(new FlowLayout());
+//                                jPanel2.add(jTextFields[i]);
+//                                jPanel2.add(pathButton);
+//                                jPanel.add(jPanel2, BorderLayout.LINE_END);
+//                                add(jPanel);
+//                            }
+//                        }
+//                    };
+//                case 4:
+//                    return new WizardPage("添加代码文件", "文件配置") {
+//                        {
+//                            setPreferredSize(new Dimension(540, 260));
+//                            setBorder(new EmptyBorder(10, 20, 10, 20));
+//                            JTextField[] jTextFields = new JTextField[5];
+//                            JLabel[] jLabels = {
+//                                    new JLabel("被测件源码:"),
+//                                    new JLabel("芯片库文件:"),
+//                                    new JLabel("测试方应用平台:"),
+//                                    new JLabel("测试用例:"),
+//                                    new JLabel("验证VIP:"),
+//                            };
+//                            setLayout(new GridLayout(5, 1));
+//
+//                            for (int i = 0; i < 5; i++) {
+//                                jTextFields[i] = new JTextField();
+//                                jTextFields[i].setPreferredSize(new Dimension(300, 20));
+//                                JPanel jPanel = new JPanel();
+//                                jPanel.setLayout(new BorderLayout());
+//                                jPanel.add(jLabels[i], BorderLayout.LINE_START);
+//                                JButton pathButton = new JButton("...");
+//                                int finalI = i;
+//                                pathButton.addActionListener(e -> {
+//                                    JFileChooser jFileChooser = new JFileChooser();
+//                                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+//                                    jFileChooser.setMultiSelectionEnabled(false);
+//                                    if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
+//                                        jTextFields[finalI].setText(jFileChooser.getSelectedFile().getPath());
+//                                    }
+//                                });
+//                                JPanel jPanel2 = new JPanel();
+//                                jPanel2.setLayout(new FlowLayout());
+//                                jPanel2.add(jTextFields[i]);
+//                                jPanel2.add(pathButton);
+//                                jPanel.add(jPanel2, BorderLayout.LINE_END);
+//                                add(jPanel);
+//                            }
+//                        }
+//                    };
+//                case 5:
+//                    return new ConfirmPage(settings);
 
             }
             return null;

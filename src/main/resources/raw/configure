@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ITEProperties>
-    <ActiveProject projectName="prj1" projectFilePath="src/main/resources/raw/test_project" />
-    <ActiveProject projectName="prj2" projectFilePath="src/main/resources/raw/test_project2" />
-    <ActiveProject projectName="StandardProject" projectFilePath="src/main/resources/raw/file_map" />
-</ITEProperties>
+    <ActiveProject projectName="prj1" projectFilePath="src/main/resources/raw/test_project"/>
+    <ActiveProject projectName="prj2" projectFilePath="src/main/resources/raw/test_project2"/>
+    <ActiveProject projectName="StandardProject" projectFilePath="src/main/resources/raw/file_map"/>
+<ActiveProject projectName="Dlien" projectFilePath="/Users/KlousesSun/test914/Dlien/Dlien.ite"/></ITEProperties>

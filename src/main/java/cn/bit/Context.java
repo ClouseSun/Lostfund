@@ -28,6 +28,7 @@ public class Context {
     public static String jsonDirPopMenuPath = RES_ROOT + "json/TreePopupMenu/popmenu_dir_hierachy";
     public static String jsonFilePopMenuPath = RES_ROOT + "json/TreePopupMenu/popmenu_file_hierachy";
     public static String jsonProjectPopMenuPath = RES_ROOT + "json/TreePopupMenu/popmenu_project_hierachy";
+    public static String defaultPrjXmlPath = RES_ROOT + "raw/default_file_map";
 
     public static Context getContext() {
         if (context != null) {

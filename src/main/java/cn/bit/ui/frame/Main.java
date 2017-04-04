@@ -25,11 +25,15 @@ public class Main extends JFrame {
     private JPanel panel1;
 
     private JTree tree1;
-    private JSplitPane consoleSpiltPane;
+    private JSplitPane consoleSplitPane;
+    private JSplitPane editorSplitPane;
 
     public static void main(String[] args) {
         Main mainObj = new Main();
         mainObj.setVisible(true);
+        mainObj.consoleSplitPane.setDividerLocation(0.3);
+        mainObj.editorSplitPane.setDividerLocation(0.5);
+
     }
 
 
@@ -42,9 +46,9 @@ public class Main extends JFrame {
 
         JMenuBar menuBar = null;
 
-        // loadAbs2RealMap menubar from resource
-
         DefaultTreeModel iteTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
+
+
 
         Context.init(Context.configureFilePath);
 
