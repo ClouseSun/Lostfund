@@ -82,52 +82,81 @@ public class JsonTreePopMenu extends JPopupMenu{
         }
     }
 
-    private void addFile(File newFile, JTree jTree, Map newFilesMap) {
+    private void addFile(File newFile, Map newFilesMap, DefaultTreeModel treeModel, DefaultMutableTreeNode parentNode) {
         if (newFile.isDirectory()) {
-            // TODO Add the whole directory recursively.
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), newFile.getName());
+            fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
+            newNode.setAllowsChildren(true);
+            treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
+            TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
+            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR)
+                    + newFile.getName() + "/";
+            newFilesMap.put(abstractPath, newFile.getPath());
+
+            File[] childFileList = newFile.listFiles();
+            for(int i = 0; i < childFileList.length; i++) {
+                addFile(childFileList[i], newFilesMap, treeModel, newNode);
+            }
         } else {
             FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), newFile.getName());
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(false);
-            ((DefaultTreeModel) jTree.getModel()).insertNodeInto(newNode
-                    , (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()
-                    , ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getChildCount());
-
-            TreeNode[] newPath = Arrays.copyOfRange(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), 2, ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath().length);
-
-            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR) + newFile.getName();
+            treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
+            TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
+            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR)
+                    + newFile.getName();
             newFilesMap.put(abstractPath, newFile.getPath());
             return ;
         }
     }
 
-    private void addCopyFile(File sourceFile, JTree jTree, Map newFilesMap) {
+    private void addCopyFile(File sourceFile,
+                             Map newFilesMap,
+                             DefaultTreeModel treeModel,
+                             DefaultMutableTreeNode parentNode) {
         if (sourceFile.isDirectory()) {
-            // TODO Add the whole directory recursively.
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), sourceFile.getName());
+            fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
+            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
+            newNode.setAllowsChildren(true);
+            treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
+
+            TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
+
+            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR)
+                    + sourceFile.getName();
+            String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealName();
+            newFilesMap.put(abstractPath, sourceFile.getPath());
+
+            File newFile = new File(dirPathToInsert + sourceFile.getName());
+            try {
+                IOUtils.copy(new FileInputStream(sourceFile), new FileOutputStream(newFile));
+                File[] childFileList = newFile.listFiles();
+                for(int i = 0; i < childFileList.length; i++) {
+                    addCopyFile(childFileList[i], newFilesMap, treeModel, newNode);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), sourceFile.getName());
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(false);
-            ((DefaultTreeModel) jTree.getModel())
-                    .insertNodeInto(newNode,
-                            (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent(),
-                            ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getChildCount());
-
-            TreeNode[] newPath = Arrays.copyOfRange(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), 2, ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath().length);
-
-            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR) + sourceFile.getName();
-            String dirPathToInsert = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getRealName();
+            treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
+            TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
+            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR)
+                    + sourceFile.getName();
+            String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealName();
             newFilesMap.put(abstractPath, sourceFile.getPath());
-
             File newFile = new File(dirPathToInsert + sourceFile.getName());
             try {
                 IOUtils.copy(new FileInputStream(sourceFile), new FileOutputStream(newFile));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return ;
         }
     }
@@ -136,17 +165,21 @@ public class JsonTreePopMenu extends JPopupMenu{
         jMenuItem.addActionListener((ActionEvent e) -> {
             JFileChooser jFileChooser = new JFileChooser();
             String projectName = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath()[1].toString();
+
             String xmlPath = Context.getProjectFilePath(projectName);
             switch (jMenuItem.getName()) {
                 case "menuitem_addExisting":
-                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                     jFileChooser.setMultiSelectionEnabled(true);
 
                     if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
                         File[] newFiles = jFileChooser.getSelectedFiles();
                         Map<String, String> newFilesMap = new HashMap<>();
                         for (File newFile : newFiles) {
-                            addFile(newFile, jTree, newFilesMap);
+                            addFile(newFile,
+                                    newFilesMap,
+                                    ((DefaultTreeModel) jTree.getModel()),
+                                    ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()));
                         }
 
                         FileMappingUtils.insertNewMapping(xmlPath, newFilesMap);
@@ -155,13 +188,16 @@ public class JsonTreePopMenu extends JPopupMenu{
                     }
                     break;
                 case "menuitem_addCopyExisting":
-                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                     jFileChooser.setMultiSelectionEnabled(true);
                     if (jFileChooser.showOpenDialog(null) != 1) {
                         File[] sourceFiles = jFileChooser.getSelectedFiles();
                         Map<String, String> newFilesMap = new HashMap<>();
                         for (File sourceFile : sourceFiles) {
-                            addCopyFile(sourceFile, jTree, newFilesMap);
+                            addCopyFile(sourceFile,
+                                    newFilesMap,
+                                    ((DefaultTreeModel) jTree.getModel()),
+                                    ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()));
                         }
                         FileMappingUtils.insertNewMapping(xmlPath, newFilesMap);
                     } else {

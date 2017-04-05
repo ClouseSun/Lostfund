@@ -3,9 +3,6 @@
     <userMapping>
         <mappingEntry abstractPath="规则检查文件夹/" absolutePath=""/>
         <mappingEntry abstractPath="规则检查文件夹/规则检查文件" absolutePath=""/>
-        <mappingEntry abstractPath="跨时钟域检查文件夹/" absolutePath=""/>
-        <mappingEntry abstractPath="跨时钟域检查文件夹/文件directive" absolutePath=""/>
-        <mappingEntry abstractPath="跨时钟域检查文件夹/文件modelsim" absolutePath=""/>
         <mappingEntry abstractPath="功能时序仿真文件夹/测试平台TB/" absolutePath=""/>
         <mappingEntry abstractPath="功能时序仿真文件夹/验证VIP/" absolutePath=""/>
         <mappingEntry abstractPath="功能时序仿真文件夹/库文件LIB/" absolutePath=""/>
