@@ -76,16 +76,16 @@ public class JsonMenuBar extends JMenuBar {
                         WizardSettings settings = newProjectDialog.getSettings();
                         String newPrjName = settings.get("prjNameField").toString();
                         String newPrjPath = settings.get("prjPathField").toString();
-                        File dir = new File(newPrjPath);
-                        if(!dir.exists()) {
-                            if(dir.mkdirs()) {
-                                File newIteFile = new File(newPrjPath + newPrjName + ".ite");
-                                FileMappingUtils.createNewProject(Context.configureFilePath, newPrjName, Context.defaultPrjXmlPath ,newIteFile.getPath());
-                                AbstractFileTree abstractFileTree = new AbstractFileTree(newPrjName, newIteFile.getPath());
+                        File newPrjDir = new File(newPrjPath);
+                        if(!newPrjDir.exists()) {
+                            if(newPrjDir.mkdirs()) {
+                                String newIteFile = newPrjPath + newPrjName + ".ite";
+                                FileMappingUtils.createNewProject(Context.configureFilePath, newPrjName, Context.defaultPrjXmlPath ,newPrjPath);
+                                AbstractFileTree abstractFileTree = new AbstractFileTree(newPrjName, newIteFile);
                                 IteProject iteProject = new IteProject(abstractFileTree);
                                 Context.getOpenProjects().put(newPrjName, iteProject);
                                 try {
-                                    abstractFileTree.addAll(FileMappingUtils.loadFileMapping(new FileInputStream(newIteFile.getPath()), true));
+                                    abstractFileTree.addAll(FileMappingUtils.loadFileMapping(new FileInputStream(newIteFile), true));
                                     ((DefaultTreeModel) jTree.getModel()).insertNodeInto(iteProject.getProjectTree().getProjectTreeRoot()
                                     , ((DefaultMutableTreeNode) jTree.getModel().getRoot())
                                     , ((DefaultMutableTreeNode) jTree.getModel().getRoot()).getChildCount());

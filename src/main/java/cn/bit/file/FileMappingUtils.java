@@ -1,9 +1,6 @@
 package cn.bit.file;
 
-import cn.bit.Context;
 import cn.bit.model.FileNodeEntity;
-import cn.bit.model.IteProject;
-import com.github.cjwizard.PageFactory;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -51,11 +48,11 @@ public class FileMappingUtils {
         return new LinkedHashMap<>();
     }
 
-    public static void insertDefaultMapping(InputStream defaultXml, String itePath) {
+    public static void insertDefaultMapping(InputStream defaultXml, String newPrjXmlPath ,String newPrjPath) {
         try {
             Document defaultDocument = new SAXReader().read(defaultXml);
             try {
-                Document iteDocument = new SAXReader().read(new FileInputStream(itePath));
+                Document iteDocument = new SAXReader().read(new FileInputStream(newPrjXmlPath));
                 List<Element> defaultFileList = defaultDocument.getRootElement().elements("mappingEntry");
                 Element iteMapping = iteDocument.getRootElement().element("userMapping");
                 if(iteMapping == null) {
@@ -64,11 +61,11 @@ public class FileMappingUtils {
                 for (Element element:defaultFileList) {
                     Element newMappingEntry = iteMapping.addElement("mappingEntry");
                     newMappingEntry.addAttribute("abstractPath", element.attributeValue("abstractPath"));
-                    newMappingEntry.addAttribute("absolutePath", element.attributeValue("absolutePath"));
+                    newMappingEntry.addAttribute("absolutePath", newPrjPath + element.attributeValue("absolutePath"));
                 }
                 XMLWriter xmlWriter = null;
                 try {
-                    xmlWriter = new XMLWriter(new FileWriter(itePath));
+                    xmlWriter = new XMLWriter(new FileWriter(newPrjXmlPath));
                     xmlWriter.write(iteDocument);
                     xmlWriter.close();
                 } catch (IOException e) {
@@ -110,22 +107,32 @@ public class FileMappingUtils {
         }
     }
 
-    public static void createNewProject(String configurePath, String prjName, String defaultXmlPath ,String prjXmlPath) {
+    public static void createNewProject(String configurePath, String newPrjName, String defaultXmlPath , String newPrjPath) {
         try {
-            File newPrjXml = new File(prjXmlPath);
+            File newPrjXml = new File(newPrjPath + newPrjName + ".ite");
             newPrjXml.createNewFile();
-            IOUtils.write("<projectModel>\n" + "</projectModel>", new FileOutputStream(prjXmlPath));
+            IOUtils.write("<projectModel>\n" + "</projectModel>", new FileOutputStream(newPrjXml.getPath()));
             Document configureDoc = new SAXReader().read(new FileInputStream(configurePath));
             Element prjConfigs = configureDoc.getRootElement();
             Element newPrj = prjConfigs.addElement("ActiveProject");
-            newPrj.addAttribute("projectName", prjName);
-            newPrj.addAttribute("projectFilePath", prjXmlPath);
+            newPrj.addAttribute("projectName", newPrjName);
+            newPrj.addAttribute("projectFilePath", newPrjXml.getPath());
 
             XMLWriter xmlWriter = new XMLWriter(new FileWriter(configurePath));
             xmlWriter.write(configureDoc);
             xmlWriter.flush();
 
-            insertDefaultMapping(new FileInputStream(defaultXmlPath), prjXmlPath);
+            insertDefaultMapping(new FileInputStream(defaultXmlPath), newPrjXml.getPath(), newPrjPath);
+
+            Document document = new SAXReader().read(new FileInputStream(newPrjXml.getPath()));
+            List<Element> newDirElementsList = document.getRootElement().element("userMapping").elements();
+
+            for (Element newDirElement : newDirElementsList) {
+                File newDir = new File(newDirElement.attributeValue("absolutePath"));
+                newDir.mkdirs();
+            }
+
+
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -142,13 +149,6 @@ public class FileMappingUtils {
              List<Element> userMappings = document.getRootElement().element("userMapping").elements();
 
             Element userMappingElement = document.getRootElement().element("userMapping");
-            //for (String abstractPath : removedList) {
-            //    for (Element element : userMappings) {
-            //        if (element.attributeValue("abstractPath").startsWith(abstractPath)) {
-            //            userMappingElement.remove(element);
-            //        }
-            //    }
-            //}
 
             removedList.stream().forEach(abstractPath -> {
                 userMappings.stream()
