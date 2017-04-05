@@ -19,7 +19,7 @@ import java.util.Map;
  * Created by zhehua on 29/03/2017.
  */
 public class Context {
-    Map<String, IteProject> openProjects;
+    static Map<String, IteProject> openProjects;
     static Context context;
 
     public final static String RES_ROOT = "src/main/resources/";
@@ -62,7 +62,7 @@ public class Context {
         this.openProjects = openProjects;
     }
 
-    public Map<String, IteProject> getOpenProjects() {
+    public static Map<String, IteProject> getOpenProjects() {
         return openProjects;
     }
 

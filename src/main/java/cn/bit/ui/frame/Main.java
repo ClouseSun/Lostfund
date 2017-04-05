@@ -48,8 +48,6 @@ public class Main extends JFrame {
 
         DefaultTreeModel iteTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
 
-
-
         Context.init(Context.configureFilePath);
 
         Context.getContext().getOpenProjects().entrySet().stream().forEach(stringIteProjectEntry -> {
@@ -60,7 +58,7 @@ public class Main extends JFrame {
 
         try {
             String jsonMenuBarString = IOUtils.toString(new FileInputStream(Context.getJsonMenuBarPath()));
-            menuBar = new JsonMenuBar(jsonMenuBarString);
+            menuBar = new JsonMenuBar(jsonMenuBarString, tree1);
             setJMenuBar(menuBar);
         } catch (IOException e) {
             e.printStackTrace();
