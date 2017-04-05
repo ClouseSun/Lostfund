@@ -118,7 +118,7 @@ public class JsonTreePopMenu extends JPopupMenu{
             TreeNode[] newPath = Arrays.copyOfRange(((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath(), 2, ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath().length);
 
             String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR) + sourceFile.getName();
-            String dirPathToInsert = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getRealName();
+            String dirPathToInsert = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getRealPath();
             newFilesMap.put(abstractPath, sourceFile.getPath());
 
             File newFile = new File(dirPathToInsert + sourceFile.getName());
@@ -169,17 +169,19 @@ public class JsonTreePopMenu extends JPopupMenu{
                     }
                     break;
                 case "menuitem_delete":
-                    int itemType = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getNodeType();
-                    //Map<Integer, String> removeMap = new HashMap<Integer, String>();
-                    List<String> removedList = new LinkedList<>();
-                    DefaultMutableTreeNode removedNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
+                    int confirmRet = JOptionPane.showConfirmDialog(null, "是否删除真实目录下的文件？");
 
-                    TreeNode[] delPath = Arrays.copyOfRange(removedNode.getPath(), 2, ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath().length);
-
-                    removedList.add(FileMappingUtils.path2String(delPath, itemType));
-                    FileMappingUtils.removeMappingFromXml(xmlPath, removedList);
-                    ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent((removedNode));
-                    break;
+                    if (confirmRet != JOptionPane.CANCEL_OPTION) {
+                        int itemType = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getNodeType();
+                        List<String> removedList = new LinkedList<>();
+                        DefaultMutableTreeNode removedNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
+                        TreeNode[] delPath = Arrays.copyOfRange(removedNode.getPath(), 2, removedNode.getPath().length);
+                        removedList.add(FileMappingUtils.path2String(delPath, itemType));
+                        FileMappingUtils.removeMappingFromXml(xmlPath,
+                                removedList,
+                                JOptionPane.OK_OPTION == confirmRet);
+                        ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent((removedNode));
+                    }
             }
         });
     }

@@ -31,8 +31,7 @@ public class JsonMenuBar extends JMenuBar {
                 jMenuItem.setName(menuList.getName());
                 bindMenuItemListener(jMenuItem, jTree);
                 add(jMenuItem);
-            }
-            else {
+            } else {
                 JMenu jMenu = new JMenu(ml.getTitle());
                 jMenu.setEnabled(ml.isEnable());
                 add(jMenu);
@@ -56,8 +55,7 @@ public class JsonMenuBar extends JMenuBar {
             jMenuItem.setName(menuList.getName());
             bindMenuItemListener(jMenuItem, jTree);
             root.add(jMenuItem);
-        }
-        else {
+        } else {
             JMenu jMenu = new JMenu(menuList.getTitle());
             jMenu.setEnabled(menuList.isEnable());
             for (MenuList ml:menuList.getMenuList()) {
@@ -80,15 +78,18 @@ public class JsonMenuBar extends JMenuBar {
                         if(!newPrjDir.exists()) {
                             if(newPrjDir.mkdirs()) {
                                 String newIteFile = newPrjPath + newPrjName + ".ite";
-                                FileMappingUtils.createNewProject(Context.configureFilePath, newPrjName, Context.defaultPrjXmlPath ,newPrjPath);
+                                FileMappingUtils.createNewProject(Context.configureFilePath,
+                                        newPrjName,
+                                        Context.defaultPrjXmlPath,
+                                        newPrjPath);
                                 AbstractFileTree abstractFileTree = new AbstractFileTree(newPrjName, newIteFile);
                                 IteProject iteProject = new IteProject(abstractFileTree);
                                 Context.getOpenProjects().put(newPrjName, iteProject);
                                 try {
                                     abstractFileTree.addAll(FileMappingUtils.loadFileMapping(new FileInputStream(newIteFile), true));
-                                    ((DefaultTreeModel) jTree.getModel()).insertNodeInto(iteProject.getProjectTree().getProjectTreeRoot()
-                                    , ((DefaultMutableTreeNode) jTree.getModel().getRoot())
-                                    , ((DefaultMutableTreeNode) jTree.getModel().getRoot()).getChildCount());
+                                    ((DefaultTreeModel) jTree.getModel()).insertNodeInto(iteProject.getProjectTree().getProjectTreeRoot(),
+                                            ((DefaultMutableTreeNode) jTree.getModel().getRoot()),
+                                            ((DefaultMutableTreeNode) jTree.getModel().getRoot()).getChildCount());
                                 } catch (FileNotFoundException e1) {
                                     e1.printStackTrace();
                                 }

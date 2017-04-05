@@ -142,7 +142,16 @@ public class FileMappingUtils {
         }
     }
 
-    public static void removeMappingFromXml(String XmlPath, List<String> removedList) {
+    private static boolean delDir(File dir) {
+        if (!dir.isDirectory() || dir.list().length == 0) {
+            return dir.delete();
+        }
+        return delDir(dir) && dir.delete();
+
+    }
+
+    // TODO test
+    public static void removeMappingFromXml(String XmlPath, List<String> removedList, boolean isDeleteFile) {
         Document document = null;
         try {
             document = new SAXReader().read(new FileInputStream(XmlPath), "UTF8");
@@ -153,7 +162,13 @@ public class FileMappingUtils {
             removedList.stream().forEach(abstractPath -> {
                 userMappings.stream()
                         .filter(element -> element.attributeValue("abstractPath").startsWith(abstractPath))
-                        .forEach(element -> userMappingElement.remove(element));
+                        .forEach(element -> {
+                            userMappingElement.remove(element);
+                            if (isDeleteFile) {
+                                File tmpFile = new File(element.attributeValue("absolutePath"));
+                                delDir(tmpFile);
+                            }
+                        });
             });
             XMLWriter xmlWriter = new XMLWriter(new FileWriter(XmlPath));
             xmlWriter.write(document);

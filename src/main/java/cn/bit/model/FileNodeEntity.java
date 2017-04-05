@@ -6,17 +6,17 @@ package cn.bit.model;
  * Besides, {@link #nodeType} defines its type as directory/file/root(project name).
  *
  * The {@link #abstractName} doesn't contain the full path in the project tree but the name of the node,
- * while the {@link #realName} is full path on machine.
+ * while the {@link #realPath} is full path on machine.
  * For example, if a node's abstract path in project is "a/b/c", and the corresponding real path is "/home/user/hello",
- * The {@link #abstractName} is "c", and {@link #realName} is "/home/user/hello", as shown below:
+ * The {@link #abstractName} is "c", and {@link #realPath} is "/home/user/hello", as shown below:
  *
  *      a
  *      |_b
- *      | |_c {abstractName = c, realName = /home/user/hello}
+ *      | |_c {abstractName = c, realPath = /home/user/hello}
  *      | |_...
  *      |_...
  *
- * If the middle nodes on the path(node "a" and "b") have no corresponding real path, the variable {@link #realName}
+ * If the middle nodes on the path(node "a" and "b") have no corresponding real path, the variable {@link #realPath}
  * would be null.
  */
 public class FileNodeEntity {
@@ -25,24 +25,24 @@ public class FileNodeEntity {
     public static final int NODE_TYPE_ROOT = 2;
 
     private String abstractName;
-    private String realName;
+    private String realPath;
     private int nodeType = NODE_TYPE_DIR;
 
     /**
      * Construct entity object with abstract file/folder name and its real name.
      * Take attention that the node type is not specified.
      */
-    public FileNodeEntity(String abstractName, String realName) {
+    public FileNodeEntity(String abstractName, String realPath) {
         this.abstractName = abstractName;
-        this.realName = realName;
+        this.realPath = realPath;
     }
 
     /**
      * Construct entity object abstract file/folder name, real name
      * and its note type of dir/file/root(project name).
      */
-    public FileNodeEntity(String abstractName, String realName, int nodeType) {
-        this(abstractName, realName);
+    public FileNodeEntity(String abstractName, String realPath, int nodeType) {
+        this(abstractName, realPath);
         this.nodeType = nodeType;
     }
 
@@ -62,12 +62,12 @@ public class FileNodeEntity {
         this.abstractName = abstractName;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getRealPath() {
+        return realPath;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setRealPath(String realPath) {
+        this.realPath = realPath;
     }
 
     public int getNodeType() {

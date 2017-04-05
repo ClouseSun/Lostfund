@@ -23,7 +23,7 @@ public class AbstractFileTree {
     public AbstractFileTree(String projectName, String projectPath) {
         FileNodeEntity entity = new FileNodeEntity(FileNodeEntity.NODE_TYPE_ROOT);
         entity.setAbstractName(projectName);
-        entity.setRealName(projectPath);
+        entity.setRealPath(projectPath);
         projectTreeRoot = new DefaultMutableTreeNode(entity);
         projectTreeRoot.setAllowsChildren(true);
     }
