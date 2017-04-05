@@ -2,8 +2,7 @@
     "menuList": [
         {
             "title": "删除",
-            "name": "menuitem_delete",
-            "isEnable": true
+            "name": "menuitem_delete"
         }
     ]
 }

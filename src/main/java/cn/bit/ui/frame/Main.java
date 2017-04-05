@@ -31,8 +31,6 @@ public class Main extends JFrame {
     public static void main(String[] args) {
         Main mainObj = new Main();
         mainObj.setVisible(true);
-        mainObj.consoleSplitPane.setDividerLocation(0.3);
-        mainObj.editorSplitPane.setDividerLocation(0.5);
 
     }
 
@@ -43,7 +41,8 @@ public class Main extends JFrame {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         setSize((int) screenSize.getWidth(), (int) screenSize.getWidth());
-
+        consoleSplitPane.setDividerLocation(0.5);
+        editorSplitPane.setDividerLocation(0.5);
         JMenuBar menuBar = null;
 
         DefaultTreeModel iteTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);

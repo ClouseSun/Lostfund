@@ -68,7 +68,7 @@ public class Context {
 
     public static String getProjectFilePath(String projectName) {
         if (context != null) {
-            return ((FileNodeEntity) context.openProjects.get(projectName).getProjectTree().getProjectTreeRoot().getUserObject()).getRealName();
+            return ((FileNodeEntity) context.openProjects.get(projectName).getProjectTree().getProjectTreeRoot().getUserObject()).getRealPath();
         } else {
             throw new IllegalStateException("Context not initialized.");
         }

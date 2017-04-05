@@ -6,6 +6,7 @@ import com.github.cjwizard.pagetemplates.TitledPageTemplate;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -54,6 +55,15 @@ public class NewProjectDialog extends JDialog {
             @Override
             public void onFinished(List<WizardPage> path, WizardSettings settings) {
                 setSettings(settings);
+                File prjPath = new File(settings.get("prjPathField").toString());
+                if(!prjPath.exists() || !prjPath.canWrite()) {
+                    JOptionPane.showMessageDialog(null,
+                            "目录不存在或不可写",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
                 finished = true;
                 NewProjectDialog.this.dispose();
             }

@@ -1,5 +1,6 @@
 package cn.bit.file;
 
+import cn.bit.Context;
 import cn.bit.model.FileNodeEntity;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
@@ -142,7 +143,16 @@ public class FileMappingUtils {
         }
     }
 
-    public static void removeMappingFromXml(String XmlPath, List<String> removedList) {
+    private static boolean delDir(File dir) {
+        if (!dir.isDirectory() || dir.list().length == 0) {
+            return dir.delete();
+        }
+        return delDir(dir) && dir.delete();
+
+    }
+
+    // TODO test
+    public static void removeMappingFromXml(String XmlPath, List<String> removedList, boolean isDeleteFile) {
         Document document = null;
         try {
             document = new SAXReader().read(new FileInputStream(XmlPath), "UTF8");
@@ -153,7 +163,13 @@ public class FileMappingUtils {
             removedList.stream().forEach(abstractPath -> {
                 userMappings.stream()
                         .filter(element -> element.attributeValue("abstractPath").startsWith(abstractPath))
-                        .forEach(element -> userMappingElement.remove(element));
+                        .forEach(element -> {
+                            userMappingElement.remove(element);
+                            if (isDeleteFile) {
+                                File tmpFile = new File(element.attributeValue("absolutePath"));
+                                delDir(tmpFile);
+                            }
+                        });
             });
             XMLWriter xmlWriter = new XMLWriter(new FileWriter(XmlPath));
             xmlWriter.write(document);
@@ -183,5 +199,31 @@ public class FileMappingUtils {
             path.append("/");
 
         return path.toString();
+    }
+
+    public static void closeProject(String prjToClose)
+    {
+        Document document = null;
+        try {
+            document = new SAXReader().read(new FileInputStream(Context.configureFilePath));
+        List<Element> projectElementList = document.getRootElement().elements();
+        for (Element projectElement: projectElementList) {
+                if(projectElement.attributeValue("projectName").equals(prjToClose)) {
+                    document.getRootElement().remove(projectElement);
+                    Context.getOpenProjects().remove(prjToClose);
+                    XMLWriter xmlWriter = null;
+                    xmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath));
+                    xmlWriter.write(document);
+                    xmlWriter.flush();
+                    xmlWriter.close();
+                }
+            }
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }  catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

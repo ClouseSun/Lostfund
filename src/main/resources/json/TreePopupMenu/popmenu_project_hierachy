@@ -9,8 +9,8 @@
             "name": "menuitem_addCopyExisting"
         },
         {
-            "title": "删除",
-            "name": "menuitem_delete"
+            "title": "关闭工程",
+            "name": "menuitem_close"
         }
     ]
 }

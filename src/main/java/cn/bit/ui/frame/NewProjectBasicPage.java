@@ -33,27 +33,34 @@ public class NewProjectBasicPage extends WizardPage {
             jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             jFileChooser.setMultiSelectionEnabled(false);
             if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
-                prjPathField.setText(jFileChooser.getSelectedFile().getPath() + "/" + prjNameField.getText() + "/");
+                prjPathField.setText(jFileChooser.getSelectedFile().getPath());
             }
         });
 
         setLayout(new GridLayout(2, 1));
         JPanel jPanel1 = new JPanel();
-        FlowLayout flowLayout1 = new FlowLayout(FlowLayout.LEFT);
-        flowLayout1.setHgap(12);
-        jPanel1.setLayout(flowLayout1);
-
-        jPanel1.add(prjNameLabel);
-        jPanel1.add(prjNameField);
+        jPanel1.setLayout(new BorderLayout());
+        jPanel1.add(prjNameLabel, BorderLayout.LINE_START);
+        JPanel jPanel3 = new JPanel();
+        FlowLayout flowLayout2 = new FlowLayout();
+        jPanel3.setLayout(flowLayout2);
+        jPanel3.add(prjNameField);
+        jPanel1.add(jPanel3, BorderLayout.LINE_END);
         JPanel jPanel2 = new JPanel();
-        jPanel2.setLayout(new FlowLayout(FlowLayout.LEFT));
-        jPanel2.add(prjPathLabel);
-        jPanel2.add(prjPathField);
-        jPanel2.add(prjPathButton);
+        jPanel2.setLayout(new BorderLayout());
+        FlowLayout flowLayout = new FlowLayout();
+        JPanel jPanel4 = new JPanel();
+        jPanel4.setLayout(flowLayout);
+        jPanel4.add(prjPathField);
+        jPanel4.add(prjPathButton);
+        jPanel2.add(prjPathLabel, BorderLayout.LINE_START);
+        jPanel2.add(jPanel4, BorderLayout.LINE_END);
         add(jPanel1);
         add(jPanel2);
-        setBorder(new EmptyBorder(5, 5, 10, 5));
+        setBorder(new EmptyBorder(5, 10, 10, 5));
     }
+
+
 
     @Override
     public void rendering(List<WizardPage> path, WizardSettings settings) {

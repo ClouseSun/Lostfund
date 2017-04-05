@@ -2,18 +2,15 @@
     "menuList": [
         {
             "title": "添加现有",
-            "name": "menuitem_addExisting",
-            "isEnable": true
+            "name": "menuitem_addExisting"
         },
         {
             "title": "添加并复制",
-            "name": "menuitem_addCopyExisting",
-            "isEnable": true
+            "name": "menuitem_addCopyExisting"
         },
         {
             "title": "删除",
-            "name": "menuitem_delete",
-            "isEnable": true
+            "name": "menuitem_delete"
         }
     ]
 }
