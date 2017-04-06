@@ -90,6 +90,28 @@ public class FileMappingUtils {
         }
     }
 
+    public static void insertNewMapping(String XMLPath, String abstractPath, String absolutePath) {
+        try {
+            Document document = new SAXReader().read(new FileInputStream(XMLPath), "UTF8");
+            Element userMap = document.getRootElement().element("userMapping");
+            Element newMappingEntry = userMap.addElement("mappingEntry");
+            newMappingEntry.addAttribute("abstractPath", abstractPath);
+            newMappingEntry.addAttribute("absolutePath", absolutePath);
+
+            XMLWriter xmlWriter = new XMLWriter(new FileWriter(XMLPath), OutputFormat.createPrettyPrint());
+            xmlWriter.write(document);
+            xmlWriter.flush();
+            xmlWriter.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void createNewProject(String newPrjName, String defaultXmlPath, String newPrjPath) {
         try {
             File newPrjXml = new File(newPrjPath + newPrjName + ".ite");
@@ -172,7 +194,7 @@ public class FileMappingUtils {
         }
     }
 
-    public static String path2String(TreeNode[] pathNodes, int nodeType) {
+    public static String path2String(TreeNode[] pathNodes, boolean isFile) {
         StringBuilder path = new StringBuilder();
         for(int i = 0; i < pathNodes.length; i++) {
             String dir = ((FileNodeEntity) ((DefaultMutableTreeNode) pathNodes[i]).getUserObject()).getAbstractName();
@@ -183,7 +205,7 @@ public class FileMappingUtils {
                 }
             }
         }
-        if(nodeType == FileNodeEntity.NODE_TYPE_DIR)
+        if(!isFile)
             path.append("/");
 
         return path.toString();

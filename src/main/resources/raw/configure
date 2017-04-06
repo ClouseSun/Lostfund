@@ -2,5 +2,7 @@
 
 <ITEProperties> 
   <ActiveProject projectName="prj1" projectFilePath="src/main/resources/raw/test_project"/>  
-  <ActiveProject projectName="prj2" projectFilePath="src/main/resources/raw/test_project2"/>
+  <ActiveProject projectName="prj2" projectFilePath="src/main/resources/raw/test_project2"/>  
+  <ActiveProject projectName="projectTemplate" projectFilePath="src/main/resources/raw/project_template"/>  
+  <ActiveProject projectName="testPrj1" projectFilePath="/Users/KlousesSun/ITEtest/testPrj1/testPrj1.ite"/>
 </ITEProperties>

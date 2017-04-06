@@ -92,7 +92,7 @@ public class JsonTreePopMenu extends JPopupMenu{
             newNode.setAllowsChildren(true);
             treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
             TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
-            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR)
+            String abstractPath = FileMappingUtils.path2String(newPath, false)
                     + newFile.getName() + "/";
             newFilesMap.put(abstractPath, newFile.getPath());
 
@@ -107,7 +107,7 @@ public class JsonTreePopMenu extends JPopupMenu{
             newNode.setAllowsChildren(false);
             treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
             TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
-            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR)
+            String abstractPath = FileMappingUtils.path2String(newPath, false)
                     + newFile.getName();
             newFilesMap.put(abstractPath, newFile.getPath());
             return ;
@@ -127,10 +127,10 @@ public class JsonTreePopMenu extends JPopupMenu{
 
             TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
 
-            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR)
+            String abstractPath = FileMappingUtils.path2String(newPath, false)
                     + sourceFile.getName();
             String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
-
+            newFilesMap.put(abstractPath, sourceFile.getPath());
             File newFile = new File(dirPathToInsert + sourceFile.getName());
             try {
                 IOUtils.copy(new FileInputStream(sourceFile), new FileOutputStream(newFile));
@@ -148,7 +148,7 @@ public class JsonTreePopMenu extends JPopupMenu{
             newNode.setAllowsChildren(false);
             treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
             TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
-            String abstractPath = FileMappingUtils.path2String(newPath, FileNodeEntity.NODE_TYPE_DIR)
+            String abstractPath = FileMappingUtils.path2String(newPath, false)
                     + sourceFile.getName();
             String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
             newFilesMap.put(abstractPath, sourceFile.getPath());
@@ -217,7 +217,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                         List<String> removedList = new LinkedList<>();
                         DefaultMutableTreeNode removedNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
                         TreeNode[] delPath = Arrays.copyOfRange(removedNode.getPath(), 2, removedNode.getPath().length);
-                        removedList.add(FileMappingUtils.path2String(delPath, itemType));
+                        removedList.add(FileMappingUtils.path2String(delPath, itemType == FileNodeEntity.NODE_TYPE_FILE));
                         FileMappingUtils.removeMappingFromXml(projectXmlPath,
                                 removedList,
                                 JOptionPane.OK_OPTION == confirmRet);
@@ -233,6 +233,31 @@ public class JsonTreePopMenu extends JPopupMenu{
                     }
                     break;
                 case "menuitem_newFolder":
+                    DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent());
+                    TreeNode[] selectedTreeNode = Arrays.copyOfRange(selectedNode.getPath(), 2, selectedNode.getPath().length);
+                    String selectedPath = FileMappingUtils.path2String(selectedTreeNode, false);
+                    String newDirName = (String)JOptionPane.showInputDialog(null,
+                            "在" + selectedPath + "下创建文件夹：");
+                    String selectedRealPath = ((FileNodeEntity) (selectedNode).getUserObject()).getRealPath();
+                    File fullRealPath = new File(selectedRealPath + "/" + newDirName + "/");
+                    if(!fullRealPath.mkdirs()) {
+                        JOptionPane.showMessageDialog(null,
+                                "创建文件夹失败",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        FileNodeEntity fileNodeEntity = new FileNodeEntity(newDirName, newDirName);
+                        fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
+                        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
+                        newNode.setAllowsChildren(true);
+
+                        FileMappingUtils.insertNewMapping(projectXmlPath,
+                                selectedPath + newDirName + "/",
+                                fullRealPath.getPath() + "/");
+
+                        ((DefaultTreeModel) jTree.getModel()).insertNodeInto(newNode,
+                                selectedNode, selectedNode.getChildCount());
+                    }
                     break;
             }
         });

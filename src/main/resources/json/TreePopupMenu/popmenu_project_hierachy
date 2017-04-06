@@ -13,7 +13,7 @@
         {
             "title": "新建文件夹",
             "name": "menuitem_newFolder",
-            "isEnable": false"
+            "isEnable": true
         },
         {
             "title": "关闭工程",

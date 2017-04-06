@@ -82,7 +82,11 @@ public class Main {
                     switch (System.getProperty("os.name").toString()) {
                         case "Mac OS X":
                             try {
-                                Runtime.getRuntime().exec("open " + selectedNode.getRealPath());
+                                if(selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_DIR)
+                                    Runtime.getRuntime().exec("open " + selectedNode.getRealPath());
+                                if(selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_ROOT)
+                                    Runtime.getRuntime().exec("open "
+                                            + selectedNode.getRealPath().substring(0, selectedNode.getRealPath().lastIndexOf('/')));
                             } catch (IOException e1) {
                                 e1.printStackTrace();
                             }
