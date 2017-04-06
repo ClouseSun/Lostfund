@@ -2,6 +2,7 @@ package cn.bit.file;
 
 import cn.bit.Context;
 import cn.bit.model.FileNodeEntity;
+import cn.bit.model.IteProject;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -97,6 +98,7 @@ public class FileMappingUtils {
             XMLWriter newXmlWriter = new XMLWriter(new FileWriter(newPrjXml.getPath()), OutputFormat.createPrettyPrint());
             Document newXmlDoc = DocumentHelper.createDocument();
             Element root = DocumentHelper.createElement("projectModel");
+            root.addAttribute("projectName", newPrjName);
             newXmlDoc.setRootElement(root);
             root.addElement("userMapping");
 
@@ -105,7 +107,6 @@ public class FileMappingUtils {
             Element newPrj = prjConfigs.addElement("ActiveProject");
             newPrj.addAttribute("projectName", newPrjName);
             newPrj.addAttribute("projectFilePath", newPrjXml.getPath());
-
             XMLWriter configXmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath), OutputFormat.createPrettyPrint());
             configXmlWriter.write(configureDoc);
             configXmlWriter.flush();
@@ -209,6 +210,36 @@ public class FileMappingUtils {
         }  catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void openProject(String itePath) {
+        try {
+            Document iteDoc = new SAXReader().read(new FileInputStream(itePath));
+            String prjName = iteDoc.getRootElement().attributeValue("projectName");
+            AbstractFileTree newPrjFileTree = new AbstractFileTree(prjName, itePath);
+            newPrjFileTree.addAll(FileMappingUtils.loadFileMapping(new FileInputStream(itePath), true));
+            IteProject newIteProject = new IteProject(newPrjFileTree);
+            Context.getOpenProjects().put(prjName, newIteProject);
+            Context.getHierarchyModel().insertNodeInto(newIteProject.getProjectTree().getProjectTreeRoot(),
+                    ((DefaultMutableTreeNode) Context.getHierarchyModel().getRoot()),
+                    ((DefaultMutableTreeNode) Context.getHierarchyModel().getRoot()).getChildCount());
+
+            Document configureDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
+            Element prjConfigs = configureDoc.getRootElement();
+            Element newPrj = prjConfigs.addElement("ActiveProject");
+            newPrj.addAttribute("projectName", prjName);
+            newPrj.addAttribute("projectFilePath", itePath);
+            XMLWriter configXmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath), OutputFormat.createPrettyPrint());
+            configXmlWriter.write(configureDoc);
+            configXmlWriter.flush();
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 
 }

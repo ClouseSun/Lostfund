@@ -49,15 +49,7 @@ public class Main {
 
         JMenuBar menuBar = null;
 
-        DefaultTreeModel iteTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
-
         Context.init(Context.configureFilePath);
-
-        Context.getContext().getOpenProjects().entrySet().stream().forEach(stringIteProjectEntry -> {
-            iteTreeModel.insertNodeInto(stringIteProjectEntry.getValue().getProjectTree().getProjectTreeRoot()
-                    , ((DefaultMutableTreeNode) iteTreeModel.getRoot())
-                    , ((DefaultMutableTreeNode) iteTreeModel.getRoot()).getChildCount());
-        });
 
         try {
             String jsonMenuBarString = IOUtils.toString(new FileInputStream(Context.getJsonMenuBarPath()));
@@ -67,7 +59,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        tree1.setModel(iteTreeModel);
+        tree1.setModel(Context.getHierarchyModel());
         tree1.addMouseListener(new MouseAdapter() {
 
             @Override

@@ -103,9 +103,10 @@ public class JsonMenuBar extends JMenuBar {
                     break;
                 case "openProject":
                     JFileChooser jFileChooser = new JFileChooser();
+                    jFileChooser.setMultiSelectionEnabled(false);
                     jFileChooser.setFileFilter(new FileNameExtensionFilter(null, "ite"));
                     if(jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
-
+                        FileMappingUtils.openProject(jFileChooser.getSelectedFile().getPath());
                     }
                     break;
             }

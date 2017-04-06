@@ -12,7 +12,7 @@
                 {
                     "title": "打开工程",
                     "name": "openProject",
-                    "isEnable": false
+                    "isEnable": true
                 },
                                 {
                     "title": "关闭工程",

@@ -9,6 +9,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
@@ -20,6 +22,7 @@ import java.util.Map;
  */
 public class Context {
     static Map<String, IteProject> openProjects;
+    static DefaultTreeModel hierarchyModel;
     static Context context;
 
     public final static String RES_ROOT = "src/main/resources/";
@@ -39,9 +42,9 @@ public class Context {
     }
 
     public static void init(String configPath) {
-        Document document = null;
         try {
-            document = new SAXReader().read(new FileInputStream(configPath));
+            hierarchyModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
+            Document document = new SAXReader().read(new FileInputStream(configPath));
             Map<String, IteProject> openProjects = new LinkedHashMap<>();
             List<Element> prjConfigList = document.getRootElement().elements();
             for (Element prjConfig: prjConfigList) {
@@ -50,6 +53,11 @@ public class Context {
                 abstractFileTree.addAll(FileMappingUtils.loadFileMapping(new FileInputStream(prjConfig.attributeValue("projectFilePath")), true));
                 openProjects.put(prjConfig.attributeValue("projectName"), new IteProject(abstractFileTree));
             }
+            openProjects.entrySet().stream().forEach(stringIteProjectEntry ->
+                    hierarchyModel.insertNodeInto(stringIteProjectEntry.getValue().getProjectTree().getProjectTreeRoot(),
+                            ((DefaultMutableTreeNode) hierarchyModel.getRoot()),
+                            ((DefaultMutableTreeNode) hierarchyModel.getRoot()).getChildCount()));
+
             context = new Context(openProjects);
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -64,6 +72,10 @@ public class Context {
 
     public static Map<String, IteProject> getOpenProjects() {
         return openProjects;
+    }
+
+    public static DefaultTreeModel getHierarchyModel() {
+        return hierarchyModel;
     }
 
     public static String getProjectFilePath(String projectName) {
