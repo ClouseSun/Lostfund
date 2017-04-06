@@ -3,6 +3,8 @@ package cn.bit.ui.frame;
 import cn.bit.Context;
 import cn.bit.ui.component.JsonMenuBar;
 import cn.bit.ui.component.JsonTreePopMenu;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import org.apache.commons.io.IOUtils;
 
 import javax.swing.*;
@@ -18,7 +20,7 @@ import java.io.IOException;
 /**
  * Created by zhehua on 19/03/2017.
  */
-public class Main extends JFrame {
+public class Main {
 
     private JPanel mainPanel;
     private JScrollPane PrjPane;
@@ -28,21 +30,21 @@ public class Main extends JFrame {
     private JSplitPane consoleSplitPane;
     private JSplitPane editorSplitPane;
 
-    public static void main(String[] args) {
-        Main mainObj = new Main();
-        mainObj.setVisible(true);
+    private JFrame mainFrame;
 
+    public static void main(String[] args) {
+        new Main();
     }
 
 
     public Main() {
-        setContentPane(mainPanel);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame = new JFrame();
+        mainFrame.setContentPane(mainPanel);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
-        setSize((int) screenSize.getWidth(), (int) screenSize.getWidth());
-        consoleSplitPane.setDividerLocation(0.5);
-        editorSplitPane.setDividerLocation(0.5);
+        mainFrame.setSize((int) screenSize.getWidth(), (int) screenSize.getWidth());
+
         JMenuBar menuBar = null;
 
         DefaultTreeModel iteTreeModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
@@ -58,7 +60,7 @@ public class Main extends JFrame {
         try {
             String jsonMenuBarString = IOUtils.toString(new FileInputStream(Context.getJsonMenuBarPath()));
             menuBar = new JsonMenuBar(jsonMenuBarString, tree1);
-            setJMenuBar(menuBar);
+            mainFrame.setJMenuBar(menuBar);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,6 +103,14 @@ public class Main extends JFrame {
 
             }
         });
+        mainFrame.setVisible(true);
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                consoleSplitPane.setDividerLocation(0.5);
+                editorSplitPane.setDividerLocation(0.5);
+            }
+        });
     }
 
     {
@@ -119,37 +129,65 @@ public class Main extends JFrame {
      */
     private void $$$setupUI$$$() {
         mainPanel = new JPanel();
-        mainPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        final JSplitPane splitPane1 = new JSplitPane();
-        splitPane1.setContinuousLayout(false);
-        splitPane1.setDividerLocation(700);
-        splitPane1.setDividerSize(3);
-        splitPane1.setDoubleBuffered(false);
-        splitPane1.setInheritsPopupMenu(true);
-        splitPane1.setOneTouchExpandable(true);
-        splitPane1.setOrientation(0);
-        splitPane1.setResizeWeight(0.0);
-        mainPanel.add(splitPane1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
-        final JSplitPane splitPane2 = new JSplitPane();
-        splitPane2.setContinuousLayout(true);
-        splitPane2.setDividerLocation(367);
-        splitPane1.setLeftComponent(splitPane2);
+        mainPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        consoleSplitPane = new JSplitPane();
+        consoleSplitPane.setContinuousLayout(false);
+        consoleSplitPane.setDividerLocation(0);
+        consoleSplitPane.setDividerSize(3);
+        consoleSplitPane.setDoubleBuffered(false);
+        consoleSplitPane.setInheritsPopupMenu(true);
+        consoleSplitPane.setOneTouchExpandable(true);
+        consoleSplitPane.setOrientation(0);
+        consoleSplitPane.setResizeWeight(0.0);
+        mainPanel.add(consoleSplitPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        editorSplitPane = new JSplitPane();
+        editorSplitPane.setContinuousLayout(true);
+        editorSplitPane.setDividerLocation(0);
+        editorSplitPane.setDividerSize(3);
+        editorSplitPane.setEnabled(true);
+        consoleSplitPane.setLeftComponent(editorSplitPane);
         panel1 = new JPanel();
-        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
-        splitPane2.setLeftComponent(panel1);
+        panel1.setLayout(new GridBagLayout());
+        editorSplitPane.setLeftComponent(panel1);
         PrjPane = new JScrollPane();
-        panel1.add(PrjPane, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        PrjPane.setPreferredSize(new Dimension(-1, -1));
+        GridBagConstraints gbc;
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel1.add(PrjPane, gbc);
         tree1 = new JTree();
         tree1.setRootVisible(false);
         tree1.setShowsRootHandles(true);
         tree1.putClientProperty("JTree.lineStyle", "");
         PrjPane.setViewportView(tree1);
         final JScrollPane scrollPane1 = new JScrollPane();
-        panel1.add(scrollPane1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel1.add(scrollPane1, gbc);
         final JScrollPane scrollPane2 = new JScrollPane();
-        panel1.add(scrollPane2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel1.add(scrollPane2, gbc);
         final JScrollPane scrollPane3 = new JScrollPane();
-        panel1.add(scrollPane3, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel1.add(scrollPane3, gbc);
     }
 
     /**
