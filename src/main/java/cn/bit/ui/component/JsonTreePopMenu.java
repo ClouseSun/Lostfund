@@ -51,6 +51,7 @@ public class JsonTreePopMenu extends JPopupMenu{
             if(ml.getMenuList() == null) {
                 JMenuItem jMenuItem = new JMenuItem(ml.getTitle());
                 jMenuItem.setName(ml.getName());
+                jMenuItem.setEnabled(ml.isEnable());
                 add(jMenuItem);
                 bindMenuItemListener(jMenuItem, jTree);
             }
@@ -71,6 +72,7 @@ public class JsonTreePopMenu extends JPopupMenu{
         if(menuList.getMenuList() == null) {
             JMenuItem jMenuItem = new JMenuItem(menuList.getTitle());
             jMenuItem.setName(menuList.getName());
+            jMenuItem.setEnabled(menuList.isEnable());
             root.add(jMenuItem);
             bindMenuItemListener(jMenuItem, jTree);
         } else {
@@ -163,10 +165,12 @@ public class JsonTreePopMenu extends JPopupMenu{
     private void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
         jMenuItem.addActionListener((ActionEvent e) -> {
             String parentPath = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getRealPath();
-            JFileChooser jFileChooser = new JFileChooser(parentPath);
             String projectName = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath()[1].toString();
+            String projectXmlPath = Context.getProjectFilePath(projectName);
 
-            String xmlPath = Context.getProjectFilePath(projectName);
+            JFileChooser jFileChooser = new JFileChooser(projectXmlPath.substring(0, projectXmlPath.lastIndexOf("/")));
+
+
             switch (jMenuItem.getName()) {
                 case "menuitem_addExisting":
                     jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -183,7 +187,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                                     ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()));
                         }
 
-                        FileMappingUtils.insertNewMapping(xmlPath, newFilesMap);
+                        FileMappingUtils.insertNewMapping(projectXmlPath, newFilesMap);
                     } else {
                         return;
                     }
@@ -200,7 +204,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                                     ((DefaultTreeModel) jTree.getModel()),
                                     ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()));
                         }
-                        FileMappingUtils.insertNewMapping(xmlPath, newFilesMap);
+                        FileMappingUtils.insertNewMapping(projectXmlPath, newFilesMap);
                     } else {
                         return;
                     }
@@ -214,7 +218,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                         DefaultMutableTreeNode removedNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
                         TreeNode[] delPath = Arrays.copyOfRange(removedNode.getPath(), 2, removedNode.getPath().length);
                         removedList.add(FileMappingUtils.path2String(delPath, itemType));
-                        FileMappingUtils.removeMappingFromXml(xmlPath,
+                        FileMappingUtils.removeMappingFromXml(projectXmlPath,
                                 removedList,
                                 JOptionPane.OK_OPTION == confirmRet);
                         ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent(removedNode);
@@ -222,8 +226,14 @@ public class JsonTreePopMenu extends JPopupMenu{
                     break;
                 case "menuitem_close":
                     DefaultMutableTreeNode selectedProject = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent());
-                    FileMappingUtils.closeProject(selectedProject.toString());
-                    ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent(selectedProject);
+                    confirmRet = JOptionPane.showConfirmDialog(null, "确认关闭工程" + selectedProject.toString() + "？");
+                    if(confirmRet == JOptionPane.OK_OPTION) {
+                        FileMappingUtils.closeProject(selectedProject.toString());
+                        ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent(selectedProject);
+                    }
+                    break;
+                case "menuitem_newFolder":
+                    break;
             }
         });
     }

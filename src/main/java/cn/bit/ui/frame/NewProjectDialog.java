@@ -17,11 +17,6 @@ public class NewProjectDialog extends JDialog {
     private WizardSettings settings;
     private boolean finished = false;
 
-    public static void main(String[] args) {
-        NewProjectDialog test = new NewProjectDialog();
-        test.setVisible(true);
-    }
-
     public boolean isFinished() {
         return finished;
     }
@@ -37,6 +32,7 @@ public class NewProjectDialog extends JDialog {
     public NewProjectDialog() {
 
         setLocationRelativeTo(null);
+        setResizable(false);
         setModalityType(ModalityType.APPLICATION_MODAL);
 
         final WizardContainer wc =
@@ -56,9 +52,16 @@ public class NewProjectDialog extends JDialog {
             public void onFinished(List<WizardPage> path, WizardSettings settings) {
                 setSettings(settings);
                 File prjPath = new File(settings.get("prjPathField").toString());
+                File prjFullPath = new File(prjPath + "/" + settings.get("prjNameField").toString());
                 if(!prjPath.exists() || !prjPath.canWrite()) {
                     JOptionPane.showMessageDialog(null,
                             "目录不存在或不可写",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                } else if(prjFullPath.exists()) {
+                    JOptionPane.showMessageDialog(null,
+                            "该目录下已存在同名文件夹",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                     return;

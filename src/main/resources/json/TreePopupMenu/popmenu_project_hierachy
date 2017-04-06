@@ -2,15 +2,23 @@
     "menuList": [
         {
             "title": "添加现有",
-            "name": "menuitem_addExisting"
+            "name": "menuitem_addExisting",
+            "isEnable": true
         },
         {
             "title": "添加并复制",
-            "name": "menuitem_addCopyExisting"
+            "name": "menuitem_addCopyExisting",
+            "isEnable": true
+        },
+        {
+            "title": "新建文件夹",
+            "name": "menuitem_newFolder",
+            "isEnable": false"
         },
         {
             "title": "关闭工程",
-            "name": "menuitem_close"
+            "name": "menuitem_close",
+            "isEnable": true
         }
     ]
 }

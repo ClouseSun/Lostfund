@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <defaultMapping>
-    <mappingEntry abstractPath="代码规则检查目录/" absolutePath="cc/"/>
-    <mappingEntry abstractPath="跨时钟域检查目录/" absolutePath="cdc/"/>
-    <mappingEntry abstractPath="静态时序分析目录/" absolutePath="sta/"/>
-    <mappingEntry abstractPath="源文件/" absolutePath="src/"/>
-    <mappingEntry abstractPath="仿真平台文件目录/" absolutePath="tb/"/>
-    <mappingEntry abstractPath="芯片库文件目录/" absolutePath="lib/"/>
-    <mappingEntry abstractPath="测试用例目录/" absolutePath="tc/"/>
-    <mappingEntry abstractPath="验证模型库文件目录/" absolutePath="vip/"/>
-    <mappingEntry abstractPath="数据库目录/" absolutePath="db/"/>
-    <mappingEntry abstractPath="通用测试平台目录/" absolutePath="run/"/>
+    <mappingEntry abstractPath="规则检查文件夹/" absolutePath="cc/"/>
+
+    <mappingEntry abstractPath="跨时钟域检查文件夹/" absolutePath="cdc/"/>
+
+    <mappingEntry abstractPath="功能时序仿真文件夹/" absolutePath="run/"/>
+    <mappingEntry abstractPath="功能时序仿真文件夹/测试平台TB/" absolutePath="tb/"/>
+    <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/" absolutePath="src/"/>
+    <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>
+    <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/ver_0/rtl/" absolutePath="src/ver_0/rtl/"/>
+    <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/ver_0/netlist_sim/" absolutePath="src/ver_0/netlist_sim/"/>
+    <mappingEntry abstractPath="功能时序仿真文件夹/验证VIP/" absolutePath="vip/"/>
+    <mappingEntry abstractPath="功能时序仿真文件夹/库文件LIB/" absolutePath="lib/"/>
+    <mappingEntry abstractPath="功能时序仿真文件夹/测试用例TC/" absolutePath="tc/"/>
+
+    <mappingEntry abstractPath="静态时序分析文件夹/" absolutePath="sta/"/>
+    <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/" absolutePath="src/"/>
+    <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>
+    <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/ver_0/netlist_sta/" absolutePath="src/ver_0/netlist_sta/"/>
+
+    <mappingEntry abstractPath="一致性检查文件夹/" absolutePath="tb/"/>
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/" absolutePath="src/"/>
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/rtl/" absolutePath="src/ver_0/rtl/"/>
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/netlist_for/" absolutePath="src/ver_0/netlist_for/"/>
+
 </defaultMapping>

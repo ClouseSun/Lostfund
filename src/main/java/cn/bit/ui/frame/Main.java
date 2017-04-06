@@ -1,6 +1,7 @@
 package cn.bit.ui.frame;
 
 import cn.bit.Context;
+import cn.bit.model.FileNodeEntity;
 import cn.bit.ui.component.JsonMenuBar;
 import cn.bit.ui.component.JsonTreePopMenu;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -14,6 +15,7 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -76,10 +78,24 @@ public class Main {
                 }
                 tree1.setSelectionPath(treePath);
 
-
                 if (e.getButton() == MouseEvent.BUTTON3) {
-                    DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree1.getLastSelectedPathComponent();
                     new JsonTreePopMenu(tree1).show(tree1, e.getX(), e.getY());
+                }
+                else if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+                    FileNodeEntity selectedNode = ((FileNodeEntity) ((DefaultMutableTreeNode) tree1.
+                            getLastSelectedPathComponent()).
+                            getUserObject());
+                    if(selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_FILE) {return ;}
+
+                    switch (System.getProperty("os.name").toString()) {
+                        case "Mac OS X":
+                            try {
+                                Runtime.getRuntime().exec("open " + selectedNode.getRealPath());
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                            break;
+                    }
                 }
             }
 

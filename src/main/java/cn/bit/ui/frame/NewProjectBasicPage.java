@@ -18,6 +18,7 @@ public class NewProjectBasicPage extends WizardPage {
         super(title, description);
 
         setPreferredSize(new Dimension(400, 175));
+
         JTextField prjNameField = new JTextField();
         prjNameField.setName("prjNameField");
         JTextField prjPathField = new JTextField();

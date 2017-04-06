@@ -9,6 +9,7 @@ import com.github.cjwizard.WizardSettings;
 import com.google.gson.Gson;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.io.File;
@@ -80,11 +81,11 @@ public class JsonMenuBar extends JMenuBar {
                         File newPrjDir = new File(newPrjPath + newPrjName + "/");
                         if(!newPrjDir.exists()) {
                             if(newPrjDir.mkdirs()) {
-                                String newIteFile = newPrjPath + newPrjName + ".ite";
-                                FileMappingUtils.createNewProject(Context.configureFilePath,
+                                String newIteFile = newPrjPath + newPrjName + "/" + newPrjName + ".ite";
+                                FileMappingUtils.createNewProject(
                                         newPrjName,
                                         Context.defaultPrjXmlPath,
-                                        newPrjPath);
+                                        newPrjDir.getPath() + "/");
                                 AbstractFileTree abstractFileTree = new AbstractFileTree(newPrjName, newIteFile);
                                 IteProject iteProject = new IteProject(abstractFileTree);
                                 Context.getOpenProjects().put(newPrjName, iteProject);
@@ -98,6 +99,13 @@ public class JsonMenuBar extends JMenuBar {
                                 }
                             }
                         }
+                    }
+                    break;
+                case "openProject":
+                    JFileChooser jFileChooser = new JFileChooser();
+                    jFileChooser.setFileFilter(new FileNameExtensionFilter(null, "ite"));
+                    if(jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
+
                     }
                     break;
             }
