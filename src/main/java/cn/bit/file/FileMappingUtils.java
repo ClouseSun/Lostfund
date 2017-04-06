@@ -2,14 +2,13 @@ package cn.bit.file;
 
 import cn.bit.Context;
 import cn.bit.model.FileNodeEntity;
-import org.apache.commons.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.xml.sax.SAXException;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -51,26 +50,15 @@ public class FileMappingUtils {
         return new LinkedHashMap<>();
     }
 
-    public static void insertDefaultMapping(InputStream defaultXml, String newPrjXmlPath ,String newPrjPath) {
+    public static void insertDefaultMapping(InputStream defaultXml, Element userMapping, String newPrjPath) {
         try {
                 Document defaultDocument = new SAXReader().read(defaultXml);
-                Document iteDocument = new SAXReader().read(new FileInputStream(newPrjXmlPath));
                 List<Element> defaultFileList = defaultDocument.getRootElement().elements("mappingEntry");
-                Element iteMapping = iteDocument.getRootElement().element("userMapping");
-                if (iteMapping == null) {
-                    iteMapping = iteDocument.getRootElement().addElement("userMapping");
-                }
                 for (Element element : defaultFileList) {
-                    Element newMappingEntry = iteMapping.addElement("mappingEntry");
+                    Element newMappingEntry = userMapping.addElement("mappingEntry");
                     newMappingEntry.addAttribute("abstractPath", element.attributeValue("abstractPath"));
                     newMappingEntry.addAttribute("absolutePath", newPrjPath + element.attributeValue("absolutePath"));
                 }
-                XMLWriter xmlWriter = null;
-                xmlWriter = new XMLWriter(new FileWriter(newPrjXmlPath), OutputFormat.createPrettyPrint());
-                xmlWriter.write(iteDocument);
-                xmlWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (DocumentException e) {
             e.printStackTrace();
         }
@@ -78,8 +66,7 @@ public class FileMappingUtils {
 
     public static void insertNewMapping(String XMLPath, Map<String, String> fileMapping) {
         try {
-            Document document = null;
-            document = new SAXReader().read(new FileInputStream(XMLPath), "UTF8");
+            Document document = new SAXReader().read(new FileInputStream(XMLPath), "UTF8");
 
             Element userMap = document.getRootElement().element("userMapping");
             fileMapping.entrySet().stream().forEach((entry) -> {
@@ -107,7 +94,12 @@ public class FileMappingUtils {
             File newPrjXml = new File(newPrjPath + newPrjName + ".ite");
             newPrjXml.createNewFile();
 
-            IOUtils.write("<projectModel>\n" + "</projectModel>", new FileOutputStream(newPrjXml.getPath()));
+            XMLWriter newXmlWriter = new XMLWriter(new FileWriter(newPrjXml.getPath()), OutputFormat.createPrettyPrint());
+            Document newXmlDoc = DocumentHelper.createDocument();
+            Element root = DocumentHelper.createElement("projectModel");
+            newXmlDoc.setRootElement(root);
+            root.addElement("userMapping");
+
             Document configureDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
             Element prjConfigs = configureDoc.getRootElement();
             Element newPrj = prjConfigs.addElement("ActiveProject");
@@ -118,16 +110,17 @@ public class FileMappingUtils {
             configXmlWriter.write(configureDoc);
             configXmlWriter.flush();
 
-            insertDefaultMapping(new FileInputStream(defaultXmlPath), newPrjXml.getPath(), newPrjPath);
+            insertDefaultMapping(new FileInputStream(defaultXmlPath), root.element("userMapping"), newPrjPath);
 
-            Document document = new SAXReader().read(new FileInputStream(newPrjXml.getPath()));
-            List<Element> newDirElementsList = document.getRootElement().element("userMapping").elements();
+            List<Element> newDirElementsList = newXmlDoc.getRootElement().element("userMapping").elements();
 
             for (Element newDirElement : newDirElementsList) {
                 File newDir = new File(newDirElement.attributeValue("absolutePath"));
                 newDir.mkdirs();
             }
 
+            newXmlWriter.write(newXmlDoc);
+            newXmlWriter.close();
 
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -148,9 +141,8 @@ public class FileMappingUtils {
 
     // TODO test
     public static void removeMappingFromXml(String XmlPath, List<String> removedList, boolean isDeleteFile) {
-        Document document = null;
         try {
-            document = new SAXReader().read(new FileInputStream(XmlPath), "UTF8");
+            Document document = new SAXReader().read(new FileInputStream(XmlPath), "UTF8");
              List<Element> userMappings = document.getRootElement().element("userMapping").elements();
 
             Element userMappingElement = document.getRootElement().element("userMapping");
@@ -197,11 +189,10 @@ public class FileMappingUtils {
     }
 
     public static void closeProject(String prjToClose) {
-        Document document = null;
         try {
-            document = new SAXReader().read(new FileInputStream(Context.configureFilePath));
-        List<Element> projectElementList = document.getRootElement().elements();
-        for (Element projectElement: projectElementList) {
+            Document document = new SAXReader().read(new FileInputStream(Context.configureFilePath));
+            List<Element> projectElementList = document.getRootElement().elements();
+            for (Element projectElement: projectElementList) {
                 if(projectElement.attributeValue("projectName").equals(prjToClose)) {
                     document.getRootElement().remove(projectElement);
                     Context.getOpenProjects().remove(prjToClose);
