@@ -72,19 +72,20 @@ public class Main {
 
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     new JsonTreePopMenu(tree1).show(tree1, e.getX(), e.getY());
-                }
-                else if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+                } else if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
                     FileNodeEntity selectedNode = ((FileNodeEntity) ((DefaultMutableTreeNode) tree1.
                             getLastSelectedPathComponent()).
                             getUserObject());
-                    if(selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_FILE) {return ;}
+                    if (selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_FILE) {
+                        return;
+                    }
 
                     switch (System.getProperty("os.name").toString()) {
                         case "Mac OS X":
                             try {
-                                if(selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_DIR)
+                                if (selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_DIR)
                                     Runtime.getRuntime().exec("open " + selectedNode.getRealPath());
-                                if(selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_ROOT)
+                                if (selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_ROOT)
                                     Runtime.getRuntime().exec("open "
                                             + selectedNode.getRealPath().substring(0, selectedNode.getRealPath().lastIndexOf('/')));
                             } catch (IOException e1) {
