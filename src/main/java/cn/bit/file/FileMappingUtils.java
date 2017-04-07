@@ -14,6 +14,7 @@ import org.dom4j.io.XMLWriter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import java.io.*;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,11 +159,10 @@ public class FileMappingUtils {
         if (!dir.isDirectory() || dir.list().length == 0) {
             return dir.delete();
         }
-        return delDir(dir) && dir.delete();
-
+        Arrays.stream(dir.listFiles()).forEach(child -> delDir(child));
+        return dir.delete();
     }
 
-    // TODO test
     public static void removeMappingFromXml(String XmlPath, List<String> removedList, boolean isDeleteFile) {
         try {
             Document document = new SAXReader().read(new FileInputStream(XmlPath), "UTF8");

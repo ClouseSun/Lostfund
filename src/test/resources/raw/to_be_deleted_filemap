@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectModel>
+    <userMapping>
+        <mappingEntry abstractPath="hello" absolutePath="src/test/resources/to_be_deleted_dir"/>
+    </userMapping>
+</projectModel>
