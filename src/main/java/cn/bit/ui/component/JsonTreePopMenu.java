@@ -84,7 +84,10 @@ public class JsonTreePopMenu extends JPopupMenu{
         }
     }
 
-    private void addFile(File newFile, Map newFilesMap, DefaultTreeModel treeModel, DefaultMutableTreeNode parentNode) {
+    private void addFile(File newFile,
+                         Map newFilesMap,
+                         DefaultTreeModel treeModel,
+                         DefaultMutableTreeNode parentNode) {
         if (newFile.isDirectory()) {
             FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), newFile.getName());
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
