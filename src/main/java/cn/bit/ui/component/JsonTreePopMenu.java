@@ -28,16 +28,16 @@ public class JsonTreePopMenu extends JPopupMenu{
         String jsonPopMenuPath;
         switch (((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getNodeType()) {
             case FileNodeEntity.NODE_TYPE_DIR:
-                jsonPopMenuPath = Context.getJsonDirPopMenuPath();
+                jsonPopMenuPath = Context.getContext().getJsonDirPopMenuPath();
                 break;
             case FileNodeEntity.NODE_TYPE_FILE:
-                jsonPopMenuPath = Context.getJsonFilePopMenuPath();
+                jsonPopMenuPath = Context.getContext().getJsonFilePopMenuPath();
                 break;
             case FileNodeEntity.NODE_TYPE_ROOT:
-                jsonPopMenuPath = Context.getJsonProjectPopMenuPath();
+                jsonPopMenuPath = Context.getContext().getJsonProjectPopMenuPath();
                 break;
             default:
-                jsonPopMenuPath = Context.getJsonFilePopMenuPath();
+                jsonPopMenuPath = Context.getContext().getJsonFilePopMenuPath();
         }
         String jsonPopMenuString = null;
         try {
@@ -170,7 +170,7 @@ public class JsonTreePopMenu extends JPopupMenu{
         jMenuItem.addActionListener((ActionEvent e) -> {
             String parentPath = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getRealPath();
             String projectName = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath()[1].toString();
-            String projectXmlPath = Context.getProjectFilePath(projectName);
+            String projectXmlPath = Context.getContext().getProjectFilePath(projectName);
 
             JFileChooser jFileChooser = new JFileChooser(projectXmlPath.substring(0, projectXmlPath.lastIndexOf("/")));
 

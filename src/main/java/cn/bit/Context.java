@@ -1,5 +1,7 @@
 package cn.bit;
 
+import cn.bit.exec.ExecMutableTreeTableNode;
+import cn.bit.exec.ExecUtils;
 import cn.bit.file.AbstractFileTree;
 import cn.bit.file.FileMappingUtils;
 import cn.bit.model.FileNodeEntity;
@@ -15,17 +17,15 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.io.*;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zhehua on 29/03/2017.
  */
 public class Context {
-    static Map<String, IteProject> openProjects;
-    static DefaultTreeModel hierarchyModel;
-    static DefaultTreeTableModel execModel;
+    Map<String, IteProject> openProjects;
+    DefaultTreeModel hierarchyModel;
+    DefaultTreeTableModel execModel;
     static Context context;
 
     public final static String RES_ROOT = "src/main/resources/";
@@ -44,21 +44,33 @@ public class Context {
         }
     }
 
-    private static IteProject constructAndOpenPrj(String projConfigPath) {
-        AbstractFileTree abstractFileTree;
+    public static IteProject constructAndOpenPrj(String projConfigPath) {
 
         Document document = null;
         try {
             document = new SAXReader().read(new FileInputStream(projConfigPath));
             // TODO is this attribute exist?
             String projectName = document.getRootElement().attributeValue("projectName");
-            abstractFileTree = new AbstractFileTree(projectName, projConfigPath);
+
+            // construct project file tree
+            AbstractFileTree abstractFileTree = new AbstractFileTree(projectName, projConfigPath);
             abstractFileTree.addAll(FileMappingUtils.loadFileMapping(
                     document.getRootElement().element("userMapping"), true));
+
+            // construct exec tree
+            Map<String, DefaultTreeTableModel> execModels = new TreeMap<>();
+            List<Element> execStatusElements = document.getRootElement().elements("execStatus");
+            execStatusElements.stream().forEach(element ->  {
+                String version = element.attributeValue("version");
+                DefaultTreeTableModel model = ExecUtils.loadTestExec(element);
+                execModels.put(version, model);
+            });
+
             IteProject iteProject = new IteProject(abstractFileTree);
             iteProject.setProjectName(projectName);
             iteProject.setProjectConfigPath(projConfigPath);
-            openProjects.put(projectName, iteProject);
+            iteProject.setExecModels(execModels);
+            context.openProjects.put(projectName, iteProject);
             return iteProject;
         } catch (DocumentException e) {
             e.printStackTrace();
@@ -71,20 +83,17 @@ public class Context {
 
     public static void init(String configPath) {
         try {
-            hierarchyModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
-            execModel = new DefaultTreeTableModel();
+            context = new Context();
 
             Document document = new SAXReader().read(new FileInputStream(configPath));
-            Map<String, IteProject> openProjects = new LinkedHashMap<>();
             List<Element> prjConfigList = document.getRootElement().elements();
             for (Element prjConfig: prjConfigList) {
                 constructAndOpenPrj(prjConfig.attributeValue("projectFilePath"));
             }
-            openProjects.entrySet().stream().forEach(stringIteProjectEntry ->
-                    hierarchyModel.insertNodeInto(stringIteProjectEntry.getValue().getProjectTree().getProjectTreeRoot(),
-                            ((DefaultMutableTreeNode) hierarchyModel.getRoot()),
-                            ((DefaultMutableTreeNode) hierarchyModel.getRoot()).getChildCount()));
-            context = new Context(openProjects);
+            context.openProjects.entrySet().stream().forEach(stringIteProjectEntry ->
+                    context.hierarchyModel.insertNodeInto(stringIteProjectEntry.getValue().getProjectTree().getProjectTreeRoot(),
+                            ((DefaultMutableTreeNode) context.hierarchyModel.getRoot()),
+                            ((DefaultMutableTreeNode) context.hierarchyModel.getRoot()).getChildCount()));
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -102,9 +111,9 @@ public class Context {
     public static void openProject(String itePath) {
         try {
             IteProject newIteProject = constructAndOpenPrj(itePath);
-            Context.getHierarchyModel().insertNodeInto(newIteProject.getProjectTree().getProjectTreeRoot(),
-                    ((DefaultMutableTreeNode) Context.getHierarchyModel().getRoot()),
-                    ((DefaultMutableTreeNode) Context.getHierarchyModel().getRoot()).getChildCount());
+            context.getHierarchyModel().insertNodeInto(newIteProject.getProjectTree().getProjectTreeRoot(),
+                    ((DefaultMutableTreeNode) context.getHierarchyModel().getRoot()),
+                    ((DefaultMutableTreeNode) context.getHierarchyModel().getRoot()).getChildCount());
 
             Document configureDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
             Element prjConfigs = configureDoc.getRootElement();
@@ -126,23 +135,25 @@ public class Context {
         }
     }
 
-    private Context(Map<String, IteProject> openProjects) {
-        this.openProjects = openProjects;
+    private Context() {
+        this.hierarchyModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
+        this.execModel = new DefaultTreeTableModel();
+        this.openProjects = new LinkedHashMap<>();
     }
 
-    public static Map<String, IteProject> getOpenProjects() {
+    public Map<String, IteProject> getOpenProjects() {
         return openProjects;
     }
 
-    public static DefaultTreeModel getHierarchyModel() {
+    public DefaultTreeModel getHierarchyModel() {
         return hierarchyModel;
     }
 
-    public static DefaultTreeTableModel getExecModel() {
+    public DefaultTreeTableModel getExecModel() {
         return execModel;
     }
 
-    public static String getProjectFilePath(String projectName) {
+    public String getProjectFilePath(String projectName) {
         if (context != null) {
             return ((FileNodeEntity) context.openProjects.get(projectName).getProjectTree().getProjectTreeRoot().getUserObject()).getRealPath();
         } else {
@@ -150,7 +161,7 @@ public class Context {
         }
     }
 
-    public static String getJsonMenuBarPath() {
+    public String getJsonMenuBarPath() {
         if (context != null) {
             return jsonMenuBarPath;
         } else {
@@ -158,7 +169,7 @@ public class Context {
         }
     }
 
-    public static String getJsonDirPopMenuPath() {
+    public String getJsonDirPopMenuPath() {
         if (context != null) {
             return jsonDirPopMenuPath;
         } else {
@@ -166,7 +177,7 @@ public class Context {
         }
     }
 
-    public static String getJsonFilePopMenuPath() {
+    public String getJsonFilePopMenuPath() {
         if (context != null) {
             return jsonFilePopMenuPath;
         } else {
@@ -174,7 +185,7 @@ public class Context {
         }
     }
 
-    public static String getJsonProjectPopMenuPath() {
+    public String getJsonProjectPopMenuPath() {
         if (context != null) {
             return jsonProjectPopMenuPath;
         } else {

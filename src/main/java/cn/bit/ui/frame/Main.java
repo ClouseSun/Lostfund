@@ -62,14 +62,14 @@ public class Main {
         Context.init(Context.configureFilePath);
 
         try {
-            String jsonMenuBarString = IOUtils.toString(new FileInputStream(Context.getJsonMenuBarPath()));
+            String jsonMenuBarString = IOUtils.toString(new FileInputStream(Context.getContext().getJsonMenuBarPath()));
             menuBar = new JsonMenuBar(jsonMenuBarString, tree1);
             mainFrame.setJMenuBar(menuBar);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        tree1.setModel(Context.getHierarchyModel());
+        tree1.setModel(Context.getContext().getHierarchyModel());
         tree1.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -128,7 +128,7 @@ public class Main {
         });
 
 
-        jxTreeTable = new JXTreeTable(Context.getExecModel());
+        jxTreeTable = new JXTreeTable(Context.getContext().getExecModel());
         Version1.add(jxTreeTable);
 
         //jxTreeTable.setDefaultEditor();

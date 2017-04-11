@@ -87,17 +87,19 @@ public class JsonMenuBar extends JMenuBar {
                                         newPrjName,
                                         Context.defaultPrjXmlPath,
                                         newPrjDir.getPath() + "/");
-                                AbstractFileTree abstractFileTree = new AbstractFileTree(newPrjName, newIteFile);
-                                IteProject iteProject = new IteProject(abstractFileTree);
-                                Context.getOpenProjects().put(newPrjName, iteProject);
-                                try {
-                                    abstractFileTree.addAll(FileMappingUtils.loadFileMapping(new FileInputStream(newIteFile), true));
-                                    ((DefaultTreeModel) jTree.getModel()).insertNodeInto(iteProject.getProjectTree().getProjectTreeRoot(),
-                                            ((DefaultMutableTreeNode) jTree.getModel().getRoot()),
-                                            ((DefaultMutableTreeNode) jTree.getModel().getRoot()).getChildCount());
-                                } catch (FileNotFoundException e1) {
-                                    e1.printStackTrace();
-                                }
+                                // TODO is replacement ok
+                                Context.constructAndOpenPrj(newIteFile);
+//                                AbstractFileTree abstractFileTree = new AbstractFileTree(newPrjName, newIteFile);
+//                                IteProject iteProject = new IteProject(abstractFileTree);
+//                                Context.getOpenProjects().put(newPrjName, iteProject);
+//                                try {
+//                                    abstractFileTree.addAll(FileMappingUtils.loadFileMapping(new FileInputStream(newIteFile), true));
+//                                    ((DefaultTreeModel) jTree.getModel()).insertNodeInto(iteProject.getProjectTree().getProjectTreeRoot(),
+//                                            ((DefaultMutableTreeNode) jTree.getModel().getRoot()),
+//                                            ((DefaultMutableTreeNode) jTree.getModel().getRoot()).getChildCount());
+//                                } catch (FileNotFoundException e1) {
+//                                    e1.printStackTrace();
+//                                }
                             }
                         }
                     }
@@ -107,7 +109,7 @@ public class JsonMenuBar extends JMenuBar {
                     jFileChooser.setMultiSelectionEnabled(false);
                     jFileChooser.setFileFilter(new FileNameExtensionFilter(null, "ite"));
                     if(jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
-                        FileMappingUtils.openProject(jFileChooser.getSelectedFile().getPath());
+                        Context.openProject(jFileChooser.getSelectedFile().getPath());
                     }
                     break;
             }

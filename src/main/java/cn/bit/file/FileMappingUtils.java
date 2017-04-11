@@ -247,7 +247,7 @@ public class FileMappingUtils {
             for (Element projectElement: projectElementList) {
                 if(projectElement.attributeValue("projectName").equals(prjToClose)) {
                     document.getRootElement().remove(projectElement);
-                    Context.getOpenProjects().remove(prjToClose);
+                    Context.getContext().getOpenProjects().remove(prjToClose);
                     XMLWriter xmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath), OutputFormat.createPrettyPrint());
                     xmlWriter.write(document);
                     xmlWriter.flush();
