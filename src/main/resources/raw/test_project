@@ -30,29 +30,29 @@
 
     <execStatus version="ver_0">
         <testClass name="静态工具">
-            <testEntry name="规则检查" arg="cc_run" status="passed">
+            <testEntry name="规则检查" arg="cc_run" status="PASSED">
                 <option name="hello" checked="true"/>
                 <option name="world" />
                 <option name="ok" />
             </testEntry>
-            <testEntry name="跨时钟域分析" arg="cdc_run" status="passed">
+            <testEntry name="跨时钟域分析" arg="cdc_run" status="PASSED">
                 <option name="hello" checked="true"/>
                 <option name="world" />
                 <option name="ok" />
             </testEntry>
-            <testEntry name="静态时序分析" arg="pt" status="passed">
+            <testEntry name="静态时序分析" arg="pt" status="PASSED">
                 <option name="hello" checked="true"/>
                 <option name="world" />
                 <option name="ok" />
             </testEntry>
         </testClass>
         <testClass name="动态工具">
-            <testEntry name="功能仿真" arg="sim" status="passed">
+            <testEntry name="功能仿真" arg="sim" status="PASSED">
                 <option name="hello" checked="true"/>
                 <option name="world" />
                 <option name="ok" />
             </testEntry>
-            <testEntry name="回归仿真" arg="sim_rgs" status="passed">
+            <testEntry name="回归仿真" arg="sim_rgs" status="PASSED">
                 <option name="hello" checked="true"/>
                 <option name="world" />
                 <option name="ok" />

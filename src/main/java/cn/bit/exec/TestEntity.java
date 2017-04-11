@@ -16,6 +16,7 @@ public class TestEntity {
     TestStatus testStatus;
     int entryType = ENTRY_TYPE_TEST;
 
+    // test executable
     public TestEntity(List<String> options, String testName, String testArg, TestStatus testStatus) {
         this.options = options;
         this.testName = testName;
@@ -23,12 +24,10 @@ public class TestEntity {
         this.testStatus = testStatus;
     }
 
-    public TestEntity(List<String> options, String testName, String testArg, TestStatus testStatus, int entryType) {
-        this.options = options;
-        this.testName = testName;
-        this.testArg = testArg;
-        this.testStatus = testStatus;
-        this.entryType = entryType;
+    // test class
+    public TestEntity(String className) {
+        this.testName = className;
+        entryType = ENTRY_TYPE_CLASS;
     }
 
     public enum TestStatus {
