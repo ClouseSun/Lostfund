@@ -1,9 +1,9 @@
-package cn.bit.ui.component.PopMenu;
+package cn.bit.ui.component;
 
 import cn.bit.Context;
 import cn.bit.file.FileMappingUtils;
 import cn.bit.model.FileNodeEntity;
-import cn.bit.ui.component.MenuList;
+import cn.bit.model.MenuList;
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 

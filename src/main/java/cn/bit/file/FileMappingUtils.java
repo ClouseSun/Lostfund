@@ -29,22 +29,18 @@ public class FileMappingUtils {
      * @param isAbs2Real true for abstract-absolute order of the key-value pair in map, false otherwise.
      * @return the file map.
      */
-    public static Map<String, String> loadFileMapping(InputStream xmlStream, boolean isAbs2Real) {
+    public static Map<String, String> loadFileMapping(Element userMappingElement, boolean isAbs2Real) {
         Map<String, String> fileMap = new LinkedHashMap<>();
 
-        try {
-            Document document = new SAXReader().read(xmlStream);
-            List<Element> elementList = document.getRootElement().element("userMapping").elements("mappingEntry");
-            for (Element element:elementList) {
-                if (isAbs2Real) {
-                    fileMap.put(element.attributeValue("abstractPath"), element.attributeValue("absolutePath"));
-                } else {
-                    fileMap.put(element.attributeValue("absolutePath"), element.attributeValue("abstractPath"));
-                }
+        List<Element> elementList = userMappingElement.elements("mappingEntry");
+        for (Element element:elementList) {
+            if (isAbs2Real) {
+                fileMap.put(element.attributeValue("abstractPath"), element.attributeValue("absolutePath"));
+            } else {
+                fileMap.put(element.attributeValue("absolutePath"), element.attributeValue("abstractPath"));
             }
-        } catch (DocumentException e) {
-            e.printStackTrace();
         }
+
         return fileMap;
     }
 
@@ -267,39 +263,5 @@ public class FileMappingUtils {
         }
     }
 
-    /**
-     * Open an existing project by .ite file.
-     * Insert new node into JTree model and register in configure XML.
-     * @param itePath full path of the .ite file.
-     * */
-    public static void openProject(String itePath) {
-        try {
-            Document iteDoc = new SAXReader().read(new FileInputStream(itePath));
-            String prjName = iteDoc.getRootElement().attributeValue("projectName");
-            AbstractFileTree newPrjFileTree = new AbstractFileTree(prjName, itePath);
-            newPrjFileTree.addAll(FileMappingUtils.loadFileMapping(new FileInputStream(itePath), true));
-            IteProject newIteProject = new IteProject(newPrjFileTree);
-            Context.getOpenProjects().put(prjName, newIteProject);
-            Context.getHierarchyModel().insertNodeInto(newIteProject.getProjectTree().getProjectTreeRoot(),
-                    ((DefaultMutableTreeNode) Context.getHierarchyModel().getRoot()),
-                    ((DefaultMutableTreeNode) Context.getHierarchyModel().getRoot()).getChildCount());
-
-            Document configureDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
-            Element prjConfigs = configureDoc.getRootElement();
-            Element newPrj = prjConfigs.addElement("ActiveProject");
-            newPrj.addAttribute("projectName", prjName);
-            newPrj.addAttribute("projectFilePath", itePath);
-            XMLWriter configXmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath), OutputFormat.createPrettyPrint());
-            configXmlWriter.write(configureDoc);
-            configXmlWriter.flush();
-
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-        e.printStackTrace();
-    }
-    }
 
 }

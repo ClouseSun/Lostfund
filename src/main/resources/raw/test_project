@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<projectModel>
+<projectModel projectName="prj2">
     <userMapping>
         <mappingEntry abstractPath="Network/a2/a21" absolutePath="A/B/C"/>
         <mappingEntry abstractPath="Network/a2/a22" absolutePath="A/B/D"/>
@@ -27,4 +27,36 @@
         <mappingEntry abstractPath="Platform/OS/" absolutePath="bin/platform/"/>
         <mappingEntry abstractPath="CopyTest/" absolutePath="/Users/KlousesSun/test907/"/>
     </userMapping>
+
+    <execStatus version="ver_0">
+        <execClass name="静态工具">
+            <execEntry name="规则检查" arg="cc_run" status="passed">
+                <option name="hello" checked="true"/>
+                <option name="world" />
+                <option name="ok" />
+            </execEntry>
+            <execEntry name="跨时钟域分析" arg="cdc_run" status="passed">
+                <option name="hello" checked="true"/>
+                <option name="world" />
+                <option name="ok" />
+            </execEntry>
+            <execEntry name="静态时序分析" arg="pt" status="passed">
+                <option name="hello" checked="true"/>
+                <option name="world" />
+                <option name="ok" />
+            </execEntry>
+        </execClass>
+        <execClass name="动态工具">
+            <execEntry name="功能仿真" arg="sim" status="passed">
+                <option name="hello" checked="true"/>
+                <option name="world" />
+                <option name="ok" />
+            </execEntry>
+            <execEntry name="回归仿真" arg="sim_rgs" status="passed">
+                <option name="hello" checked="true"/>
+                <option name="world" />
+                <option name="ok" />
+            </execEntry>
+        </execClass>
+    </execStatus>
 </projectModel>

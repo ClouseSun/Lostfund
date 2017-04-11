@@ -7,17 +7,14 @@ import cn.bit.model.IteProject;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
-import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.dom4j.io.XMLWriter;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
-import org.jdesktop.swingx.treetable.MutableTreeTableNode;
-import sun.jvm.hotspot.ui.treetable.TreeTableModel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,30 +44,84 @@ public class Context {
         }
     }
 
+    private static IteProject constructAndOpenPrj(String projConfigPath) {
+        AbstractFileTree abstractFileTree;
+
+        Document document = null;
+        try {
+            document = new SAXReader().read(new FileInputStream(projConfigPath));
+            // TODO is this attribute exist?
+            String projectName = document.getRootElement().attributeValue("projectName");
+            abstractFileTree = new AbstractFileTree(projectName, projConfigPath);
+            abstractFileTree.addAll(FileMappingUtils.loadFileMapping(
+                    document.getRootElement().element("userMapping"), true));
+            IteProject iteProject = new IteProject(abstractFileTree);
+            iteProject.setProjectName(projectName);
+            iteProject.setProjectConfigPath(projConfigPath);
+            openProjects.put(projectName, iteProject);
+            return iteProject;
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public static void init(String configPath) {
         try {
             hierarchyModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
-
-
+            execModel = new DefaultTreeTableModel();
 
             Document document = new SAXReader().read(new FileInputStream(configPath));
             Map<String, IteProject> openProjects = new LinkedHashMap<>();
             List<Element> prjConfigList = document.getRootElement().elements();
             for (Element prjConfig: prjConfigList) {
-                AbstractFileTree abstractFileTree = new AbstractFileTree(prjConfig.attributeValue("projectName")
-                        , prjConfig.attributeValue("projectFilePath"));
-                abstractFileTree.addAll(FileMappingUtils.loadFileMapping(new FileInputStream(prjConfig.attributeValue("projectFilePath")), true));
-                openProjects.put(prjConfig.attributeValue("projectName"), new IteProject(abstractFileTree));
+                constructAndOpenPrj(prjConfig.attributeValue("projectFilePath"));
             }
             openProjects.entrySet().stream().forEach(stringIteProjectEntry ->
                     hierarchyModel.insertNodeInto(stringIteProjectEntry.getValue().getProjectTree().getProjectTreeRoot(),
                             ((DefaultMutableTreeNode) hierarchyModel.getRoot()),
                             ((DefaultMutableTreeNode) hierarchyModel.getRoot()).getChildCount()));
-
             context = new Context(openProjects);
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // TODO test
+    /**
+     * Open an existing project by .ite file.
+     * Insert new node into JTree model and register in configure XML.
+     * @param itePath full path of the .ite file.
+     * */
+    public static void openProject(String itePath) {
+        try {
+            IteProject newIteProject = constructAndOpenPrj(itePath);
+            Context.getHierarchyModel().insertNodeInto(newIteProject.getProjectTree().getProjectTreeRoot(),
+                    ((DefaultMutableTreeNode) Context.getHierarchyModel().getRoot()),
+                    ((DefaultMutableTreeNode) Context.getHierarchyModel().getRoot()).getChildCount());
+
+            Document configureDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
+            Element prjConfigs = configureDoc.getRootElement();
+            Element newPrj = prjConfigs.addElement("ActiveProject");
+            newPrj.addAttribute("projectName", newIteProject.getProjectName());
+            newPrj.addAttribute("projectFilePath", itePath);
+            XMLWriter configXmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath), OutputFormat.createPrettyPrint());
+            configXmlWriter.write(configureDoc);
+            configXmlWriter.flush();
+
+
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

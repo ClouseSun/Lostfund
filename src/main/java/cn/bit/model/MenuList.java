@@ -1,4 +1,4 @@
-package cn.bit.ui.component;
+package cn.bit.model;
 
 /**
  * Created by KlousesSun on 2017/3/27.
