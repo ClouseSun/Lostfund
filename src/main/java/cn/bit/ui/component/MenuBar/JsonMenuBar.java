@@ -1,9 +1,10 @@
-package cn.bit.ui.component;
+package cn.bit.ui.component.MenuBar;
 
 import cn.bit.Context;
 import cn.bit.file.AbstractFileTree;
 import cn.bit.file.FileMappingUtils;
 import cn.bit.model.IteProject;
+import cn.bit.ui.component.MenuList;
 import cn.bit.ui.frame.NewProjectDialog;
 import com.github.cjwizard.WizardSettings;
 import com.google.gson.Gson;

@@ -8,6 +8,11 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.jdesktop.swingx.JXTreeTable;
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
+import org.jdesktop.swingx.treetable.MutableTreeTableNode;
+import sun.jvm.hotspot.ui.treetable.TreeTableModel;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -23,6 +28,7 @@ import java.util.Map;
 public class Context {
     static Map<String, IteProject> openProjects;
     static DefaultTreeModel hierarchyModel;
+    static DefaultTreeTableModel execModel;
     static Context context;
 
     public final static String RES_ROOT = "src/main/resources/";
@@ -44,6 +50,9 @@ public class Context {
     public static void init(String configPath) {
         try {
             hierarchyModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
+
+
+
             Document document = new SAXReader().read(new FileInputStream(configPath));
             Map<String, IteProject> openProjects = new LinkedHashMap<>();
             List<Element> prjConfigList = document.getRootElement().elements();
@@ -76,6 +85,10 @@ public class Context {
 
     public static DefaultTreeModel getHierarchyModel() {
         return hierarchyModel;
+    }
+
+    public static DefaultTreeTableModel getExecModel() {
+        return execModel;
     }
 
     public static String getProjectFilePath(String projectName) {
