@@ -131,12 +131,9 @@ public class Main {
         });
         projectTree.setCellRenderer(new FileTreeCellRender());
 
-//        jxTreeTable = new JXTreeTable(Context.getContext().getExecModel());
-//        Version1.add(jxTreeTable);
-
-        jxTreeTable = new JXTreeTable();
-        jxTreeTable.setTreeTableModel(Context.getContext().getActiveProject().getExecModels().get("ver_0"));
+        jxTreeTable = new JXTreeTable(Context.getContext().getActiveProject().getExecModels().get("ver_0"));
         ver1Pane.add(jxTreeTable);
+
         mainFrame.setVisible(true);
         EventQueue.invokeLater(new Runnable() {
             @Override

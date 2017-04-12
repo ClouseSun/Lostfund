@@ -15,6 +15,10 @@ import java.util.stream.Collectors;
 public class ExecUtils {
     public static DefaultTreeTableModel loadTestExec(Element execElement) {
         DefaultTreeTableModel defaultTreeTableModel = new DefaultTreeTableModel();
+        ArrayList<String> colIds = new ArrayList<>();
+        colIds.add("name");
+        colIds.add("options");
+        defaultTreeTableModel.setColumnIdentifiers(colIds);
         DefaultMutableTreeTableNode rootNode = new DefaultMutableTreeTableNode();
         defaultTreeTableModel.setRoot(rootNode);
 
