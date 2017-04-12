@@ -2,11 +2,7 @@ package cn.bit.file;
 
 import cn.bit.Context;
 import cn.bit.model.FileNodeEntity;
-import cn.bit.model.IteProject;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
+import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -48,18 +44,28 @@ public class FileMappingUtils {
      * Called when creating new project to insert file mappings of default hierarchy into the XML file of the
      * new project.
      * @param defaultXml the InputStream of default hierarchy file.
-     * @param userMapping the root element of the new project file mapping.
+     * @param rootElement the root element of the new project XML.
      * @param newPrjPath string of the new project path.
      */
-    public static void insertDefaultMapping(InputStream defaultXml, Element userMapping, String newPrjPath) {
+    public static void insertDefaultMapping(InputStream defaultXml, Element rootElement, String newPrjPath) {
         try {
                 Document defaultDocument = new SAXReader().read(defaultXml);
-                List<Element> defaultFileList = defaultDocument.getRootElement().elements("mappingEntry");
+                List<Element> defaultFileList = defaultDocument.
+                                                getRootElement().
+                                                element("defaultMapping").
+                                                elements("mappingEntry");
+                Element userMapping = rootElement.element("userMapping");
                 for (Element element : defaultFileList) {
                     Element newMappingEntry = userMapping.addElement("mappingEntry");
                     newMappingEntry.addAttribute("abstractPath", element.attributeValue("abstractPath"));
-                    newMappingEntry.addAttribute("absolutePath", newPrjPath + element.attributeValue("absolutePath"));
+                    newMappingEntry.addAttribute("absolutePath",
+                            newPrjPath + element.attributeValue("absolutePath"));
                 }
+                Element defaultExecRoot = defaultDocument.getRootElement().element("defaultExecStatus");
+                Element cloneExecRoot = defaultExecRoot.createCopy();
+                cloneExecRoot.setQName(new QName("execStatus"));
+                rootElement.add(cloneExecRoot);
+
             } catch (DocumentException e) {
             e.printStackTrace();
         }
@@ -131,7 +137,8 @@ public class FileMappingUtils {
             File newPrjXml = new File(newPrjPath + newPrjName + ".ite");
             newPrjXml.createNewFile();
 
-            XMLWriter newXmlWriter = new XMLWriter(new FileWriter(newPrjXml.getPath()), OutputFormat.createPrettyPrint());
+            XMLWriter newXmlWriter = new XMLWriter(new FileWriter(newPrjXml.getPath()),
+                    OutputFormat.createPrettyPrint());
             Document newXmlDoc = DocumentHelper.createDocument();
             Element root = DocumentHelper.createElement("projectModel");
             root.addAttribute("projectName", newPrjName);
@@ -140,14 +147,18 @@ public class FileMappingUtils {
 
             Document configureDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
             Element prjConfigs = configureDoc.getRootElement();
-            Element newPrj = prjConfigs.addElement("ActiveProject");
+            Element newPrj = prjConfigs.addElement("Project");
             newPrj.addAttribute("projectName", newPrjName);
             newPrj.addAttribute("projectFilePath", newPrjXml.getPath());
-            XMLWriter configXmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath), OutputFormat.createPrettyPrint());
+            newPrj.addAttribute("projectFilePath", newPrjXml.getPath());
+            newPrj.addAttribute("isActivated", "false");
+
+            XMLWriter configXmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath),
+                    OutputFormat.createPrettyPrint());
             configXmlWriter.write(configureDoc);
             configXmlWriter.flush();
 
-            insertDefaultMapping(new FileInputStream(defaultXmlPath), root.element("userMapping"), newPrjPath);
+            insertDefaultMapping(new FileInputStream(defaultXmlPath), root, newPrjPath);
 
             List<Element> newDirElementsList = newXmlDoc.getRootElement().element("userMapping").elements();
 
@@ -155,6 +166,8 @@ public class FileMappingUtils {
                 File newDir = new File(newDirElement.attributeValue("absolutePath"));
                 newDir.mkdirs();
             }
+
+
 
             newXmlWriter.write(newXmlDoc);
             newXmlWriter.close();
@@ -248,12 +261,15 @@ public class FileMappingUtils {
                 if(projectElement.attributeValue("projectName").equals(prjToClose)) {
                     document.getRootElement().remove(projectElement);
                     Context.getContext().getOpenProjects().remove(prjToClose);
-                    XMLWriter xmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath), OutputFormat.createPrettyPrint());
-                    xmlWriter.write(document);
-                    xmlWriter.flush();
-                    xmlWriter.close();
                 }
             }
+
+            XMLWriter xmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath),
+                    OutputFormat.createPrettyPrint());
+            xmlWriter.write(document);
+            xmlWriter.flush();
+            xmlWriter.close();
+
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -263,5 +279,30 @@ public class FileMappingUtils {
         }
     }
 
+    public static void changeActivatedProject(String prjToActivated) {
+        try {
+            Document configDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
+            List<Element> projectElementList = configDoc.getRootElement().elements();
+            for (Element projectElement: projectElementList) {
+                if(projectElement.attributeValue("projectName").equals(prjToActivated)) {
+                    projectElement.addAttribute("isActivated", "true");
+                } else{
+                    projectElement.addAttribute("isActivated", "false");
+                }
+            }
 
+            XMLWriter xmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath),
+                    OutputFormat.createPrettyPrint());
+            xmlWriter.write(configDoc);
+            xmlWriter.flush();
+            xmlWriter.close();
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

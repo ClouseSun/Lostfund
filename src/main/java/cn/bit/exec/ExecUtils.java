@@ -22,7 +22,8 @@ public class ExecUtils {
         List<Element> testEntryElements;
         int classCount = 0;
         for (Element testClassElement : testClassElements) {
-            ExecMutableTreeTableNode newClassNode = new ExecMutableTreeTableNode(new TestEntity(testClassElement.attributeValue("name")));
+            ExecMutableTreeTableNode newClassNode =
+                    new ExecMutableTreeTableNode(new TestEntity(testClassElement.attributeValue("name")));
             defaultTreeTableModel.insertNodeInto(newClassNode, rootNode, classCount);
             testEntryElements = testClassElement.elements();
             int testCount = 0;

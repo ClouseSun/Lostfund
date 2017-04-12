@@ -19,6 +19,11 @@
             "title": "关闭工程",
             "name": "menuitem_close",
             "isEnable": true
+        },
+        {
+            "title": "标记为测试中工程",
+            "name": "menuitem_markAsTesting",
+            "isEnable": true
         }
     ]
 }

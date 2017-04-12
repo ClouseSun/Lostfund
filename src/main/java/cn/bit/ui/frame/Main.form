@@ -36,14 +36,14 @@
             </properties>
             <border type="none"/>
             <children>
-              <grid id="e189b" binding="panel1" layout-manager="GridBagLayout">
+              <grid id="e189b" binding="projectViewPane" layout-manager="GridBagLayout">
                 <constraints>
                   <splitpane position="left"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <scrollpane id="2cb47" binding="HierarchyPane">
+                  <scrollpane id="2cb47" binding="projectFilePane">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="1.0" weighty="1.0"/>
@@ -53,7 +53,7 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="5c999" class="javax.swing.JTree" binding="tree1" default-binding="true">
+                      <component id="5c999" class="javax.swing.JTree" binding="projectTree" default-binding="true">
                         <constraints/>
                         <properties>
                           <rootVisible value="false"/>
@@ -82,12 +82,12 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <tabbedpane id="9a008" binding="tabbedPane2" default-binding="true">
+                      <tabbedpane id="9a008" binding="ExecTabbedPane" default-binding="true">
                         <constraints/>
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="df0f2" binding="Version1" layout-manager="GridBagLayout">
+                          <grid id="df0f2" binding="ver1Pane" layout-manager="GridBagLayout">
                             <constraints>
                               <tabbedpane title="ver1"/>
                             </constraints>
@@ -95,7 +95,7 @@
                             <border type="none"/>
                             <children/>
                           </grid>
-                          <grid id="4dd5a" binding="Version2" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                          <grid id="4dd5a" binding="ver2Pane" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="0" left="0" bottom="0" right="0"/>
                             <constraints>
                               <tabbedpane title="ver2"/>
@@ -121,7 +121,7 @@
               </grid>
             </children>
           </splitpane>
-          <tabbedpane id="13f55" binding="tabbedPane1" default-binding="true">
+          <tabbedpane id="13f55" binding="consolePane" default-binding="true">
             <constraints>
               <splitpane position="right"/>
             </constraints>

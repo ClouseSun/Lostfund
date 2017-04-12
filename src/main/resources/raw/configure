@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <ITEProperties> 
-  <ActiveProject projectName="prj1" projectFilePath="src/main/resources/raw/test_project"/>  
-  <ActiveProject projectName="prj2" projectFilePath="src/main/resources/raw/test_project2"/>  
-  <ActiveProject projectName="projectTemplate" projectFilePath="src/main/resources/raw/project_template"/>  
+  <Project projectName="prj1" projectFilePath="src/main/resources/raw/test_project" isActivated="false"/>  
+  <Project projectName="prj2" projectFilePath="src/main/resources/raw/test_project2" isActivated="true"/>  
+  <Project projectName="projectTemplate" projectFilePath="src/main/resources/raw/project_template" isActivated="false"/> 
 </ITEProperties>

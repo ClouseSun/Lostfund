@@ -1,7 +1,6 @@
 package cn.bit.ui.component;
 
 import cn.bit.Context;
-import cn.bit.file.AbstractFileTree;
 import cn.bit.file.FileMappingUtils;
 import cn.bit.model.IteProject;
 import cn.bit.model.MenuList;
@@ -14,8 +13,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 /**
  * Created by KlousesSun on 2017/3/19.
@@ -87,19 +84,13 @@ public class JsonMenuBar extends JMenuBar {
                                         newPrjName,
                                         Context.defaultPrjXmlPath,
                                         newPrjDir.getPath() + "/");
-                                // TODO is replacement ok
-                                Context.constructAndOpenPrj(newIteFile);
-//                                AbstractFileTree abstractFileTree = new AbstractFileTree(newPrjName, newIteFile);
-//                                IteProject iteProject = new IteProject(abstractFileTree);
-//                                Context.getOpenProjects().put(newPrjName, iteProject);
-//                                try {
-//                                    abstractFileTree.addAll(FileMappingUtils.loadFileMapping(new FileInputStream(newIteFile), true));
-//                                    ((DefaultTreeModel) jTree.getModel()).insertNodeInto(iteProject.getProjectTree().getProjectTreeRoot(),
-//                                            ((DefaultMutableTreeNode) jTree.getModel().getRoot()),
-//                                            ((DefaultMutableTreeNode) jTree.getModel().getRoot()).getChildCount());
-//                                } catch (FileNotFoundException e1) {
-//                                    e1.printStackTrace();
-//                                }
+
+                                IteProject newIteProject = Context.constructAndOpenPrj(newIteFile);
+                                DefaultTreeModel hierarchyModel = Context.getContext().getProjectFileModel();
+                                Context.getContext().getProjectFileModel().insertNodeInto(
+                                        newIteProject.getProjectTree().getProjectTreeRoot(),
+                                        ((DefaultMutableTreeNode) hierarchyModel.getRoot()),
+                                        ((DefaultMutableTreeNode) hierarchyModel.getRoot()).getChildCount());
                             }
                         }
                     }

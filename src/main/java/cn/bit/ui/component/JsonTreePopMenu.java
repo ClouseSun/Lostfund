@@ -168,9 +168,11 @@ public class JsonTreePopMenu extends JPopupMenu{
 
     private void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
         jMenuItem.addActionListener((ActionEvent e) -> {
-            String parentPath = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getRealPath();
-            String projectName = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getPath()[1].toString();
+            DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent());
+            String parentPath = ((FileNodeEntity) selectedNode.getUserObject()).getRealPath();
+            String projectName = selectedNode.getPath()[1].toString();
             String projectXmlPath = Context.getContext().getProjectFilePath(projectName);
+
 
             JFileChooser jFileChooser = new JFileChooser(projectXmlPath.substring(0, projectXmlPath.lastIndexOf("/")));
 
@@ -217,28 +219,36 @@ public class JsonTreePopMenu extends JPopupMenu{
                     int confirmRet = JOptionPane.showConfirmDialog(null, "是否删除真实目录下的文件？");
 
                     if (confirmRet != JOptionPane.CANCEL_OPTION) {
-                        int itemType = ((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getNodeType();
+                        int itemType = ((FileNodeEntity) selectedNode.getUserObject()).getNodeType();
                         List<String> removedList = new LinkedList<>();
-                        DefaultMutableTreeNode removedNode = (DefaultMutableTreeNode) jTree.getLastSelectedPathComponent();
-                        TreeNode[] delPath = Arrays.copyOfRange(removedNode.getPath(), 2, removedNode.getPath().length);
-                        removedList.add(FileMappingUtils.path2String(delPath, itemType == FileNodeEntity.NODE_TYPE_FILE));
+                        TreeNode[] delPath = Arrays.copyOfRange(selectedNode.getPath(),
+                                2,
+                                selectedNode.getPath().length);
+
+                        removedList.add(FileMappingUtils.path2String(delPath,
+                                itemType == FileNodeEntity.NODE_TYPE_FILE));
+
                         FileMappingUtils.removeMappingFromXml(projectXmlPath,
                                 removedList,
                                 JOptionPane.OK_OPTION == confirmRet);
-                        ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent(removedNode);
+
+                        ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent(selectedNode);
                     }
                     break;
                 case "menuitem_close":
-                    DefaultMutableTreeNode selectedProject = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent());
-                    confirmRet = JOptionPane.showConfirmDialog(null, "确认关闭工程" + selectedProject.toString() + "？");
+                    confirmRet = JOptionPane.showConfirmDialog(null,
+                            "确认关闭工程" + selectedNode.toString() + "？");
+
                     if(confirmRet == JOptionPane.OK_OPTION) {
-                        FileMappingUtils.closeProject(selectedProject.toString());
-                        ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent(selectedProject);
+                        FileMappingUtils.closeProject(selectedNode.toString());
+                        ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent(selectedNode);
                     }
                     break;
                 case "menuitem_newFolder":
-                    DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent());
-                    TreeNode[] selectedTreeNode = Arrays.copyOfRange(selectedNode.getPath(), 2, selectedNode.getPath().length);
+                    TreeNode[] selectedTreeNode = Arrays.copyOfRange(selectedNode.getPath(),
+                            2,
+                            selectedNode.getPath().length);
+
                     String selectedPath = FileMappingUtils.path2String(selectedTreeNode, false);
                     String newDirName = (String)JOptionPane.showInputDialog(null,
                             "在" + selectedPath + "下创建文件夹：");
@@ -262,6 +272,10 @@ public class JsonTreePopMenu extends JPopupMenu{
                         ((DefaultTreeModel) jTree.getModel()).insertNodeInto(newNode,
                                 selectedNode, selectedNode.getChildCount());
                     }
+                    break;
+                case "menuitem_markAsTesting":
+                    FileMappingUtils.changeActivatedProject(selectedNode.toString());
+                    Context.getContext().setActiveProject(Context.getContext().getOpenProjects().get(selectedNode.toString()));
                     break;
             }
         });
