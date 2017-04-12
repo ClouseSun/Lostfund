@@ -2,6 +2,7 @@ package cn.bit.ui.frame;
 
 import cn.bit.Context;
 import cn.bit.model.FileNodeEntity;
+import cn.bit.ui.FileTreeCellRender;
 import cn.bit.ui.component.JsonMenuBar;
 import cn.bit.ui.component.JsonTreePopMenu;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -12,6 +13,7 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -97,7 +99,8 @@ public class Main {
                                     Runtime.getRuntime().exec("open " + selectedNode.getRealPath());
                                 if (selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_ROOT)
                                     Runtime.getRuntime().exec("open "
-                                            + selectedNode.getRealPath().substring(0, selectedNode.getRealPath().lastIndexOf('/')));
+                                            + selectedNode.getRealPath().substring(0,
+                                            selectedNode.getRealPath().lastIndexOf('/')));
                             } catch (IOException e1) {
                                 e1.printStackTrace();
                             }
@@ -126,12 +129,14 @@ public class Main {
 
             }
         });
-
+        projectTree.setCellRenderer(new FileTreeCellRender());
 
 //        jxTreeTable = new JXTreeTable(Context.getContext().getExecModel());
 //        Version1.add(jxTreeTable);
 
-        //jxTreeTable.setDefaultEditor();
+        jxTreeTable = new JXTreeTable();
+        jxTreeTable.setTreeTableModel(Context.getContext().getActiveProject().getExecModels().get("ver_0"));
+        ver1Pane.add(jxTreeTable);
         mainFrame.setVisible(true);
         EventQueue.invokeLater(new Runnable() {
             @Override

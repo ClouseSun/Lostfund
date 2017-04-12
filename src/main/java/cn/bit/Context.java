@@ -89,7 +89,7 @@ public class Context {
             List<Element> prjConfigList = document.getRootElement().elements();
             for (Element prjConfig: prjConfigList) {
                 IteProject newProject = constructAndOpenPrj(prjConfig.attributeValue("projectFilePath"));
-                if(prjConfig.attributeValue("isActivated") == "true") {
+                if(prjConfig.attributeValue("isActivated").equals("true")) {
                     context.activeProject = newProject;
                 }
             }

@@ -1,58 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<projectModel projectName="projectTemplate">
-    <userMapping>
-        <mappingEntry abstractPath="规则检查文件夹/" absolutePath="cc/"/>
-        <mappingEntry abstractPath="跨时钟域检查文件夹/" absolutePath="cdc/"/>
-        <mappingEntry abstractPath="功能时序仿真文件夹/" absolutePath="run/"/>
-        <mappingEntry abstractPath="功能时序仿真文件夹/测试平台TB/" absolutePath="tb/"/>
-        <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/" absolutePath="src/"/>
-        <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>
-        <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/ver_0/rtl/" absolutePath="src/ver_0/rtl/"/>
-        <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/ver_0/netlist_sim/" absolutePath="src/ver_0/netlist_sim/"/>
-        <mappingEntry abstractPath="功能时序仿真文件夹/验证VIP/" absolutePath="vip/"/>
-        <mappingEntry abstractPath="功能时序仿真文件夹/库文件LIB/" absolutePath="lib/"/>
-        <mappingEntry abstractPath="功能时序仿真文件夹/测试用例TC/" absolutePath="tc/"/>
-        <mappingEntry abstractPath="静态时序分析文件夹/" absolutePath="sta/"/>
-        <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/" absolutePath="src/"/>
-        <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>
-        <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/ver_0/netlist_sta/" absolutePath="src/ver_0/netlist_sta/"/>
-        <mappingEntry abstractPath="一致性检查文件夹/" absolutePath="tb/"/>
-        <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/" absolutePath="src/"/>
-        <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>
-        <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/rtl/" absolutePath="src/ver_0/rtl/"/>
-        <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/netlist_for/" absolutePath="src/ver_0/netlist_for/"/>
-    </userMapping>
 
-    <execStatus version="ver_0">
-        <testClass name="静态工具">
-            <testEntry name="规则检查" arg="cc_run" status="PASSED">
-                <option name="hello" checked="true"/>
-                <option name="world"/>
-                <option name="ok"/>
-            </testEntry>
-            <testEntry name="跨时钟域分析" arg="cdc_run" status="PASSED">
-                <option name="hello" checked="true"/>
-                <option name="world"/>
-                <option name="ok"/>
-            </testEntry>
-            <testEntry name="静态时序分析" arg="pt" status="PASSED">
-                <option name="hello" checked="true"/>
-                <option name="world"/>
-                <option name="ok"/>
-            </testEntry>
-        </testClass>
-        <testClass name="动态工具">
-            <testEntry name="功能仿真" arg="sim" status="PASSED">
-                <option name="hello" checked="true"/>
-                <option name="world"/>
-                <option name="ok"/>
-            </testEntry>
-            <testEntry name="回归仿真" arg="sim_rgs" status="PASSED">
-                <option name="hello" checked="true"/>
-                <option name="world"/>
-                <option name="ok"/>
-            </testEntry>
-        </testClass>
-    </execStatus>
-
+<projectModel projectName="projectTemplate"> 
+  <userMapping> 
+    <mappingEntry abstractPath="规则检查文件夹/" absolutePath="cc/"/>  
+    <mappingEntry abstractPath="跨时钟域检查文件夹/" absolutePath="cdc/"/>  
+    <mappingEntry abstractPath="功能时序仿真文件夹/" absolutePath="run/"/>  
+    <mappingEntry abstractPath="功能时序仿真文件夹/测试平台TB/" absolutePath="tb/"/>  
+    <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/" absolutePath="src/"/>  
+    <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>  
+    <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/ver_0/rtl/" absolutePath="src/ver_0/rtl/"/>  
+    <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/ver_0/netlist_sim/" absolutePath="src/ver_0/netlist_sim/"/>  
+    <mappingEntry abstractPath="功能时序仿真文件夹/验证VIP/" absolutePath="vip/"/>  
+    <mappingEntry abstractPath="功能时序仿真文件夹/库文件LIB/" absolutePath="lib/"/>  
+    <mappingEntry abstractPath="功能时序仿真文件夹/测试用例TC/" absolutePath="tc/"/>  
+    <mappingEntry abstractPath="静态时序分析文件夹/" absolutePath="sta/"/>  
+    <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/" absolutePath="src/"/>  
+    <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>  
+    <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/ver_0/netlist_sta/" absolutePath="src/ver_0/netlist_sta/"/>  
+    <mappingEntry abstractPath="一致性检查文件夹/" absolutePath="tb/"/>  
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/" absolutePath="src/"/>  
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>  
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/rtl/" absolutePath="src/ver_0/rtl/"/>  
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/netlist_for/" absolutePath="src/ver_0/netlist_for/"/>  
+    <mappingEntry abstractPath="规则检查文件夹/dwd" absolutePath="/Users/KlousesSun/dwd"/>
+  </userMapping>  
+  <execStatus version="ver_0"> 
+    <testClass name="静态工具"> 
+      <testEntry name="规则检查" arg="cc_run" status="PASSED"> 
+        <option name="hello" checked="true"/>  
+        <option name="world"/>  
+        <option name="ok"/> 
+      </testEntry>  
+      <testEntry name="跨时钟域分析" arg="cdc_run" status="PASSED"> 
+        <option name="hello" checked="true"/>  
+        <option name="world"/>  
+        <option name="ok"/> 
+      </testEntry>  
+      <testEntry name="静态时序分析" arg="pt" status="PASSED"> 
+        <option name="hello" checked="true"/>  
+        <option name="world"/>  
+        <option name="ok"/> 
+      </testEntry> 
+    </testClass>  
+    <testClass name="动态工具"> 
+      <testEntry name="功能仿真" arg="sim" status="PASSED"> 
+        <option name="hello" checked="true"/>  
+        <option name="world"/>  
+        <option name="ok"/> 
+      </testEntry>  
+      <testEntry name="回归仿真" arg="sim_rgs" status="PASSED"> 
+        <option name="hello" checked="true"/>  
+        <option name="world"/>  
+        <option name="ok"/> 
+      </testEntry> 
+    </testClass> 
+  </execStatus> 
 </projectModel>
