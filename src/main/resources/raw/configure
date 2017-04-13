@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ITEProperties>
+<ITEProperties> 
   <Project projectName="projectTemplate" projectFilePath="src/main/resources/raw/project_template" isActivated="true"/>
 </ITEProperties>

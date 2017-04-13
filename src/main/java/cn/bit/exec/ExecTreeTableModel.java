@@ -10,9 +10,6 @@ import java.util.List;
 public class ExecTreeTableModel extends DefaultTreeTableModel {
     @Override
     public boolean isCellEditable(Object node, int column) {
-        if(node == null || node.toString().equals("null")) {
-            return false;
-        }
         return (column == 1
                 && ((ExecMutableTreeTableNode) node).getTestEntity().getTestCases() != null
                 && !((ExecMutableTreeTableNode) node).getTestEntity().getTestCases().isEmpty());
