@@ -1,19 +1,20 @@
 package cn.bit.ui.frame;
 
 import cn.bit.Context;
+import cn.bit.exec.TestEntity;
 import cn.bit.model.FileNodeEntity;
-import cn.bit.ui.FileTreeCellRender;
+import cn.bit.ui.ExecTableCellEditor;
+import cn.bit.ui.ExecTreeCellRenderer;
+import cn.bit.ui.FileTreeCellRenderer;
 import cn.bit.ui.component.JsonMenuBar;
 import cn.bit.ui.component.JsonTreePopMenu;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import org.apache.commons.io.IOUtils;
 import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -109,29 +110,23 @@ public class Main {
                 }
             }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
         });
-        projectTree.setCellRenderer(new FileTreeCellRender());
+
+        projectTree.setCellRenderer(new FileTreeCellRenderer());
 
         jxTreeTable = new JXTreeTable(Context.getContext().getActiveProject().getExecModels().get("ver_0"));
+        jxTreeTable.setTreeCellRenderer(new ExecTreeCellRenderer());
+        jxTreeTable.setDefaultEditor(TestEntity.class, new ExecTableCellEditor(new JComboBox()));
+
+        jxTreeTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+
+                }
+            }
+        });
+
         ver1Pane.add(jxTreeTable);
 
         mainFrame.setVisible(true);
@@ -214,7 +209,7 @@ public class Main {
         execTabbedPane = new JTabbedPane();
         testPane.setViewportView(execTabbedPane);
         ver1Pane = new JPanel();
-        ver1Pane.setLayout(new GridBagLayout());
+        ver1Pane.setLayout(new BorderLayout(0, 0));
         execTabbedPane.addTab("ver1", ver1Pane);
         ver2Pane = new JPanel();
         ver2Pane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));

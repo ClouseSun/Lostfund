@@ -21,37 +21,33 @@
     <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/" absolutePath="src/"/>  
     <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>  
     <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/rtl/" absolutePath="src/ver_0/rtl/"/>  
-    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/netlist_for/" absolutePath="src/ver_0/netlist_for/"/>  
-    <mappingEntry abstractPath="规则检查文件夹/dwd" absolutePath="/Users/KlousesSun/dwd"/>
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/netlist_for/" absolutePath="src/ver_0/netlist_for/"/>
   </userMapping>  
   <execStatus version="ver_0"> 
     <testClass name="静态工具"> 
-      <testEntry name="规则检查" arg="cc_run" status="PASSED"> 
-        <option name="hello" checked="true"/>  
-        <option name="world"/>  
-        <option name="ok"/> 
+      <testEntry name="规则检查" arg="cc_run" status="PASSED">
       </testEntry>  
-      <testEntry name="跨时钟域分析" arg="cdc_run" status="PASSED"> 
-        <option name="hello" checked="true"/>  
-        <option name="world"/>  
-        <option name="ok"/> 
+      <testEntry name="跨时钟域检查" arg="cdc_run" status="RUNNING">
       </testEntry>  
-      <testEntry name="静态时序分析" arg="pt" status="PASSED"> 
-        <option name="hello" checked="true"/>  
-        <option name="world"/>  
-        <option name="ok"/> 
+      <testEntry name="静态时序分析" arg="pt" status="FAILED">
       </testEntry> 
     </testClass>  
     <testClass name="动态工具"> 
       <testEntry name="功能仿真" arg="sim" status="PASSED"> 
-        <option name="hello" checked="true"/>  
-        <option name="world"/>  
-        <option name="ok"/> 
+        <option name="sim_tc001" checked="true"/>
+        <option name="sim_tc002"/>
+        <option name="sim_tc003"/>
+        <option name="sim_tc004"/>
+        <option name="sim_tc005"/>
+        <option name="sim_tc006"/>
       </testEntry>  
-      <testEntry name="回归仿真" arg="sim_rgs" status="PASSED"> 
-        <option name="hello" checked="true"/>  
-        <option name="world"/>  
-        <option name="ok"/> 
+      <testEntry name="回归仿真" arg="sim_rgs" status="FAILED">
+        <option name="sim_rgs_tc001"/>
+        <option name="sim_rgs_tc002"/>
+        <option name="sim_rgs_tc003"/>
+        <option name="sim_rgs_tc004" checked="true"/>
+        <option name="sim_rgs_tc005"/>
+        <option name="sim_rgs_tc006"/>
       </testEntry> 
     </testClass> 
   </execStatus> 

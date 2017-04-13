@@ -11,9 +11,9 @@ import java.awt.*;
 /**
  * Created by KlousesSun on 2017/4/12.
  */
-public class FileTreeCellRender extends DefaultTreeCellRenderer {
+public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
 
-    public FileTreeCellRender() {
+    public FileTreeCellRenderer() {
         super();
     }
 
@@ -21,10 +21,10 @@ public class FileTreeCellRender extends DefaultTreeCellRenderer {
     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-        DefaultMutableTreeNode node = ((DefaultMutableTreeNode) value);
         FileNodeEntity nodeEntity = ((FileNodeEntity) ((DefaultMutableTreeNode) value).getUserObject());
         int nodeType = nodeEntity.getNodeType();
         String activeProjectName = Context.getContext().getActiveProject().getProjectName();
+
 
         switch (nodeType) {
             case FileNodeEntity.NODE_TYPE_ROOT:

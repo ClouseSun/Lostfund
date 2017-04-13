@@ -87,7 +87,7 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <grid id="df0f2" binding="ver1Pane" layout-manager="GridBagLayout">
+                          <grid id="df0f2" binding="ver1Pane" layout-manager="BorderLayout" hgap="0" vgap="0">
                             <constraints>
                               <tabbedpane title="ver1"/>
                             </constraints>

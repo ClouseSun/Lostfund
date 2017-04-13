@@ -18,14 +18,17 @@ public class ExecMutableTreeTableNode extends AbstractMutableTreeTableNode {
             case 0:
                 return testEntity.testName;
             case 1:
-                return testEntity.options;
-            default:
-                return null;
+                return testEntity;
         }
+        return null;
     }
 
     @Override
     public int getColumnCount() {
         return testEntity.entryType;
+    }
+
+    public TestEntity getTestEntity() {
+        return testEntity;
     }
 }

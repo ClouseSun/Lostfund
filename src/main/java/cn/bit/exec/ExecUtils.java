@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
  */
 public class ExecUtils {
     public static DefaultTreeTableModel loadTestExec(Element execElement) {
-        DefaultTreeTableModel defaultTreeTableModel = new DefaultTreeTableModel();
+        DefaultTreeTableModel defaultTreeTableModel = new ExecTreeTableModel();
         ArrayList<String> colIds = new ArrayList<>();
         colIds.add("name");
-        colIds.add("options");
+        colIds.add("testCases");
         defaultTreeTableModel.setColumnIdentifiers(colIds);
         DefaultMutableTreeTableNode rootNode = new DefaultMutableTreeTableNode();
         defaultTreeTableModel.setRoot(rootNode);
@@ -34,20 +34,20 @@ public class ExecUtils {
             for (Element testEntryElement : testEntryElements) {
                 List<Element> optionElements = testEntryElement.elements();
                 List<String> stringOptionList = new ArrayList<>();
-                int optionCount = 0;
+                String selectedOption = null;
                 for (Element optionElement : optionElements) {
                     String isChecked = optionElement.attributeValue("checked");
                     stringOptionList.add(optionElement.attributeValue("name"));
-                    if (isChecked == null || !isChecked.equals("true")) {
-                        optionCount++;
+                    if(isChecked!= null && isChecked.equals("true")) {
+                        selectedOption = optionElement.attributeValue("name");
                     }
                 }
                 ExecMutableTreeTableNode newTestNode = new ExecMutableTreeTableNode(new TestEntity(
                         stringOptionList,
                         testEntryElement.attributeValue("name"),
                         testEntryElement.attributeValue("arg"),
-                        TestEntity.TestStatus.valueOf(testEntryElement.attributeValue("status"))
-                ));
+                        TestEntity.TestStatus.valueOf(testEntryElement.attributeValue("status")),
+                        selectedOption));
                 defaultTreeTableModel.insertNodeInto(newTestNode, newClassNode, testCount);
                 testCount ++;
             }

@@ -1,7 +1,5 @@
 package cn.bit.exec;
 
-import oracle.jrockit.jfr.StringConstantPool;
-
 import java.util.List;
 
 /**
@@ -10,18 +8,22 @@ import java.util.List;
 public class TestEntity {
     public static final int ENTRY_TYPE_TEST = 2;
     public static final int ENTRY_TYPE_CLASS = 1;
-    List<String> options;
+
+    List<String> testCases;
+    String selectedCase;
+
     String testName;
     String testArg;
     TestStatus testStatus;
     int entryType = ENTRY_TYPE_TEST;
 
     // test executable
-    public TestEntity(List<String> options, String testName, String testArg, TestStatus testStatus) {
-        this.options = options;
+    public TestEntity(List<String> testCases, String testName, String testArg, TestStatus testStatus, String selectedCase) {
+        this.testCases = testCases;
         this.testName = testName;
         this.testArg = testArg;
         this.testStatus = testStatus;
+        this.selectedCase = selectedCase;
     }
 
     // test class
@@ -34,5 +36,32 @@ public class TestEntity {
         PASSED,
         FAILED,
         RUNNING
+    }
+
+    public String getTestName() {
+        return testName;
+    }
+
+    public TestStatus getTestStatus() {
+        return testStatus;
+    }
+
+    public List<String> getTestCases() {
+        return testCases;
+    }
+
+    public int getEntryType() {
+        return entryType;
+    }
+
+    @Override
+    public String toString() {
+        if(testCases.isEmpty())
+            return null;
+        return selectedCase;
+    }
+
+    public String getSelectedCase() {
+        return selectedCase;
     }
 }
