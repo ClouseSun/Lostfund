@@ -236,7 +236,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                     break;
                 case "menuitem_close":
                     confirmRet = JOptionPane.showConfirmDialog(null,
-                            "确认关闭工程" + selectedNode.toString() + "？");
+                            "确认关闭工程" + selectedNode.toString() + "? ");
 
                     if(confirmRet == JOptionPane.OK_OPTION) {
                         FileMappingUtils.closeProject(selectedNode.toString());

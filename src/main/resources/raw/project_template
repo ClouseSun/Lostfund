@@ -21,8 +21,7 @@
     <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/" absolutePath="src/"/>  
     <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>  
     <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/rtl/" absolutePath="src/ver_0/rtl/"/>  
-    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/netlist_for/" absolutePath="src/ver_0/netlist_for/"/>  
-    <mappingEntry abstractPath="规则检查文件夹/null/" absolutePath="cc/null/"/>
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/netlist_for/" absolutePath="src/ver_0/netlist_for/"/>
   </userMapping>  
   <execStatus version="ver_0"> 
     <testClass name="静态工具"> 
