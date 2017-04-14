@@ -90,7 +90,8 @@ public class JsonTreePopMenu extends JPopupMenu{
                          DefaultTreeModel treeModel,
                          DefaultMutableTreeNode parentNode) {
         if (newFile.isDirectory()) {
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), newFile.getName());
+            String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), dirPathToInsert + newFile.getName() + "/");
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(true);
@@ -98,14 +99,15 @@ public class JsonTreePopMenu extends JPopupMenu{
             TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
             String abstractPath = FileMappingUtils.path2String(newPath, false)
                     + newFile.getName() + "/";
-            newFilesMap.put(abstractPath, newFile.getPath());
+            newFilesMap.put(abstractPath, newFile.getPath() + "/");
 
             File[] childFileList = newFile.listFiles();
             for(int i = 0; i < childFileList.length; i++) {
                 addFile(childFileList[i], newFilesMap, treeModel, newNode);
             }
         } else {
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), newFile.getName());
+            String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), dirPathToInsert + newFile.getName());
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(false);
@@ -124,7 +126,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                              DefaultMutableTreeNode parentNode) {
         if (sourceFile.isDirectory()) {
             String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), dirPathToInsert + "/" + sourceFile.getName());
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), dirPathToInsert + sourceFile.getName() + "/");
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(true);
@@ -144,7 +146,7 @@ public class JsonTreePopMenu extends JPopupMenu{
             }
         } else {
             String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), dirPathToInsert + "/" + sourceFile.getName());
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), dirPathToInsert + sourceFile.getName());
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(false);
@@ -152,8 +154,8 @@ public class JsonTreePopMenu extends JPopupMenu{
             TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
             String abstractPath = FileMappingUtils.path2String(newPath, false)
                     + sourceFile.getName();
-            newFilesMap.put(abstractPath, dirPathToInsert + "/" + sourceFile.getName());
-            File newFile = new File(dirPathToInsert + "/" + sourceFile.getName());
+            newFilesMap.put(abstractPath, dirPathToInsert + sourceFile.getName());
+            File newFile = new File(dirPathToInsert + sourceFile.getName());
             try {
                 IOUtils.copy(new FileInputStream(sourceFile), new FileOutputStream(newFile));
             } catch (IOException e) {
@@ -181,7 +183,6 @@ public class JsonTreePopMenu extends JPopupMenu{
                 case "menuitem_addExisting":
                     jFileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
                     jFileChooser.setMultiSelectionEnabled(true);
-
 
                     if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
                         File[] newFiles = jFileChooser.getSelectedFiles();
