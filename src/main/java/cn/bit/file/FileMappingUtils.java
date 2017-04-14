@@ -200,9 +200,8 @@ public class FileMappingUtils {
     public static void removeMappingFromXml(String XmlPath, List<String> removedList, boolean isDeleteFile) {
         try {
             Document document = new SAXReader().read(new FileInputStream(XmlPath), "UTF8");
-             List<Element> userMappings = document.getRootElement().element("userMapping").elements();
-
             Element userMappingElement = document.getRootElement().element("userMapping");
+            List<Element> userMappings = userMappingElement.elements();
 
             removedList.stream().forEach(abstractPath -> {
                 userMappings.stream()
@@ -294,6 +293,81 @@ public class FileMappingUtils {
             XMLWriter xmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath),
                     OutputFormat.createPrettyPrint());
             xmlWriter.write(configDoc);
+            xmlWriter.flush();
+            xmlWriter.close();
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void renameFile(String newNameString,
+                                  String fileAbstractPath,
+                                  String xmlPath,
+                                  boolean isRenameFile) {
+        try {
+            Document projectDoc = new SAXReader().read(new FileInputStream(xmlPath));
+            List<Element> userMappings = projectDoc.getRootElement().element("userMapping").elements();
+
+            boolean isFile = !fileAbstractPath.endsWith("/");
+            String fileAbsolutePath = null;
+            String newFileAbstractPath = null;
+            String newFileAbsolutePath = null;
+
+            if(isFile) {
+                newFileAbstractPath = fileAbstractPath.substring(0, fileAbstractPath.lastIndexOf('/'))
+                        + "/" + newNameString;
+            } else {
+                int index = fileAbstractPath.substring(0, fileAbstractPath.length() - 1).lastIndexOf('/');
+                if(index != -1) {
+                    newFileAbstractPath = fileAbstractPath.
+                            substring(0, index) + "/" + newNameString + "/";
+                } else {
+                    newFileAbstractPath = newNameString + "/";
+                }
+            }
+
+            for (Element mapping: userMappings) {
+                if(mapping.attributeValue("abstractPath").equals(fileAbstractPath)) {
+                    fileAbsolutePath = mapping.attributeValue("absolutePath");
+                }
+            }
+
+            if(isFile) {
+                newFileAbsolutePath = fileAbsolutePath.substring(0, fileAbsolutePath.lastIndexOf('/'))
+                        + "/" + newNameString;
+            } else {
+                int index = fileAbsolutePath.substring(0, fileAbsolutePath.length() - 1).lastIndexOf('/');
+                if(index != -1) {
+                    newFileAbsolutePath = fileAbsolutePath.
+                            substring(0, index) + "/" + newNameString + "/";
+                } else {
+                    newFileAbsolutePath = newNameString + "/";
+                }
+            }
+
+            for (Element mapping: userMappings) {
+                if(mapping.attributeValue("abstractPath").startsWith(fileAbstractPath)) {
+                    String oldAbstractPath = mapping.attributeValue("abstractPath");
+                    mapping.addAttribute("abstractPath",
+                            oldAbstractPath.replaceFirst(fileAbstractPath, newFileAbstractPath));
+                }
+                if(isRenameFile && mapping.attributeValue("absolutePath").startsWith(fileAbsolutePath)) {
+                    String oldAbsolutePath = mapping.attributeValue("absolutePath");
+                    mapping.addAttribute("absolutePath",
+                            oldAbsolutePath.replaceFirst(fileAbsolutePath, newFileAbsolutePath));
+                    File oldFile = new File(fileAbsolutePath);
+                    File newFile = new File(newFileAbsolutePath);
+                    oldFile.renameTo(newFile);
+                }
+            }
+
+            XMLWriter xmlWriter = new XMLWriter(new FileWriter(xmlPath), OutputFormat.createPrettyPrint());
+            xmlWriter.write(projectDoc);
             xmlWriter.flush();
             xmlWriter.close();
 

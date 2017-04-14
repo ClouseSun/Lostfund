@@ -11,11 +11,6 @@
             "isEnable": true
         },
         {
-            "title": "新建文件夹",
-            "name": "menuitem_newFolder",
-            "isEnable": true
-        },
-        {
             "title": "关闭工程",
             "name": "menuitem_close",
             "isEnable": true

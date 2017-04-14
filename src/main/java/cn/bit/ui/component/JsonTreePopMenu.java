@@ -123,7 +123,8 @@ public class JsonTreePopMenu extends JPopupMenu{
                              DefaultTreeModel treeModel,
                              DefaultMutableTreeNode parentNode) {
         if (sourceFile.isDirectory()) {
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), sourceFile.getName());
+            String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), dirPathToInsert + "/" + sourceFile.getName());
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(true);
@@ -132,21 +133,18 @@ public class JsonTreePopMenu extends JPopupMenu{
             TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
 
             String abstractPath = FileMappingUtils.path2String(newPath, false)
-                    + sourceFile.getName();
-            String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
-            newFilesMap.put(abstractPath, sourceFile.getPath());
+                    + sourceFile.getName() + "/";
+
+            newFilesMap.put(abstractPath, dirPathToInsert + sourceFile.getName() + "/");
             File newFile = new File(dirPathToInsert + sourceFile.getName());
-            try {
-                IOUtils.copy(new FileInputStream(sourceFile), new FileOutputStream(newFile));
-                File[] childFileList = newFile.listFiles();
-                for(int i = 0; i < childFileList.length; i++) {
-                    addCopyFile(childFileList[i], newFilesMap, treeModel, newNode);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            newFile.mkdir();
+            File[] childFileList = sourceFile.listFiles();
+            for(int i = 0; i < childFileList.length; i++) {
+                addCopyFile(childFileList[i], newFilesMap, treeModel, newNode);
             }
         } else {
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), sourceFile.getName());
+            String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), dirPathToInsert + "/" + sourceFile.getName());
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(false);
@@ -154,9 +152,8 @@ public class JsonTreePopMenu extends JPopupMenu{
             TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
             String abstractPath = FileMappingUtils.path2String(newPath, false)
                     + sourceFile.getName();
-            String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
-            newFilesMap.put(abstractPath, sourceFile.getPath());
-            File newFile = new File(dirPathToInsert + sourceFile.getName());
+            newFilesMap.put(abstractPath, dirPathToInsert + "/" + sourceFile.getName());
+            File newFile = new File(dirPathToInsert + "/" + sourceFile.getName());
             try {
                 IOUtils.copy(new FileInputStream(sourceFile), new FileOutputStream(newFile));
             } catch (IOException e) {
@@ -172,6 +169,9 @@ public class JsonTreePopMenu extends JPopupMenu{
             String parentPath = ((FileNodeEntity) selectedNode.getUserObject()).getRealPath();
             String projectName = selectedNode.getPath()[1].toString();
             String projectXmlPath = Context.getContext().getProjectFilePath(projectName);
+            int nodeType = ((FileNodeEntity) selectedNode.getUserObject()).getNodeType();
+            TreeNode[] path = Arrays.copyOfRange(selectedNode.getPath(), 2, selectedNode.getPath().length);
+            String selectedPath = FileMappingUtils.path2String(path, nodeType == FileNodeEntity.NODE_TYPE_FILE);
 
 
             JFileChooser jFileChooser = new JFileChooser(projectXmlPath.substring(0, projectXmlPath.lastIndexOf("/")));
@@ -219,14 +219,13 @@ public class JsonTreePopMenu extends JPopupMenu{
                     int confirmRet = JOptionPane.showConfirmDialog(null, "是否删除真实目录下的文件？");
 
                     if (confirmRet != JOptionPane.CANCEL_OPTION) {
-                        int itemType = ((FileNodeEntity) selectedNode.getUserObject()).getNodeType();
                         List<String> removedList = new LinkedList<>();
                         TreeNode[] delPath = Arrays.copyOfRange(selectedNode.getPath(),
                                 2,
                                 selectedNode.getPath().length);
 
                         removedList.add(FileMappingUtils.path2String(delPath,
-                                itemType == FileNodeEntity.NODE_TYPE_FILE));
+                                nodeType == FileNodeEntity.NODE_TYPE_FILE));
 
                         FileMappingUtils.removeMappingFromXml(projectXmlPath,
                                 removedList,
@@ -249,33 +248,44 @@ public class JsonTreePopMenu extends JPopupMenu{
                             2,
                             selectedNode.getPath().length);
 
-                    String selectedPath = FileMappingUtils.path2String(selectedTreeNode, false);
                     String newDirName = (String)JOptionPane.showInputDialog(null,
                             "在" + selectedPath + "下创建文件夹：");
-                    String selectedRealPath = ((FileNodeEntity) (selectedNode).getUserObject()).getRealPath();
-                    File fullRealPath = new File(selectedRealPath + "/" + newDirName + "/");
-                    if(!fullRealPath.mkdirs()) {
-                        JOptionPane.showMessageDialog(null,
-                                "创建文件夹失败",
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        FileNodeEntity fileNodeEntity = new FileNodeEntity(newDirName, newDirName);
-                        fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
-                        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
-                        newNode.setAllowsChildren(true);
 
-                        FileMappingUtils.insertNewMapping(projectXmlPath,
-                                selectedPath + newDirName + "/",
-                                fullRealPath.getPath() + "/");
+                    if(newDirName != null && !newDirName.equals("")) {
+                        String selectedRealPath = ((FileNodeEntity) (selectedNode).getUserObject()).getRealPath();
+                        File fullRealPath = new File(selectedRealPath + "/" + newDirName + "/");
+                        if (!fullRealPath.mkdirs()) {
+                            JOptionPane.showMessageDialog(null,
+                                    "创建文件夹失败",
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            FileNodeEntity fileNodeEntity = new FileNodeEntity(newDirName, newDirName);
+                            fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
+                            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
+                            newNode.setAllowsChildren(true);
 
-                        ((DefaultTreeModel) jTree.getModel()).insertNodeInto(newNode,
-                                selectedNode, selectedNode.getChildCount());
+                            FileMappingUtils.insertNewMapping(projectXmlPath,
+                                    selectedPath + newDirName + "/",
+                                    fullRealPath.getPath() + "/");
+
+                            ((DefaultTreeModel) jTree.getModel()).insertNodeInto(newNode,
+                                    selectedNode, selectedNode.getChildCount());
+                        }
                     }
                     break;
                 case "menuitem_markAsTesting":
                     FileMappingUtils.changeActivatedProject(selectedNode.toString());
                     Context.getContext().setActiveProject(Context.getContext().getOpenProjects().get(selectedNode.toString()));
+                    break;
+                case "menuitem_rename":
+                    String oldNameString = ((FileNodeEntity) selectedNode.getUserObject()).getAbstractName();
+                    String newNameString = JOptionPane.showInputDialog(null,
+                            "将 " + oldNameString + " 更名为：");
+                    if(newNameString != null && !newNameString.equals("")) {
+                        FileMappingUtils.renameFile(newNameString, selectedPath, projectXmlPath, true);
+                    }
+                    ((FileNodeEntity) selectedNode.getUserObject()).setAbstractName(newNameString);
                     break;
             }
         });
