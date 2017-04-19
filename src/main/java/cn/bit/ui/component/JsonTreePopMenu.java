@@ -91,7 +91,8 @@ public class JsonTreePopMenu extends JPopupMenu{
                          DefaultMutableTreeNode parentNode) {
         if (newFile.isDirectory()) {
             String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), dirPathToInsert + newFile.getName() + "/");
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(),
+                    dirPathToInsert + newFile.getName() + "/");
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(true);
@@ -107,7 +108,8 @@ public class JsonTreePopMenu extends JPopupMenu{
             }
         } else {
             String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(), dirPathToInsert + newFile.getName());
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(),
+                    dirPathToInsert + newFile.getName());
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(false);
@@ -126,7 +128,8 @@ public class JsonTreePopMenu extends JPopupMenu{
                              DefaultMutableTreeNode parentNode) {
         if (sourceFile.isDirectory()) {
             String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), dirPathToInsert + sourceFile.getName() + "/");
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(),
+                    dirPathToInsert + sourceFile.getName() + "/");
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(true);
@@ -146,7 +149,8 @@ public class JsonTreePopMenu extends JPopupMenu{
             }
         } else {
             String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(), dirPathToInsert + sourceFile.getName());
+            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(),
+                    dirPathToInsert + sourceFile.getName());
             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(false);
@@ -185,15 +189,12 @@ public class JsonTreePopMenu extends JPopupMenu{
                     jFileChooser.setMultiSelectionEnabled(true);
 
                     if (jFileChooser.showOpenDialog(null) != JFileChooser.CANCEL_OPTION) {
-                        File[] newFiles = jFileChooser.getSelectedFiles();
                         Map<String, String> newFilesMap = new HashMap<>();
-                        for (File newFile : newFiles) {
-                            addFile(newFile,
-                                    newFilesMap,
-                                    ((DefaultTreeModel) jTree.getModel()),
-                                    ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()));
-                        }
-
+                        Arrays.stream(jFileChooser.getSelectedFiles()).forEach(newFile ->
+                                addFile(newFile,
+                                        newFilesMap,
+                                        ((DefaultTreeModel) jTree.getModel()),
+                                        ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent())));
                         FileMappingUtils.insertNewMapping(projectXmlPath, newFilesMap);
                     } else {
                         return;
@@ -205,12 +206,13 @@ public class JsonTreePopMenu extends JPopupMenu{
                     if (jFileChooser.showOpenDialog(null) != 1) {
                         File[] sourceFiles = jFileChooser.getSelectedFiles();
                         Map<String, String> newFilesMap = new HashMap<>();
-                        for (File sourceFile : sourceFiles) {
-                            addCopyFile(sourceFile,
-                                    newFilesMap,
-                                    ((DefaultTreeModel) jTree.getModel()),
-                                    ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()));
-                        }
+
+                        Arrays.stream(jFileChooser.getSelectedFiles()).forEach(sourceFile ->
+                                addCopyFile(sourceFile,
+                                        newFilesMap,
+                                        ((DefaultTreeModel) jTree.getModel()),
+                                        ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent())));
+
                         FileMappingUtils.insertNewMapping(projectXmlPath, newFilesMap);
                     } else {
                         return;
@@ -237,7 +239,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                     break;
                 case "menuitem_close":
                     confirmRet = JOptionPane.showConfirmDialog(null,
-                            "确认关闭工程" + selectedNode.toString() + "? ");
+                            "确认关闭工程" + selectedNode.toString() + "?");
 
                     if(confirmRet == JOptionPane.OK_OPTION) {
                         FileMappingUtils.closeProject(selectedNode.toString());
@@ -245,11 +247,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                     }
                     break;
                 case "menuitem_newFolder":
-                    TreeNode[] selectedTreeNode = Arrays.copyOfRange(selectedNode.getPath(),
-                            2,
-                            selectedNode.getPath().length);
-
-                    String newDirName = (String)JOptionPane.showInputDialog(null,
+                    String newDirName = JOptionPane.showInputDialog(null,
                             "在" + selectedPath + "下创建文件夹：");
 
                     if(newDirName != null && !newDirName.equals("")) {

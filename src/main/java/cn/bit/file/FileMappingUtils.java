@@ -91,13 +91,9 @@ public class FileMappingUtils {
             xmlWriter.flush();
             xmlWriter.close();
 
-            } catch (FileNotFoundException e) {
+            } catch (IOException | DocumentException e) {
                 e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (DocumentException e) {
-            e.printStackTrace();
-        }
+            }
     }
 
     /**
@@ -116,11 +112,7 @@ public class FileMappingUtils {
             xmlWriter.flush();
             xmlWriter.close();
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
+        } catch (IOException | DocumentException e) {
             e.printStackTrace();
         }
     }
@@ -172,11 +164,7 @@ public class FileMappingUtils {
             newXmlWriter.write(newXmlDoc);
             newXmlWriter.close();
 
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -188,7 +176,7 @@ public class FileMappingUtils {
         if (!dir.isDirectory() || dir.list().length == 0) {
             return dir.delete();
         }
-        Arrays.stream(dir.listFiles()).forEach(child -> delDir(child));
+        Arrays.stream(dir.listFiles()).forEach(FileMappingUtils::delDir);
         return dir.delete();
     }
 
@@ -203,7 +191,7 @@ public class FileMappingUtils {
             Element userMappingElement = document.getRootElement().element("userMapping");
             List<Element> userMappings = userMappingElement.elements();
 
-            removedList.stream().forEach(abstractPath -> {
+            removedList.forEach(abstractPath -> {
                 userMappings.stream()
                         .filter(element -> element.attributeValue("abstractPath").startsWith(abstractPath))
                         .forEach(element -> {
@@ -218,11 +206,7 @@ public class FileMappingUtils {
             xmlWriter.write(document);
             xmlWriter.flush();
             xmlWriter.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
+        } catch (IOException | DocumentException e) {
             e.printStackTrace();
         }
     }
@@ -256,12 +240,14 @@ public class FileMappingUtils {
         try {
             Document document = new SAXReader().read(new FileInputStream(Context.configureFilePath));
             List<Element> projectElementList = document.getRootElement().elements();
-            for (Element projectElement: projectElementList) {
-                if(projectElement.attributeValue("projectName").equals(prjToClose)) {
-                    document.getRootElement().remove(projectElement);
-                    Context.getContext().getOpenProjects().remove(prjToClose);
-                }
-            }
+
+            projectElementList.
+                    stream().
+                    filter(projectElement -> projectElement.attributeValue("projectName").equals(prjToClose)).
+                    forEach(projectElement -> {
+                        document.getRootElement().remove(projectElement);
+                        Context.getContext().getOpenProjects().remove(prjToClose);
+                    });
 
             XMLWriter xmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath),
                     OutputFormat.createPrettyPrint());
@@ -269,11 +255,7 @@ public class FileMappingUtils {
             xmlWriter.flush();
             xmlWriter.close();
 
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }  catch (IOException e) {
+        } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -296,11 +278,7 @@ public class FileMappingUtils {
             xmlWriter.flush();
             xmlWriter.close();
 
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -371,11 +349,7 @@ public class FileMappingUtils {
             xmlWriter.flush();
             xmlWriter.close();
 
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
     }

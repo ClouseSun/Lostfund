@@ -14,14 +14,15 @@
     <mappingEntry abstractPath="功能时序仿真文件夹/库文件LIB/" absolutePath="lib/"/>  
     <mappingEntry abstractPath="功能时序仿真文件夹/测试用例TC/" absolutePath="tc/"/>  
     <mappingEntry abstractPath="静态时序分析文件夹/" absolutePath="sta/"/>  
-    <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/" absolutePath="src/"/>
+    <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/" absolutePath="src/"/>  
     <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>  
     <mappingEntry abstractPath="静态时序分析文件夹/源代码SRC/ver_0/netlist_sta/" absolutePath="src/ver_0/netlist_sta/"/>  
     <mappingEntry abstractPath="一致性检查文件夹/" absolutePath="tb/"/>  
     <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/" absolutePath="src/"/>  
     <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/" absolutePath="src/ver_0/"/>  
     <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/rtl/" absolutePath="src/ver_0/rtl/"/>  
-    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/netlist_for/" absolutePath="src/ver_0/netlist_for/"/>
+    <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/netlist_for/" absolutePath="src/ver_0/netlist_for/"/>  
+    <mappingEntry abstractPath="功能时序仿真文件夹/源代码SRC/ver_1/" absolutePath="src/ver_1/"/>
   </userMapping>  
   <execStatus version="ver_0"> 
     <testClass name="静态工具"> 

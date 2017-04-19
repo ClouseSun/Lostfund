@@ -23,6 +23,7 @@ public class ExecTableCellEditor extends DefaultCellEditor {
         TestEntity node = ((TestEntity) value);
         JComboBox jComboBox = ((JComboBox) this.getComponent());
         jComboBox.removeAllItems();
+
         for (String option : node.getTestCases()) {
             jComboBox.addItem(option);
             if(option.equals(node.getSelectedCase())) {
@@ -30,5 +31,10 @@ public class ExecTableCellEditor extends DefaultCellEditor {
             }
         }
         return this.getComponent();
+    }
+
+    @Override
+    public boolean isCellEditable(EventObject anEvent) {
+        return true;
     }
 }
