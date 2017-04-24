@@ -1,6 +1,7 @@
 package cn.bit;
 
 import cn.bit.exec.ExecUtils;
+import cn.bit.exec.TestMakefile;
 import cn.bit.file.AbstractFileTree;
 import cn.bit.file.FileMappingUtils;
 import cn.bit.model.FileNodeEntity;
@@ -36,6 +37,9 @@ public class Context {
     public static String jsonProjectPopMenuPath = RES_ROOT + "json/TreePopupMenu/popmenu_project_hierachy";
     public static String defaultPrjXmlPath = RES_ROOT + "raw/default_file_map";
 
+    public static String DEFAULT_MAKEFILE_PATH = "run/Makefile";
+
+
     public static Context getContext() {
         if (context != null) {
             return context;
@@ -69,6 +73,11 @@ public class Context {
             IteProject iteProject = new IteProject(abstractFileTree);
             iteProject.setProjectName(projectName);
             iteProject.setProjectConfigPath(prjConfigPath);
+            String projectPath = new File(prjConfigPath).getParent();
+            if (!projectPath.endsWith("/")) {
+                projectPath += "/";
+            }
+            iteProject.setMakefile(new TestMakefile(projectPath + Context.DEFAULT_MAKEFILE_PATH));
             iteProject.setExecModels(execModels);
             context.openProjects.put(projectName, iteProject);
             return iteProject;

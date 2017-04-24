@@ -26,29 +26,5 @@ public class Makefile extends File {
         return process;
     }
 
-    public static class Builder {
-        Makefile makefile;
 
-        public Builder(String path) {
-            makefile = new Makefile(path + "Makefile");
-        }
-
-        public Makefile build() throws IOException {
-            if (makefile.exists()) {
-                makefile.delete();
-            }
-            makefile.createNewFile();
-
-            makefile.setWritable(true);
-            FileOutputStream makefileStream = new FileOutputStream(makefile);
-            InputStream templateStream = getClass().getResourceAsStream("/raw/makefile_template");
-            byte[] buf = new byte[1024];
-            while (templateStream.read(buf) > 0) {
-                makefileStream.write(buf);
-            }
-            makefileStream.close();
-            templateStream.close();
-            return makefile;
-        }
-    }
 }

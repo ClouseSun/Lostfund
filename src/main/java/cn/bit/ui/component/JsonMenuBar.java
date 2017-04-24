@@ -80,17 +80,17 @@ public class JsonMenuBar extends JMenuBar {
                         if(!newPrjDir.exists()) {
                             if(newPrjDir.mkdirs()) {
                                 String newIteFile = newPrjPath + newPrjName + "/" + newPrjName + ".ite";
-                                FileMappingUtils.createNewProject(
+                                FileMappingUtils.createNewProjectXmlAndFiles(
                                         newPrjName,
                                         Context.defaultPrjXmlPath,
                                         newPrjDir.getPath() + "/");
 
                                 IteProject newIteProject = Context.constructAndOpenPrj(newIteFile);
-                                DefaultTreeModel hierarchyModel = Context.getContext().getProjectFileModel();
+                                DefaultTreeModel projectTreeModel = Context.getContext().getProjectFileModel();
                                 Context.getContext().getProjectFileModel().insertNodeInto(
                                         newIteProject.getProjectTree().getProjectTreeRoot(),
-                                        ((DefaultMutableTreeNode) hierarchyModel.getRoot()),
-                                        ((DefaultMutableTreeNode) hierarchyModel.getRoot()).getChildCount());
+                                        ((DefaultMutableTreeNode) projectTreeModel.getRoot()),
+                                        ((DefaultMutableTreeNode) projectTreeModel.getRoot()).getChildCount());
 
                             }
                         }

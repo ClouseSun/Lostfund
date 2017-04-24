@@ -1,6 +1,7 @@
 package cn.bit.file;
 
 import cn.bit.Context;
+import cn.bit.exec.TestMakefile;
 import cn.bit.model.FileNodeEntity;
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
@@ -124,7 +125,7 @@ public class FileMappingUtils {
      * Build dirs in real path of the new project.
      * @param newPrjPath the full path of the new project ends with '/'.
      * */
-    public static void createNewProject(String newPrjName, String defaultXmlPath, String newPrjPath) {
+    public static void createNewProjectXmlAndFiles(String newPrjName, String defaultXmlPath, String newPrjPath) {
         try {
             File newPrjXml = new File(newPrjPath + newPrjName + ".ite");
             newPrjXml.createNewFile();
@@ -158,9 +159,7 @@ public class FileMappingUtils {
                 File newDir = new File(newDirElement.attributeValue("absolutePath"));
                 newDir.mkdirs();
             }
-
-
-
+            new TestMakefile.Builder(newPrjPath + Context.DEFAULT_MAKEFILE_PATH).build();
             newXmlWriter.write(newXmlDoc);
             newXmlWriter.close();
 
