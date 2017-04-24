@@ -14,8 +14,6 @@ import org.apache.commons.io.IOUtils;
 import org.jdesktop.swingx.JXTreeTable;
 
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
-import javax.swing.table.TableCellEditor;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.*;
@@ -23,7 +21,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.EventObject;
 
 /**
  * Created by zhehua on 19/03/2017.
@@ -43,9 +40,8 @@ public class Main {
     private JTextArea textArea3;
     private JTextArea textArea4;
     private JScrollPane testPane;
-    private JTabbedPane execTabbedPane;
-    private JPanel ver1Pane;
-    private JPanel ver2Pane;
+    private JTabbedPane versionTabbedPane;
+    private JPanel ver0Pane;
     private JXTreeTable jxTreeTable;
 
     private JFrame mainFrame;
@@ -89,9 +85,11 @@ public class Main {
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     new JsonTreePopMenu(projectTree).show(projectTree, e.getX(), e.getY());
                 } else if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+
                     FileNodeEntity selectedNode = ((FileNodeEntity) ((DefaultMutableTreeNode) projectTree.
                             getLastSelectedPathComponent()).
                             getUserObject());
+
                     if (selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_FILE) {
                         return;
                     }
@@ -118,6 +116,7 @@ public class Main {
         projectTree.setCellRenderer(new FileTreeCellRenderer());
 
         jxTreeTable = new JXTreeTable(Context.getContext().getActiveProject().getExecModels().get("ver_0"));
+        jxTreeTable.setRowSelectionAllowed(true);
         jxTreeTable.setTreeCellRenderer(new ExecTreeCellRenderer());
         jxTreeTable.setDefaultEditor(TestEntity.class, new ExecTableCellEditor(new JComboBox()));
 
@@ -125,12 +124,38 @@ public class Main {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+                    try {
+                        int selectedRow = jxTreeTable.getRowForPath(jxTreeTable.getPathForLocation(e.getX(), e.getY()));
+                        TestEntity selectedNode = (TestEntity) jxTreeTable.getValueAt(selectedRow, 1);
+                        if (selectedNode != null) {
+                            switch (selectedNode.getTestName()) {
+                                case "规则检查":
+                                    Context.
+                                        getContext().
+                                        getActiveProject().
+                                        getMakefile().
+                                        execCc(String.valueOf(versionTabbedPane.getSelectedIndex()));
 
+
+                                    break;
+                                case "跨时钟域检查":
+                                    break;
+                                case "静态时序分析":
+                                    break;
+                                case "功能仿真":
+                                    break;
+                                case "回归仿真":
+                                    break;
+                            }
+                        }
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
 
-        ver1Pane.add(jxTreeTable);
+        ver0Pane.add(jxTreeTable);
 
         mainFrame.setVisible(true);
         EventQueue.invokeLater(new Runnable() {
@@ -209,14 +234,11 @@ public class Main {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         projectViewPane.add(testPane, gbc);
-        execTabbedPane = new JTabbedPane();
-        testPane.setViewportView(execTabbedPane);
-        ver1Pane = new JPanel();
-        ver1Pane.setLayout(new BorderLayout(0, 0));
-        execTabbedPane.addTab("ver1", ver1Pane);
-        ver2Pane = new JPanel();
-        ver2Pane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        execTabbedPane.addTab("ver2", ver2Pane);
+        versionTabbedPane = new JTabbedPane();
+        testPane.setViewportView(versionTabbedPane);
+        ver0Pane = new JPanel();
+        ver0Pane.setLayout(new BorderLayout(0, 0));
+        versionTabbedPane.addTab("ver0", ver0Pane);
         final JScrollPane scrollPane2 = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;

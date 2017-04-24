@@ -81,9 +81,7 @@ public class Context {
             iteProject.setExecModels(execModels);
             context.openProjects.put(projectName, iteProject);
             return iteProject;
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
+        } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -102,16 +100,14 @@ public class Context {
                     context.activeProject = newProject;
                 }
             }
-            context.openProjects.entrySet().stream().forEach(stringIteProjectEntry ->
+            context.openProjects.entrySet().forEach(stringIteProjectEntry ->
                     context.projectFileModel.insertNodeInto(stringIteProjectEntry.getValue().getProjectTree().getProjectTreeRoot(),
                             ((DefaultMutableTreeNode) context.projectFileModel.getRoot()),
                             ((DefaultMutableTreeNode) context.projectFileModel.getRoot()).getChildCount())
 
             );
 
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
+        } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
         }
     }

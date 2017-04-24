@@ -14,9 +14,9 @@ public class TestMakefile extends Makefile {
         super(pathname);
     }
 
-    public Process execCc(int version) throws IOException {
+    public Process execCc(String version) throws IOException {
         Map<String, String> vars = new HashMap();
-        vars.put("version", version+"");
+        vars.put("version", version + "");
         return exec("cc_run", vars);
     }
 
