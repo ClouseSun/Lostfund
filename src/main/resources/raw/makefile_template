@@ -1,0 +1,3 @@
+#makefile template
+build: $(src)
+    gcc $(src) -o $(output)

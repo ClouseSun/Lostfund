@@ -1,7 +1,9 @@
 package cn.bit.exec;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -15,7 +17,7 @@ public class Makefile extends File {
 
     public Process exec(String args, Map<String, String> vars) throws IOException {
         StringBuilder sb = new StringBuilder();
-        vars.entrySet().stream()
+        vars.entrySet()
                 .forEach(entry -> sb.append(entry.getKey()).append("=").append(entry.getValue()).append(" "));
         Process process = new ProcessBuilder()
                 .directory(this.getParentFile())
@@ -31,7 +33,21 @@ public class Makefile extends File {
             makefile = new Makefile(path + "Makefile");
         }
 
-        public Makefile build() {
+        public Makefile build() throws IOException {
+            if (makefile.exists()) {
+                makefile.delete();
+            }
+            makefile.createNewFile();
+
+            makefile.setWritable(true);
+            FileOutputStream makefileStream = new FileOutputStream(makefile);
+            InputStream templateStream = getClass().getResourceAsStream("/raw/makefile_template");
+            byte[] buf = new byte[1024];
+            while (templateStream.read(buf) > 0) {
+                makefileStream.write(buf);
+            }
+            makefileStream.close();
+            templateStream.close();
             return makefile;
         }
     }
