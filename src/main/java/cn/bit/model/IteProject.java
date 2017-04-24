@@ -1,6 +1,6 @@
 package cn.bit.model;
 
-import cn.bit.exec.Makefile;
+import cn.bit.exec.TestMakefile;
 import cn.bit.file.AbstractFileTree;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 public class IteProject {
 
     private AbstractFileTree projectTree;
-    private Makefile makefile;
+    private TestMakefile makefile;
     private Map<String, DefaultTreeTableModel> execModels;
 
     private String projectName;
@@ -42,11 +42,11 @@ public class IteProject {
         this.projectConfigPath = projectConfigPath;
     }
 
-    public Makefile getMakefile() {
+    public TestMakefile getMakefile() {
         return makefile;
     }
 
-    public void setMakefile(Makefile makefile) {
+    public void setMakefile(TestMakefile makefile) {
         this.makefile = makefile;
     }
 
