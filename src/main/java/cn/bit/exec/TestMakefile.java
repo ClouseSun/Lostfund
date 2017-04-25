@@ -20,11 +20,18 @@ public class TestMakefile extends Makefile {
         return exec("cc_run", vars);
     }
 
+    public Process execBuild(String srcPath, String outputPath) throws IOException {
+        Map<String, String> vars = new HashMap<>();
+        vars.put("src", srcPath);
+        vars.put("output", outputPath);
+        return exec("build", vars);
+    }
+
     public static class Builder {
         Makefile makefile;
 
         public Builder(String path) {
-            makefile = new TestMakefile(path + "Makefile");
+            makefile = new TestMakefile(path + "makefile_template");
         }
 
         public Makefile build() throws IOException {

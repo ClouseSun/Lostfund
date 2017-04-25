@@ -37,7 +37,7 @@ public class Context {
     public static String jsonProjectPopMenuPath = RES_ROOT + "json/TreePopupMenu/popmenu_project_hierachy";
     public static String defaultPrjXmlPath = RES_ROOT + "raw/default_file_map";
 
-    public static String DEFAULT_MAKEFILE_PATH = "run/Makefile";
+    public static String DEFAULT_MAKEFILE_PATH = "run/makefile_template";
 
 
     public static Context getContext() {
