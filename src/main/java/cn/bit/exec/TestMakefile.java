@@ -31,7 +31,7 @@ public class TestMakefile extends Makefile {
         Makefile makefile;
 
         public Builder(String path) {
-            makefile = new TestMakefile(path + "makefile_template");
+            makefile = new TestMakefile(path);
         }
 
         public Makefile build() throws IOException {
