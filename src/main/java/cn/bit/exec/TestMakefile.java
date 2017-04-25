@@ -15,9 +15,46 @@ public class TestMakefile extends Makefile {
     }
 
     public Process execCc(String version) throws IOException {
-        Map<String, String> vars = new HashMap();
-        vars.put("version", version + "");
+        Map<String, String> vars = new HashMap<>();
+        vars.put("VERSION", version);
         return exec("cc_run", vars);
+    }
+
+    public Process execCdc(String version) throws IOException {
+        Map<String, String> vars = new HashMap<>();
+        vars.put("VERSION", version);
+        return exec("cdc_run", vars);
+    }
+
+    public Process execSta() throws IOException {
+        Map<String, String> vars = new HashMap<>();
+        return exec("pt", vars);
+    }
+
+    public Process execSim(String version, String testcase) throws IOException {
+        Map<String, String> vars = new HashMap<>();
+        vars.put("version", version);
+        vars.put("tc", testcase);
+        vars.put("cov", "no");
+        vars.put("gui", "no");
+        vars.put("debug", "no");
+        vars.put("sim_tool", "qsim");
+        vars.put("sm", "func");
+        return exec("sim", vars);
+    }
+
+    public Process execSimRgs(String version) throws IOException {
+        Map<String, String> vars = new HashMap<>();
+        vars.put("version", version);
+        vars.put("sm", "func");
+        return exec("sim_rgs", vars);
+    }
+
+    public Process execVerdi(String version, String testcase) throws IOException {
+        Map<String, String> vars = new HashMap<>();
+        vars.put("version", version);
+        vars.put("tc", testcase);
+        return exec("verdi", vars);
     }
 
     public Process execBuild(String srcPath, String outputPath) throws IOException {

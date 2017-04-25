@@ -131,21 +131,47 @@ public class Main {
                             switch (selectedNode.getTestName()) {
                                 case "规则检查":
                                     Context.
-                                        getContext().
-                                        getActiveProject().
-                                        getMakefile().
-                                        execCc(String.valueOf(versionTabbedPane.getSelectedIndex()));
-
-
+                                            getContext().
+                                            getActiveProject().
+                                            getMakefile().
+                                            execCc("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
                                     break;
                                 case "跨时钟域检查":
+                                    Context.
+                                            getContext().
+                                            getActiveProject().
+                                            getMakefile().
+                                            execCdc("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
                                     break;
                                 case "静态时序分析":
+                                    Context.
+                                            getContext().
+                                            getActiveProject().
+                                            getMakefile().
+                                            execSta();
                                     break;
                                 case "功能仿真":
+                                    Context.
+                                            getContext().
+                                            getActiveProject().
+                                            getMakefile().
+                                            execSim("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()),
+                                                    selectedNode.getSelectedCase());
                                     break;
                                 case "回归仿真":
+                                    Context.
+                                            getContext().
+                                            getActiveProject().
+                                            getMakefile().
+                                            execSimRgs("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
                                     break;
+                                case "波形调试":
+                                    Context.
+                                            getContext().
+                                            getActiveProject().
+                                            getMakefile().
+                                            execVerdi("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()),
+                                                    selectedNode.getSelectedCase());
                             }
                         }
                     } catch (IOException e1) {
