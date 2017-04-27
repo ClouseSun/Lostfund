@@ -28,7 +28,7 @@ public class JsonMenuBar extends JMenuBar {
                 JMenuItem jMenuItem = new JMenuItem(menuList.getTitle());
                 jMenuItem.setEnabled(menuList.isEnable());
                 jMenuItem.setName(menuList.getName());
-                bindMenuItemListener(jMenuItem, jTree);
+                bindMenuItemListener(jMenuItem);
                 add(jMenuItem);
             } else {
                 JMenu jMenu = new JMenu(ml.getTitle());
@@ -52,7 +52,7 @@ public class JsonMenuBar extends JMenuBar {
             JMenuItem jMenuItem = new JMenuItem(menuList.getTitle());
             jMenuItem.setEnabled(menuList.isEnable());
             jMenuItem.setName(menuList.getName());
-            bindMenuItemListener(jMenuItem, jTree);
+            bindMenuItemListener(jMenuItem);
             root.add(jMenuItem);
         } else {
             JMenu jMenu = new JMenu(menuList.getTitle());
@@ -64,7 +64,7 @@ public class JsonMenuBar extends JMenuBar {
         }
     }
 
-    private void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
+    private void bindMenuItemListener(JMenuItem jMenuItem) {
         jMenuItem.addActionListener(e -> {
             switch (jMenuItem.getName()) {
                 case "newProject":

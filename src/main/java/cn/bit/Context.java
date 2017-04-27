@@ -64,7 +64,7 @@ public class Context {
             // construct exec tree
             Map<String, DefaultTreeTableModel> execModels = new TreeMap<>();
             List<Element> execStatusElements = document.getRootElement().elements("execStatus");
-            execStatusElements.stream().forEach(element ->  {
+            execStatusElements.forEach(element ->  {
                 String version = element.attributeValue("version");
                 DefaultTreeTableModel model = ExecUtils.loadTestExec(element);
                 execModels.put(version, model);
@@ -131,15 +131,12 @@ public class Context {
             Element newPrj = prjConfigs.addElement("Project");
             newPrj.addAttribute("projectName", newIteProject.getProjectName());
             newPrj.addAttribute("projectFilePath", itePath);
-            XMLWriter configXmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath), OutputFormat.createPrettyPrint());
+            XMLWriter configXmlWriter = new XMLWriter(new FileWriter(Context.configureFilePath),
+                    OutputFormat.createPrettyPrint());
             configXmlWriter.write(configureDoc);
             configXmlWriter.flush();
 
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -161,6 +158,14 @@ public class Context {
         if (context != null) {
             return ((FileNodeEntity) context.openProjects.get(projectName).getProjectTree().getProjectTreeRoot().getUserObject()).
                     getRealPath();
+        } else {
+            throw new IllegalStateException("Context not initialized.");
+        }
+    }
+
+    public IteProject getProjectByName(String prjName) {
+        if (context != null) {
+            return context.openProjects.get(prjName);
         } else {
             throw new IllegalStateException("Context not initialized.");
         }

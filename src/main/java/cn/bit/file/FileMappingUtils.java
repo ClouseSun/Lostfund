@@ -8,13 +8,11 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import javax.print.Doc;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 import java.io.*;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by KlousesSun on 2017/3/23.
@@ -259,7 +257,7 @@ public class FileMappingUtils {
         }
     }
 
-    public static void changeActivatedProject(String prjToActivated) {
+    public static void setActivatedProject(String prjToActivated) {
         try {
             Document configDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
             List<Element> projectElementList = configDoc.getRootElement().elements();
@@ -352,4 +350,51 @@ public class FileMappingUtils {
             e.printStackTrace();
         }
     }
+
+    public static Map<String, String> addNewVerToXml(String prjXmlPath, int verIndex) throws IOException, DocumentException {
+        Document prjDoc = new SAXReader().read(new FileInputStream(prjXmlPath));
+        String prjPath = new File(prjXmlPath).getParent();
+        List<Element> userMappings = prjDoc.getRootElement().element("userMapping").elements();
+        Map<String, String> newVerMap = new HashMap<>();
+
+        for(Element element : userMappings) {
+            if(element.attributeValue("absolutePath").startsWith(prjPath + "/src/ver_" + String.valueOf(verIndex - 1))) {
+                Element newVerEle = element.createCopy();
+                String abstractPath = newVerEle.attributeValue("abstractPath");
+                String absolutePath = newVerEle.attributeValue("absolutePath");
+                newVerEle.addAttribute("abstractPath", abstractPath.replaceFirst("ver_" + String.valueOf(verIndex - 1),
+                            "ver_" + String.valueOf(verIndex)));
+
+                newVerEle.addAttribute("absolutePath", absolutePath.replaceFirst(prjPath + "/src/ver_" + String.valueOf(verIndex - 1),
+                        prjPath + "/src/ver_" + String.valueOf(verIndex)));
+
+            prjDoc.getRootElement().element("userMapping").add(newVerEle);
+            newVerMap.put(newVerEle.attributeValue("abstractPath"), newVerEle.attributeValue("absolutePath"));
+
+            }
+        }
+
+//        userMappings.stream().filter(e ->
+//            e.attributeValue("absolutePath").startsWith(prjPath + "/src/ver_" + String.valueOf(verIndex - 1))
+//        ).forEach(e -> {
+//            Element newVerMapping = e.createCopy();
+//            newVerMapping.
+//                    attributeValue("absolutePath").
+//                    replaceFirst(prjPath + "/src/ver_" + String.valueOf(verIndex - 1),
+//                            prjPath + "/src/ver_" + String.valueOf(verIndex));
+//            newVerMapping.
+//                    attributeValue("abstractPath").
+//                    replaceFirst("/ver_" + String.valueOf(verIndex - 1),
+//                            "/ver_" + String.valueOf(verIndex));
+//            prjDoc.getRootElement().element("userMapping").add(newVerMapping);
+//            newVerMap.put(newVerMapping.attributeValue("abstractPath"), newVerMapping.attributeValue("absolutePath"));
+//        });
+
+        XMLWriter xmlWriter = new XMLWriter(new FileWriter(prjXmlPath), OutputFormat.createPrettyPrint());
+        xmlWriter.write(prjDoc);
+        xmlWriter.close();
+
+        return newVerMap;
+    }
+
 }

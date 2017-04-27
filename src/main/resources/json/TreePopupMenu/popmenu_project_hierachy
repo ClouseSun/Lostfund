@@ -19,6 +19,11 @@
             "title": "标记为测试中工程",
             "name": "menuitem_markAsTesting",
             "isEnable": true
+        },
+        {
+            "title": "创建新版本",
+            "name": "menuitem_newVersion",
+            "isEnable": true
         }
     ]
 }

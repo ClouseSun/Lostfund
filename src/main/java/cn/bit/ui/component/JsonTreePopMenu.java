@@ -6,6 +6,7 @@ import cn.bit.model.FileNodeEntity;
 import cn.bit.model.MenuList;
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
+import org.dom4j.DocumentException;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -90,6 +91,11 @@ public class JsonTreePopMenu extends JPopupMenu{
                          DefaultTreeModel treeModel,
                          DefaultMutableTreeNode parentNode) {
         if (newFile.isDirectory()) {
+            TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
+            String abstractPath = FileMappingUtils.path2String(newPath, false)
+                    + newFile.getName() + "/";
+            newFilesMap.put(abstractPath, newFile.getPath() + "/");
+
             String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
             FileNodeEntity fileNodeEntity = new FileNodeEntity(newFile.getName(),
                     dirPathToInsert + newFile.getName() + "/");
@@ -97,10 +103,6 @@ public class JsonTreePopMenu extends JPopupMenu{
             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
             newNode.setAllowsChildren(true);
             treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
-            TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
-            String abstractPath = FileMappingUtils.path2String(newPath, false)
-                    + newFile.getName() + "/";
-            newFilesMap.put(abstractPath, newFile.getPath() + "/");
 
             File[] childFileList = newFile.listFiles();
             for(int i = 0; i < childFileList.length; i++) {
@@ -148,25 +150,26 @@ public class JsonTreePopMenu extends JPopupMenu{
                 addCopyFile(childFileList[i], newFilesMap, treeModel, newNode);
             }
         } else {
-            String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
-            FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(),
-                    dirPathToInsert + sourceFile.getName());
-            fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
-            DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
-            newNode.setAllowsChildren(false);
-            treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
-            TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
-            String abstractPath = FileMappingUtils.path2String(newPath, false)
-                    + sourceFile.getName();
-            newFilesMap.put(abstractPath, dirPathToInsert + sourceFile.getName());
-            File newFile = new File(dirPathToInsert + sourceFile.getName());
-            try {
+                try {
+                String dirPathToInsert = ((FileNodeEntity) (parentNode).getUserObject()).getRealPath();
+                FileNodeEntity fileNodeEntity = new FileNodeEntity(sourceFile.getName(),
+                        dirPathToInsert + sourceFile.getName());
+                fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_FILE);
+                DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
+                newNode.setAllowsChildren(false);
+                treeModel.insertNodeInto(newNode, parentNode, parentNode.getChildCount());
+                TreeNode[] newPath = Arrays.copyOfRange(parentNode.getPath(), 2, parentNode.getPath().length);
+                String abstractPath = FileMappingUtils.path2String(newPath, false)
+                        + sourceFile.getName();
+                newFilesMap.put(abstractPath, dirPathToInsert + sourceFile.getName());
+                File newFile = new File(dirPathToInsert + sourceFile.getName());
                 IOUtils.copy(new FileInputStream(sourceFile), new FileOutputStream(newFile));
-            } catch (IOException e) {
+
+                } catch (IOException e) {
                 e.printStackTrace();
             }
-            return ;
         }
+        return;
     }
 
     private void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
@@ -259,7 +262,8 @@ public class JsonTreePopMenu extends JPopupMenu{
                                     "Error",
                                     JOptionPane.ERROR_MESSAGE);
                         } else {
-                            FileNodeEntity fileNodeEntity = new FileNodeEntity(newDirName, newDirName);
+                            FileNodeEntity fileNodeEntity = new FileNodeEntity(newDirName,
+                                    selectedRealPath + "/" + newDirName + "/");
                             fileNodeEntity.setNodeType(FileNodeEntity.NODE_TYPE_DIR);
                             DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(fileNodeEntity);
                             newNode.setAllowsChildren(true);
@@ -274,7 +278,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                     }
                     break;
                 case "menuitem_markAsTesting":
-                    FileMappingUtils.changeActivatedProject(selectedNode.toString());
+                    FileMappingUtils.setActivatedProject(selectedNode.toString());
                     Context.getContext().setActiveProject(Context.getContext().getOpenProjects().get(selectedNode.toString()));
                     break;
                 case "menuitem_rename":
@@ -285,6 +289,20 @@ public class JsonTreePopMenu extends JPopupMenu{
                         FileMappingUtils.renameFile(newNameString, selectedPath, projectXmlPath, true);
                     }
                     ((FileNodeEntity) selectedNode.getUserObject()).setAbstractName(newNameString);
+                    break;
+                case "menuitem_newVersion":
+                    try {
+                        int newVerIndex = Context.getContext().getProjectByName(projectName).getExecModels().size();
+                        Context.getContext().getProjectByName(projectName).newVersion(new FileInputStream(Context.defaultPrjXmlPath));
+                        Context.
+                                getContext().
+                                getProjectByName(projectName).
+                                getProjectTree().
+                                addAll(FileMappingUtils.addNewVerToXml(projectXmlPath, newVerIndex));
+
+                    } catch (IOException | DocumentException e1) {
+                        e1.printStackTrace();
+                    }
                     break;
             }
         });

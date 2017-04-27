@@ -154,8 +154,8 @@ public class Main {
                                                 selectedNode.getSelectedCase());
                                         break;
                                     case "testC":
-                                        execProcess = prjMakefile.execBuild("/Users/KlousesSun/ITEtest/test.c",
-                                                "/Users/KlousesSun/ITEtest/test");
+//                                        execProcess = prjMakefile.execBuild("/Users/KlousesSun/ITEtest/test.c",
+//                                                "/Users/KlousesSun/ITEtest/test");
                                         break;
                                 }
                                 consoleTabbedPane.setSelectedIndex(execProcess.waitFor() == RUN_TAB_INDEX ?
