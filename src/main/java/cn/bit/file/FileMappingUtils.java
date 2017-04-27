@@ -3,16 +3,21 @@ package cn.bit.file;
 import cn.bit.Context;
 import cn.bit.exec.TestMakefile;
 import cn.bit.model.FileNodeEntity;
+import cn.bit.ui.component.JXVersionTreeTable;
+import cn.bit.ui.frame.Main;
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import javax.print.Doc;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
+import java.awt.*;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by KlousesSun on 2017/3/23.
@@ -257,7 +262,7 @@ public class FileMappingUtils {
         }
     }
 
-    public static void setActivatedProject(String prjToActivated) {
+    public static void setActivatedProject(String prjToActivated, Main mainFrame) {
         try {
             Document configDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
             List<Element> projectElementList = configDoc.getRootElement().elements();
@@ -274,6 +279,15 @@ public class FileMappingUtils {
             xmlWriter.write(configDoc);
             xmlWriter.flush();
             xmlWriter.close();
+
+            mainFrame.getVersionTabbedPane().removeAll();
+            Context.getContext().getActiveProject().getExecModels().entrySet().forEach(verModel -> {
+                JPanel newVerPanel = new JPanel();
+                newVerPanel.setLayout(new BorderLayout());
+                JXVersionTreeTable jxVersionTreeTable = new JXVersionTreeTable(verModel.getValue(), mainFrame);
+                newVerPanel.add(jxVersionTreeTable);
+                mainFrame.getVersionTabbedPane().addTab(verModel.getKey(), newVerPanel);
+            });
 
         } catch (DocumentException | IOException e) {
             e.printStackTrace();
@@ -373,22 +387,6 @@ public class FileMappingUtils {
 
             }
         }
-
-//        userMappings.stream().filter(e ->
-//            e.attributeValue("absolutePath").startsWith(prjPath + "/src/ver_" + String.valueOf(verIndex - 1))
-//        ).forEach(e -> {
-//            Element newVerMapping = e.createCopy();
-//            newVerMapping.
-//                    attributeValue("absolutePath").
-//                    replaceFirst(prjPath + "/src/ver_" + String.valueOf(verIndex - 1),
-//                            prjPath + "/src/ver_" + String.valueOf(verIndex));
-//            newVerMapping.
-//                    attributeValue("abstractPath").
-//                    replaceFirst("/ver_" + String.valueOf(verIndex - 1),
-//                            "/ver_" + String.valueOf(verIndex));
-//            prjDoc.getRootElement().element("userMapping").add(newVerMapping);
-//            newVerMap.put(newVerMapping.attributeValue("abstractPath"), newVerMapping.attributeValue("absolutePath"));
-//        });
 
         XMLWriter xmlWriter = new XMLWriter(new FileWriter(prjXmlPath), OutputFormat.createPrettyPrint());
         xmlWriter.write(prjDoc);

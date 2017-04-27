@@ -4,6 +4,7 @@ import cn.bit.Context;
 import cn.bit.file.FileMappingUtils;
 import cn.bit.model.FileNodeEntity;
 import cn.bit.model.MenuList;
+import cn.bit.ui.frame.Main;
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.DocumentException;
@@ -12,6 +13,7 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,9 +27,9 @@ import java.util.List;
  */
 public class JsonTreePopMenu extends JPopupMenu{
 
-    public JsonTreePopMenu(JTree jTree) {
+    public JsonTreePopMenu(Main mainFrame) {
         String jsonPopMenuPath;
-        switch (((FileNodeEntity) ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent()).getUserObject()).getNodeType()) {
+        switch (((FileNodeEntity) ((DefaultMutableTreeNode) mainFrame.getProjectTree().getLastSelectedPathComponent()).getUserObject()).getNodeType()) {
             case FileNodeEntity.NODE_TYPE_DIR:
                 jsonPopMenuPath = Context.getContext().getJsonDirPopMenuPath();
                 break;
@@ -55,14 +57,14 @@ public class JsonTreePopMenu extends JPopupMenu{
                 jMenuItem.setName(ml.getName());
                 jMenuItem.setEnabled(ml.isEnable());
                 add(jMenuItem);
-                bindMenuItemListener(jMenuItem, jTree);
+                bindMenuItemListener(jMenuItem, mainFrame);
             }
             else {
                 JMenu jMenu = new JMenu(ml.getTitle());
                 add(jMenu);
                 if (ml.getMenuList() != null) {
                     for (MenuList mll : ml.getMenuList()) {
-                        buildMenuByList(jMenu, mll, jTree);
+                        buildMenuByList(jMenu, mll, mainFrame);
                     }
                 }
             }
@@ -70,17 +72,17 @@ public class JsonTreePopMenu extends JPopupMenu{
     }
 
 
-    public void buildMenuByList(JMenu root, MenuList menuList, JTree jTree) {
+    public void buildMenuByList(JMenu root, MenuList menuList, Main mainFrame) {
         if(menuList.getMenuList() == null) {
             JMenuItem jMenuItem = new JMenuItem(menuList.getTitle());
             jMenuItem.setName(menuList.getName());
             jMenuItem.setEnabled(menuList.isEnable());
             root.add(jMenuItem);
-            bindMenuItemListener(jMenuItem, jTree);
+            bindMenuItemListener(jMenuItem, mainFrame);
         } else {
             JMenu jMenu = new JMenu(menuList.getTitle());
             for (MenuList ml:menuList.getMenuList()) {
-                buildMenuByList(jMenu, ml, jTree);
+                buildMenuByList(jMenu, ml, mainFrame);
             }
             root.add(jMenu);
         }
@@ -172,9 +174,10 @@ public class JsonTreePopMenu extends JPopupMenu{
         return;
     }
 
-    private void bindMenuItemListener(JMenuItem jMenuItem, JTree jTree) {
+    private void bindMenuItemListener(JMenuItem jMenuItem, Main mainFrame) {
+        JTree projectTree = mainFrame.getProjectTree();
         jMenuItem.addActionListener((ActionEvent e) -> {
-            DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent());
+            DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) projectTree.getLastSelectedPathComponent());
             String parentPath = ((FileNodeEntity) selectedNode.getUserObject()).getRealPath();
             String projectName = selectedNode.getPath()[1].toString();
             String projectXmlPath = Context.getContext().getProjectFilePath(projectName);
@@ -196,8 +199,8 @@ public class JsonTreePopMenu extends JPopupMenu{
                         Arrays.stream(jFileChooser.getSelectedFiles()).forEach(newFile ->
                                 addFile(newFile,
                                         newFilesMap,
-                                        ((DefaultTreeModel) jTree.getModel()),
-                                        ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent())));
+                                        ((DefaultTreeModel) projectTree.getModel()),
+                                        ((DefaultMutableTreeNode) projectTree.getLastSelectedPathComponent())));
                         FileMappingUtils.insertNewMapping(projectXmlPath, newFilesMap);
                     } else {
                         return;
@@ -213,8 +216,8 @@ public class JsonTreePopMenu extends JPopupMenu{
                         Arrays.stream(jFileChooser.getSelectedFiles()).forEach(sourceFile ->
                                 addCopyFile(sourceFile,
                                         newFilesMap,
-                                        ((DefaultTreeModel) jTree.getModel()),
-                                        ((DefaultMutableTreeNode) jTree.getLastSelectedPathComponent())));
+                                        ((DefaultTreeModel) projectTree.getModel()),
+                                        ((DefaultMutableTreeNode) projectTree.getLastSelectedPathComponent())));
 
                         FileMappingUtils.insertNewMapping(projectXmlPath, newFilesMap);
                     } else {
@@ -237,7 +240,7 @@ public class JsonTreePopMenu extends JPopupMenu{
                                 removedList,
                                 JOptionPane.OK_OPTION == confirmRet);
 
-                        ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent(selectedNode);
+                        ((DefaultTreeModel) projectTree.getModel()).removeNodeFromParent(selectedNode);
                     }
                     break;
                 case "menuitem_close":
@@ -246,7 +249,7 @@ public class JsonTreePopMenu extends JPopupMenu{
 
                     if(confirmRet == JOptionPane.OK_OPTION) {
                         FileMappingUtils.closeProject(selectedNode.toString());
-                        ((DefaultTreeModel) jTree.getModel()).removeNodeFromParent(selectedNode);
+                        ((DefaultTreeModel) projectTree.getModel()).removeNodeFromParent(selectedNode);
                     }
                     break;
                 case "menuitem_newFolder":
@@ -272,14 +275,14 @@ public class JsonTreePopMenu extends JPopupMenu{
                                     selectedPath + newDirName + "/",
                                     fullRealPath.getPath() + "/");
 
-                            ((DefaultTreeModel) jTree.getModel()).insertNodeInto(newNode,
+                            ((DefaultTreeModel) projectTree.getModel()).insertNodeInto(newNode,
                                     selectedNode, selectedNode.getChildCount());
                         }
                     }
                     break;
                 case "menuitem_markAsTesting":
-                    FileMappingUtils.setActivatedProject(selectedNode.toString());
                     Context.getContext().setActiveProject(Context.getContext().getOpenProjects().get(selectedNode.toString()));
+                    FileMappingUtils.setActivatedProject(selectedNode.toString(), mainFrame);
                     break;
                 case "menuitem_rename":
                     String oldNameString = ((FileNodeEntity) selectedNode.getUserObject()).getAbstractName();
@@ -299,6 +302,16 @@ public class JsonTreePopMenu extends JPopupMenu{
                                 getProjectByName(projectName).
                                 getProjectTree().
                                 addAll(FileMappingUtils.addNewVerToXml(projectXmlPath, newVerIndex));
+
+                        JPanel newVerPanel = new JPanel();
+                        newVerPanel.setLayout(new BorderLayout());
+
+                        JXVersionTreeTable jxVersionTreeTable = new JXVersionTreeTable(
+                                Context.getContext().getProjectByName(projectName).getExecModels().get("ver_" + newVerIndex),
+                                mainFrame);
+
+                        newVerPanel.add(jxVersionTreeTable);
+                        mainFrame.getVersionTabbedPane().addTab("ver_" + newVerIndex, newVerPanel);
 
                     } catch (IOException | DocumentException e1) {
                         e1.printStackTrace();

@@ -86,16 +86,7 @@
                         <constraints/>
                         <properties/>
                         <border type="none"/>
-                        <children>
-                          <grid id="df0f2" binding="ver0Pane" layout-manager="BorderLayout" hgap="0" vgap="0">
-                            <constraints>
-                              <tabbedpane title="ver0"/>
-                            </constraints>
-                            <properties/>
-                            <border type="none"/>
-                            <children/>
-                          </grid>
-                        </children>
+                        <children/>
                       </tabbedpane>
                     </children>
                   </scrollpane>

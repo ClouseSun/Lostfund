@@ -1,18 +1,14 @@
 package cn.bit.ui.frame;
 
 import cn.bit.Context;
-import cn.bit.exec.TestEntity;
-import cn.bit.exec.TestMakefile;
 import cn.bit.model.FileNodeEntity;
-import cn.bit.ui.ExecTableCellEditor;
-import cn.bit.ui.ExecTreeCellRenderer;
 import cn.bit.ui.FileTreeCellRenderer;
+import cn.bit.ui.component.JXVersionTreeTable;
 import cn.bit.ui.component.JsonMenuBar;
 import cn.bit.ui.component.JsonTreePopMenu;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import org.apache.commons.io.IOUtils;
-import org.jdesktop.swingx.JXTreeTable;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -40,8 +36,6 @@ public class Main {
     private JTextArea consoleErrorArea;
     private JScrollPane testPane;
     private JTabbedPane versionTabbedPane;
-    private JPanel ver0Pane;
-    private JXTreeTable jxTreeTable;
 
     public static final int RUN_TAB_INDEX = 0;
     public static final int ERROR_TAB_INDEX = 1;
@@ -52,6 +46,21 @@ public class Main {
         new Main();
     }
 
+    public JTree getProjectTree() {
+        return projectTree;
+    }
+
+    public JTabbedPane getVersionTabbedPane() {
+        return versionTabbedPane;
+    }
+
+    public JTextArea getConsoleMsgArea() {
+        return consoleMsgArea;
+    }
+
+    public JTextArea getConsoleErrorArea() {
+        return consoleErrorArea;
+    }
 
     public Main() {
         mainFrame = new JFrame();
@@ -85,7 +94,7 @@ public class Main {
                 projectTree.setSelectionPath(treePath);
 
                 if (e.getButton() == MouseEvent.BUTTON3) {
-                    new JsonTreePopMenu(projectTree).show(projectTree, e.getX(), e.getY());
+                    new JsonTreePopMenu(Main.this).show(projectTree, e.getX(), e.getY());
                 } else if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
 
                     FileNodeEntity selectedNode = ((FileNodeEntity) ((DefaultMutableTreeNode) projectTree.
@@ -96,7 +105,7 @@ public class Main {
                         return;
                     }
 
-                    switch (System.getProperty("os.name").toString()) {
+                    switch (System.getProperty("os.name")) {
                         case "Mac OS X":
                             try {
                                 if (selectedNode.getNodeType() == FileNodeEntity.NODE_TYPE_DIR)
@@ -118,59 +127,14 @@ public class Main {
         projectTree.setCellRenderer(new FileTreeCellRenderer());
 
         if (Context.getContext().getActiveProject() != null) {
-            jxTreeTable = new JXTreeTable(Context.getContext().getActiveProject().getExecModels().get("ver_0"));
-            jxTreeTable.setRowSelectionAllowed(true);
-            jxTreeTable.setTreeCellRenderer(new ExecTreeCellRenderer());
-            jxTreeTable.setDefaultEditor(TestEntity.class, new ExecTableCellEditor(new JComboBox()));
-            jxTreeTable.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-                        try {
-                            int selectedRow = jxTreeTable.getRowForPath(jxTreeTable.getPathForLocation(e.getX(), e.getY()));
-                            TestEntity selectedNode = (TestEntity) jxTreeTable.getValueAt(selectedRow, 1);
-                            if (selectedNode != null) {
-                                TestMakefile prjMakefile = Context.getContext().getActiveProject().getMakefile();
-                                Process execProcess = null;
-                                switch (selectedNode.getTestName()) {
-                                    case "规则检查":
-                                        execProcess = prjMakefile.execCc("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
-                                        break;
-                                    case "跨时钟域检查":
-                                        execProcess = prjMakefile.execCdc("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
-                                        break;
-                                    case "静态时序分析":
-                                        execProcess = prjMakefile.execSta();
-                                        break;
-                                    case "功能仿真":
-                                        execProcess = prjMakefile.execSim("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()),
-                                                selectedNode.getSelectedCase());
-                                        break;
-                                    case "回归仿真":
-                                        execProcess = prjMakefile.execSimRgs("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
-                                        break;
-                                    case "波形调试":
-                                        execProcess = prjMakefile.execVerdi("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()),
-                                                selectedNode.getSelectedCase());
-                                        break;
-                                    case "testC":
-//                                        execProcess = prjMakefile.execBuild("/Users/KlousesSun/ITEtest/test.c",
-//                                                "/Users/KlousesSun/ITEtest/test");
-                                        break;
-                                }
-                                consoleTabbedPane.setSelectedIndex(execProcess.waitFor() == RUN_TAB_INDEX ?
-                                        RUN_TAB_INDEX : ERROR_TAB_INDEX);
-                                consoleMsgArea.setText(IOUtils.toString(execProcess.getInputStream()));
-                                consoleErrorArea.setText(IOUtils.toString(execProcess.getErrorStream()));
-                            }
-                        } catch (IOException | InterruptedException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                }
+            Context.getContext().getActiveProject().getExecModels().entrySet().forEach(verModel -> {
+                JPanel newVerPanel = new JPanel();
+                newVerPanel.setLayout(new BorderLayout());
+                JXVersionTreeTable jxVersionTreeTable = new JXVersionTreeTable(verModel.getValue(), this);
+                newVerPanel.add(jxVersionTreeTable);
+                versionTabbedPane.addTab(verModel.getKey(), newVerPanel);
             });
         }
-        ver0Pane.add(jxTreeTable);
 
         mainFrame.setVisible(true);
         EventQueue.invokeLater(new Runnable() {
@@ -251,9 +215,6 @@ public class Main {
         projectViewPane.add(testPane, gbc);
         versionTabbedPane = new JTabbedPane();
         testPane.setViewportView(versionTabbedPane);
-        ver0Pane = new JPanel();
-        ver0Pane.setLayout(new BorderLayout(0, 0));
-        versionTabbedPane.addTab("ver0", ver0Pane);
         final JScrollPane scrollPane2 = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
