@@ -1,5 +1,8 @@
 package cn.bit.exec;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,14 +81,8 @@ public class TestMakefile extends Makefile {
             makefile.createNewFile();
 
             makefile.setWritable(true);
-            FileOutputStream makefileStream = new FileOutputStream(makefile);
-            InputStream templateStream = getClass().getResourceAsStream("/raw/makefile_template");
-            byte[] buf = new byte[1024];
-            while (templateStream.read(buf) > 0) {
-                makefileStream.write(buf);
-            }
-            makefileStream.close();
-            templateStream.close();
+            FileUtils.copyFile(new File("./src/main/resources/raw/makefile_template"), makefile);
+
             return makefile;
         }
     }

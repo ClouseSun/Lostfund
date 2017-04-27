@@ -28,7 +28,8 @@
     <testClass name="静态工具"> 
       <testEntry name="规则检查" arg="cc_run" status="PASSED"/>  
       <testEntry name="跨时钟域检查" arg="cdc_run" status="RUNNING"/>  
-      <testEntry name="静态时序分析" arg="pt" status="FAILED"/> 
+      <testEntry name="静态时序分析" arg="pt" status="FAILED"/>
+      <testEntry name="testC" status="FAILED"/>
     </testClass>  
     <testClass name="动态工具"> 
       <testEntry name="功能仿真" arg="sim" status="PASSED"> 

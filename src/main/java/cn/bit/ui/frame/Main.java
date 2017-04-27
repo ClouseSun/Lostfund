@@ -2,6 +2,7 @@ package cn.bit.ui.frame;
 
 import cn.bit.Context;
 import cn.bit.exec.TestEntity;
+import cn.bit.exec.TestMakefile;
 import cn.bit.model.FileNodeEntity;
 import cn.bit.ui.ExecTableCellEditor;
 import cn.bit.ui.ExecTreeCellRenderer;
@@ -34,15 +35,16 @@ public class Main {
     private JTree projectTree;
     private JSplitPane consoleSplitPane;
     private JSplitPane editorSplitPane;
-    private JTabbedPane consolePane;
-    private JTextArea textArea1;
-    private JTextArea textArea2;
-    private JTextArea textArea3;
-    private JTextArea textArea4;
+    private JTabbedPane consoleTabbedPane;
+    private JTextArea consoleMsgArea;
+    private JTextArea consoleErrorArea;
     private JScrollPane testPane;
     private JTabbedPane versionTabbedPane;
     private JPanel ver0Pane;
     private JXTreeTable jxTreeTable;
+
+    public static final int RUN_TAB_INDEX = 0;
+    public static final int ERROR_TAB_INDEX = 1;
 
     private JFrame mainFrame;
 
@@ -115,72 +117,59 @@ public class Main {
 
         projectTree.setCellRenderer(new FileTreeCellRenderer());
 
-        jxTreeTable = new JXTreeTable(Context.getContext().getActiveProject().getExecModels().get("ver_0"));
-        jxTreeTable.setRowSelectionAllowed(true);
-        jxTreeTable.setTreeCellRenderer(new ExecTreeCellRenderer());
-        jxTreeTable.setDefaultEditor(TestEntity.class, new ExecTableCellEditor(new JComboBox()));
-
-        jxTreeTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-                    try {
-                        int selectedRow = jxTreeTable.getRowForPath(jxTreeTable.getPathForLocation(e.getX(), e.getY()));
-                        TestEntity selectedNode = (TestEntity) jxTreeTable.getValueAt(selectedRow, 1);
-                        if (selectedNode != null) {
-                            switch (selectedNode.getTestName()) {
-                                case "规则检查":
-                                    Context.
-                                            getContext().
-                                            getActiveProject().
-                                            getMakefile().
-                                            execCc("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
-                                    break;
-                                case "跨时钟域检查":
-                                    Context.
-                                            getContext().
-                                            getActiveProject().
-                                            getMakefile().
-                                            execCdc("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
-                                    break;
-                                case "静态时序分析":
-                                    Context.
-                                            getContext().
-                                            getActiveProject().
-                                            getMakefile().
-                                            execSta();
-                                    break;
-                                case "功能仿真":
-                                    Context.
-                                            getContext().
-                                            getActiveProject().
-                                            getMakefile().
-                                            execSim("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()),
-                                                    selectedNode.getSelectedCase());
-                                    break;
-                                case "回归仿真":
-                                    Context.
-                                            getContext().
-                                            getActiveProject().
-                                            getMakefile().
-                                            execSimRgs("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
-                                    break;
-                                case "波形调试":
-                                    Context.
-                                            getContext().
-                                            getActiveProject().
-                                            getMakefile().
-                                            execVerdi("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()),
-                                                    selectedNode.getSelectedCase());
+        if (Context.getContext().getActiveProject() != null) {
+            jxTreeTable = new JXTreeTable(Context.getContext().getActiveProject().getExecModels().get("ver_0"));
+            jxTreeTable.setRowSelectionAllowed(true);
+            jxTreeTable.setTreeCellRenderer(new ExecTreeCellRenderer());
+            jxTreeTable.setDefaultEditor(TestEntity.class, new ExecTableCellEditor(new JComboBox()));
+            jxTreeTable.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
+                        try {
+                            int selectedRow = jxTreeTable.getRowForPath(jxTreeTable.getPathForLocation(e.getX(), e.getY()));
+                            TestEntity selectedNode = (TestEntity) jxTreeTable.getValueAt(selectedRow, 1);
+                            if (selectedNode != null) {
+                                TestMakefile prjMakefile = Context.getContext().getActiveProject().getMakefile();
+                                Process execProcess = null;
+                                switch (selectedNode.getTestName()) {
+                                    case "规则检查":
+                                        execProcess = prjMakefile.execCc("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
+                                        break;
+                                    case "跨时钟域检查":
+                                        execProcess = prjMakefile.execCdc("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
+                                        break;
+                                    case "静态时序分析":
+                                        execProcess = prjMakefile.execSta();
+                                        break;
+                                    case "功能仿真":
+                                        execProcess = prjMakefile.execSim("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()),
+                                                selectedNode.getSelectedCase());
+                                        break;
+                                    case "回归仿真":
+                                        execProcess = prjMakefile.execSimRgs("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()));
+                                        break;
+                                    case "波形调试":
+                                        execProcess = prjMakefile.execVerdi("ver_" + String.valueOf(versionTabbedPane.getSelectedIndex()),
+                                                selectedNode.getSelectedCase());
+                                        break;
+                                    case "testC":
+                                        execProcess = prjMakefile.execBuild("/Users/KlousesSun/ITEtest/test.c",
+                                                "/Users/KlousesSun/ITEtest/test");
+                                        break;
+                                }
+                                consoleTabbedPane.setSelectedIndex(execProcess.waitFor() == RUN_TAB_INDEX ?
+                                        RUN_TAB_INDEX : ERROR_TAB_INDEX);
+                                consoleMsgArea.setText(IOUtils.toString(execProcess.getInputStream()));
+                                consoleErrorArea.setText(IOUtils.toString(execProcess.getErrorStream()));
                             }
+                        } catch (IOException | InterruptedException e1) {
+                            e1.printStackTrace();
                         }
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
                     }
                 }
-            }
-        });
-
+            });
+        }
         ver0Pane.add(jxTreeTable);
 
         mainFrame.setVisible(true);
@@ -273,33 +262,21 @@ public class Main {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         projectViewPane.add(scrollPane2, gbc);
-        consolePane = new JTabbedPane();
-        consolePane.setEnabled(true);
-        consoleSplitPane.setRightComponent(consolePane);
+        consoleTabbedPane = new JTabbedPane();
+        consoleTabbedPane.setEnabled(true);
+        consoleSplitPane.setRightComponent(consoleTabbedPane);
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        consolePane.addTab("系统控制台", panel1);
-        textArea1 = new JTextArea();
-        textArea1.setEnabled(false);
-        panel1.add(textArea1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        consoleTabbedPane.addTab("系统控制台", panel1);
+        consoleMsgArea = new JTextArea();
+        consoleMsgArea.setEnabled(false);
+        panel1.add(consoleMsgArea, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        consolePane.addTab("系统控制台错误", panel2);
-        textArea2 = new JTextArea();
-        textArea2.setEnabled(false);
-        panel2.add(textArea2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        consolePane.addTab("系统控制台警告", panel3);
-        textArea3 = new JTextArea();
-        textArea3.setEnabled(false);
-        panel3.add(textArea3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        final JPanel panel4 = new JPanel();
-        panel4.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        consolePane.addTab("测试软件EDA控制台", panel4);
-        textArea4 = new JTextArea();
-        textArea4.setEnabled(false);
-        panel4.add(textArea4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        consoleTabbedPane.addTab("系统控制台错误", panel2);
+        consoleErrorArea = new JTextArea();
+        consoleErrorArea.setEnabled(false);
+        panel2.add(consoleErrorArea, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
     }
 
     /**
