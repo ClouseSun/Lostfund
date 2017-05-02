@@ -1,6 +1,7 @@
 package cn.bit.ui.component;
 
 import cn.bit.Context;
+import cn.bit.exec.ExecUtils;
 import cn.bit.exec.TestEntity;
 import cn.bit.exec.TestMakefile;
 import cn.bit.ui.ExecTableCellEditor;
@@ -13,7 +14,9 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import static cn.bit.ui.frame.Main.RUN_TAB_INDEX;
 import static cn.bit.ui.frame.Main.ERROR_TAB_INDEX;
@@ -66,7 +69,22 @@ public class JXVersionTreeTable extends JXTreeTable {
                             }
                             mainFrame.getVersionTabbedPane().setSelectedIndex(execProcess.waitFor() == RUN_TAB_INDEX ? RUN_TAB_INDEX : ERROR_TAB_INDEX);
                             mainFrame.getConsoleMsgArea().setText(IOUtils.toString(execProcess.getInputStream()));
-                            mainFrame.getConsoleErrorArea().setText(IOUtils.toString(execProcess.getErrorStream()));
+                            BufferedReader br = new BufferedReader(new InputStreamReader(execProcess.getErrorStream()));
+                            String line;
+                            while(null != (line = br.readLine())) {
+                                switch (ExecUtils.classifyInputStringFromMakefile(line)) {
+                                    case ExecUtils.NORMAL_LINE:
+                                        mainFrame.getConsoleMsgArea().append(line);
+                                        break;
+                                    case ExecUtils.WARNING_LINE:
+
+                                        break;
+                                    case ExecUtils.ERROR_LINE:
+
+                                        break;
+                                }
+                            }
+                            //mainFrame.getConsoleErrorArea().setText(IOUtils.toString(execProcess.getErrorStream()));
                         }
                     } catch (IOException | InterruptedException e1) {
                         e1.printStackTrace();

@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
  * Created by zhehua on 11/04/2017.
  */
 public class ExecUtils {
+    public static final int ERROR_LINE = 2;
+    public static final int WARNING_LINE = 1;
+    public static final int NORMAL_LINE = 0;
     public static DefaultTreeTableModel loadTestExec(Element execElement) {
         DefaultTreeTableModel defaultTreeTableModel = new ExecTreeTableModel();
         ArrayList<String> colIds = new ArrayList<>();
@@ -60,4 +63,13 @@ public class ExecUtils {
         return defaultTreeTableModel;
     }
 
+    public static int classifyInputStringFromMakefile(String line) {
+        if (line.contains("Error")) {
+            return 2;
+        } else if (line.contains("Warning")) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }
