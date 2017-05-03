@@ -92,6 +92,12 @@ public class JsonMenuBar extends JMenuBar {
                                         ((DefaultMutableTreeNode) projectTreeModel.getRoot()),
                                         ((DefaultMutableTreeNode) projectTreeModel.getRoot()).getChildCount());
 
+                                DefaultTreeModel logTreeModel = Context.getContext().getLogFileModel();
+                                Context.getContext().getLogFileModel().insertNodeInto(
+                                        newIteProject.getLogTree().getProjectTreeRoot(),
+                                        ((DefaultMutableTreeNode) logTreeModel.getRoot()),
+                                        ((DefaultMutableTreeNode) logTreeModel.getRoot()).getChildCount());
+
                             }
                         }
                     }

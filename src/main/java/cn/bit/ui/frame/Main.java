@@ -40,6 +40,8 @@ public class Main {
     private JTextArea edaMsgArea;
     private JTextArea edaErrorArea;
     private JTextArea edaWarningArea;
+    private JScrollPane logPane;
+    private JTree logTree;
 
     private JFrame mainFrame;
 
@@ -79,6 +81,10 @@ public class Main {
         return edaWarningArea;
     }
 
+    public JTree getLogTree() {
+        return logTree;
+    }
+
     public Main() {
         mainFrame = new JFrame();
         mainFrame.setContentPane(mainPanel);
@@ -88,6 +94,7 @@ public class Main {
         mainFrame.setSize((int) screenSize.getWidth(), (int) screenSize.getWidth());
 
         JMenuBar menuBar = null;
+        FileTreeCellRenderer fileTreeCellRenderer = new FileTreeCellRenderer();
 
         Context.init(Context.configureFilePath);
 
@@ -101,7 +108,6 @@ public class Main {
 
         projectTree.setModel(Context.getContext().getProjectFileModel());
         projectTree.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 TreePath treePath = projectTree.getPathForLocation(e.getX(), e.getY());
@@ -140,18 +146,20 @@ public class Main {
             }
 
         });
-
-        projectTree.setCellRenderer(new FileTreeCellRenderer());
+        projectTree.setCellRenderer(fileTreeCellRenderer);
 
         if (Context.getContext().getActiveProject() != null) {
-            Context.getContext().getActiveProject().getExecModels().entrySet().forEach(verModel -> {
+            Context.getContext().getActiveProject().getExecModels().forEach((key, value) -> {
                 JPanel newVerPanel = new JPanel();
                 newVerPanel.setLayout(new BorderLayout());
-                JXVersionTreeTable jxVersionTreeTable = new JXVersionTreeTable(verModel.getValue(), this);
+                JXVersionTreeTable jxVersionTreeTable = new JXVersionTreeTable(value, this);
                 newVerPanel.add(jxVersionTreeTable);
-                versionTabbedPane.addTab(verModel.getKey(), newVerPanel);
+                versionTabbedPane.addTab(key, newVerPanel);
             });
         }
+
+        logTree.setModel(Context.getContext().getLogFileModel());
+        logTree.setCellRenderer(fileTreeCellRenderer);
 
         mainFrame.setVisible(true);
         EventQueue.invokeLater(new Runnable() {

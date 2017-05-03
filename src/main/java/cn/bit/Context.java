@@ -23,11 +23,12 @@ import java.util.*;
  * Created by zhehua on 29/03/2017.
  */
 public class Context {
-    Map<String, IteProject> openProjects;
-    IteProject activeProject;
+    private Map<String, IteProject> openProjects;
+    private IteProject activeProject;
 
-    DefaultTreeModel projectFileModel;
-    static Context context;
+    private DefaultTreeModel projectFileModel;
+    private DefaultTreeModel logFileModel;
+    private static Context context;
 
     public final static String RES_ROOT = "src/main/resources/";
     public static String configureFilePath = RES_ROOT + "raw/configure";
@@ -57,9 +58,14 @@ public class Context {
             String projectName = document.getRootElement().attributeValue("projectName");
 
             // construct project file tree
-            AbstractFileTree abstractFileTree = new AbstractFileTree(projectName, prjConfigPath);
-            abstractFileTree.addAll(FileMappingUtils.loadFileMapping(
+            AbstractFileTree projectFileTree = new AbstractFileTree(projectName, prjConfigPath);
+            projectFileTree.addAll(FileMappingUtils.loadFileMapping(
                     document.getRootElement().element("userMapping"), true));
+
+            // construct log file tree
+            AbstractFileTree logFileTree = new AbstractFileTree(projectName, prjConfigPath);
+            logFileTree.addAll(FileMappingUtils.loadFileMapping(
+                    document.getRootElement().element("userLogMapping"), true));
 
             // construct exec tree
             Map<String, DefaultTreeTableModel> execModels = new TreeMap<>();
@@ -70,7 +76,7 @@ public class Context {
                 execModels.put(version, model);
             });
 
-            IteProject iteProject = new IteProject(abstractFileTree);
+            IteProject iteProject = new IteProject(projectFileTree, logFileTree, execModels);
             iteProject.setProjectName(projectName);
             iteProject.setProjectConfigPath(prjConfigPath);
             String projectPath = new File(prjConfigPath).getParent();
@@ -100,12 +106,16 @@ public class Context {
                     context.activeProject = newProject;
                 }
             }
-            context.openProjects.entrySet().forEach(stringIteProjectEntry ->
-                    context.projectFileModel.insertNodeInto(stringIteProjectEntry.getValue().getProjectTree().getProjectTreeRoot(),
-                            ((DefaultMutableTreeNode) context.projectFileModel.getRoot()),
-                            ((DefaultMutableTreeNode) context.projectFileModel.getRoot()).getChildCount())
+            context.openProjects.entrySet().forEach(stringIteProjectEntry -> {
+                context.projectFileModel.insertNodeInto(stringIteProjectEntry.getValue().getProjectTree().getProjectTreeRoot(),
+                        ((DefaultMutableTreeNode) context.projectFileModel.getRoot()),
+                        ((DefaultMutableTreeNode) context.projectFileModel.getRoot()).getChildCount());
 
-            );
+                context.logFileModel.insertNodeInto(stringIteProjectEntry.getValue().getLogTree().getProjectTreeRoot(),
+                        ((DefaultMutableTreeNode) context.logFileModel.getRoot()),
+                        ((DefaultMutableTreeNode) context.logFileModel.getRoot()).getChildCount());
+            });
+
 
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
@@ -126,6 +136,10 @@ public class Context {
                     ((DefaultMutableTreeNode) context.getProjectFileModel().getRoot()),
                     ((DefaultMutableTreeNode) context.getProjectFileModel().getRoot()).getChildCount());
 
+            context.getLogFileModel().insertNodeInto(newIteProject.getLogTree().getProjectTreeRoot(),
+                    ((DefaultMutableTreeNode) context.getLogFileModel().getRoot()),
+                    ((DefaultMutableTreeNode) context.getLogFileModel().getRoot()).getChildCount());
+
             Document configureDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
             Element prjConfigs = configureDoc.getRootElement();
             Element newPrj = prjConfigs.addElement("Project");
@@ -143,6 +157,7 @@ public class Context {
 
     private Context() {
         this.projectFileModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
+        this.logFileModel = new DefaultTreeModel(new DefaultMutableTreeNode(), true);
         this.openProjects = new LinkedHashMap<>();
     }
 
@@ -201,6 +216,10 @@ public class Context {
         } else {
             throw new IllegalStateException("Context not initialized.");
         }
+    }
+
+    public DefaultTreeModel getLogFileModel() {
+        return logFileModel;
     }
 
     public IteProject getActiveProject() {

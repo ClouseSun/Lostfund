@@ -31,7 +31,6 @@ public class FileTreeCellRenderer extends DefaultTreeCellRenderer {
         int nodeType = nodeEntity.getNodeType();
         String activeProjectName = Context.getContext().getActiveProject().getProjectName();
 
-
         switch (nodeType) {
             case FileNodeEntity.NODE_TYPE_ROOT:
                 if(nodeEntity.getAbstractName().equals(activeProjectName)) {

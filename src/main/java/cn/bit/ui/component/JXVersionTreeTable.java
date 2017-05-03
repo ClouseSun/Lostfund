@@ -80,7 +80,6 @@ public class JXVersionTreeTable extends JXTreeTable {
                                         break;
                                 }
                             }
-                            //mainFrame.getConsoleErrorArea().setText(IOUtils.toString(execProcess.getErrorStream()));
                         }
                     } catch (IOException e1) {
                         e1.printStackTrace();

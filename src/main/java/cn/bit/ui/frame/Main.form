@@ -65,14 +65,22 @@
                       </component>
                     </children>
                   </scrollpane>
-                  <scrollpane id="98bfb">
+                  <scrollpane id="98bfb" binding="logPane">
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
-                    <children/>
+                    <children>
+                      <component id="e19ef" class="javax.swing.JTree" binding="logTree" default-binding="true">
+                        <constraints/>
+                        <properties>
+                          <rootVisible value="false"/>
+                          <showsRootHandles value="true"/>
+                        </properties>
+                      </component>
+                    </children>
                   </scrollpane>
                   <scrollpane id="a4d8f" binding="testPane">
                     <constraints>

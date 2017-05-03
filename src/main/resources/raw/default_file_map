@@ -23,6 +23,17 @@
         <mappingEntry abstractPath="一致性检查文件夹/源代码SRC/ver_0/netlist_for/" absolutePath="src/ver_0/netlist_for/"/>
     </defaultMapping>
 
+    <defaultLogMapping>
+        <mappingEntry abstractPath="静态工具日志/" absolutePath=""/>
+        <mappingEntry abstractPath="静态工具日志/规则检查日志/" absolutePath="cc/cc-logs/"/>
+        <mappingEntry abstractPath="静态工具日志/跨时钟域分析日志/" absolutePath="cc/cdc-logs/"/>
+        <mappingEntry abstractPath="动态工具日志/" absolutePath=""/>
+        <mappingEntry abstractPath="动态工具日志/功能仿真测试日志/" absolutePath="db/log_func/"/>
+        <mappingEntry abstractPath="动态工具日志/时序仿真测试日志/" absolutePath="db/log_post/"/>
+        <mappingEntry abstractPath="调试工具日志/" absolutePath=""/>
+        <mappingEntry abstractPath="调试工具日志/Verdi/" absolutePath="run/vericomLog/"/>
+    </defaultLogMapping>
+
     <defaultExecStatus version="ver_0">
         <testClass name="静态工具">
             <testEntry name="规则检查" arg="cc_run" status="PASSED"/>

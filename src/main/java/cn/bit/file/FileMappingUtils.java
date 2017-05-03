@@ -54,17 +54,30 @@ public class FileMappingUtils {
     public static void insertDefaultMapping(InputStream defaultXml, Element rootElement, String newPrjPath) {
         try {
                 Document defaultDocument = new SAXReader().read(defaultXml);
-                List<Element> defaultFileList = defaultDocument.
+                List<Element> defaultPrjFileList = defaultDocument.
                                                 getRootElement().
                                                 element("defaultMapping").
                                                 elements("mappingEntry");
                 Element userMapping = rootElement.element("userMapping");
-                for (Element element : defaultFileList) {
+                defaultPrjFileList.forEach(element -> {
                     Element newMappingEntry = userMapping.addElement("mappingEntry");
                     newMappingEntry.addAttribute("abstractPath", element.attributeValue("abstractPath"));
                     newMappingEntry.addAttribute("absolutePath",
                             newPrjPath + element.attributeValue("absolutePath"));
-                }
+                });
+
+                List<Element> defaultLogFileList = defaultDocument.
+                                                getRootElement().
+                                                element("defaultLogMapping").
+                                                elements("mappingEntry");
+                Element userLogMapping = rootElement.element("userLogMapping");
+                defaultLogFileList.forEach(element -> {
+                    Element newMappingEntry = userLogMapping.addElement("mappingEntry");
+                    newMappingEntry.addAttribute("abstractPath", element.attributeValue("abstractPath"));
+                    newMappingEntry.addAttribute("absolutePath",
+                            newPrjPath + element.attributeValue("absolutePath"));
+                });
+
                 Element defaultExecRoot = defaultDocument.getRootElement().element("defaultExecStatus");
                 Element cloneExecRoot = defaultExecRoot.createCopy();
                 cloneExecRoot.setQName(new QName("execStatus"));
@@ -140,12 +153,12 @@ public class FileMappingUtils {
             root.addAttribute("projectName", newPrjName);
             newXmlDoc.setRootElement(root);
             root.addElement("userMapping");
+            root.addElement("userLogMapping");
 
             Document configureDoc = new SAXReader().read(new FileInputStream(Context.configureFilePath));
             Element prjConfigs = configureDoc.getRootElement();
             Element newPrj = prjConfigs.addElement("Project");
             newPrj.addAttribute("projectName", newPrjName);
-            newPrj.addAttribute("projectFilePath", newPrjXml.getPath());
             newPrj.addAttribute("projectFilePath", newPrjXml.getPath());
             newPrj.addAttribute("isActivated", "false");
 
@@ -156,12 +169,24 @@ public class FileMappingUtils {
 
             insertDefaultMapping(new FileInputStream(defaultXmlPath), root, newPrjPath);
 
-            List<Element> newDirElementsList = newXmlDoc.getRootElement().element("userMapping").elements();
+            List<Element> newPrjDirElementsList = newXmlDoc.getRootElement().element("userMapping").elements();
+            newPrjDirElementsList.forEach(element -> {
+                String dirName = element.attributeValue("absolutePath");
+                if(dirName != "" && dirName != null) {
+                    File newDir = new File(dirName);
+                    newDir.mkdirs();
+                }
+            });
 
-            for (Element newDirElement : newDirElementsList) {
-                File newDir = new File(newDirElement.attributeValue("absolutePath"));
-                newDir.mkdirs();
-            }
+            List<Element> newLogDirElementsList = newXmlDoc.getRootElement().element("userLogMapping").elements();
+            newLogDirElementsList.forEach(element -> {
+                String dirName = element.attributeValue("absolutePath");
+                if(dirName != "" && dirName != null) {
+                    File newDir = new File(dirName);
+                    newDir.mkdirs();
+                }
+            });
+
             new TestMakefile.Builder(newPrjPath + Context.DEFAULT_MAKEFILE_PATH).build();
             newXmlWriter.write(newXmlDoc);
             newXmlWriter.close();
@@ -382,8 +407,8 @@ public class FileMappingUtils {
                 newVerEle.addAttribute("absolutePath", absolutePath.replaceFirst(prjPath + "/src/ver_" + String.valueOf(verIndex - 1),
                         prjPath + "/src/ver_" + String.valueOf(verIndex)));
 
-            prjDoc.getRootElement().element("userMapping").add(newVerEle);
-            newVerMap.put(newVerEle.attributeValue("abstractPath"), newVerEle.attributeValue("absolutePath"));
+                prjDoc.getRootElement().element("userMapping").add(newVerEle);
+                newVerMap.put(newVerEle.attributeValue("abstractPath"), newVerEle.attributeValue("absolutePath"));
 
             }
         }

@@ -3,7 +3,6 @@ package cn.bit.model;
 import cn.bit.exec.ExecUtils;
 import cn.bit.exec.TestMakefile;
 import cn.bit.file.AbstractFileTree;
-import cn.bit.file.FileMappingUtils;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -23,6 +22,7 @@ import java.util.Map;
 public class IteProject {
 
     private AbstractFileTree projectTree;
+    private AbstractFileTree logTree;
     private TestMakefile makefile;
     private Map<String, DefaultTreeTableModel> execModels;
 
@@ -46,7 +46,7 @@ public class IteProject {
 
         File prjPath = new File(projectConfigPath).getParentFile();
         File[] verDir = new File(prjPath + "/src").listFiles();
-        File newVerDir = null;
+        File newVerDir;
         File srcVerDir = null;
         for(File file : verDir) {
             if(file.getName().startsWith("ver_")) {
@@ -96,8 +96,14 @@ public class IteProject {
         this.makefile = makefile;
     }
 
-    public IteProject(AbstractFileTree projectTree) {
+    public AbstractFileTree getLogTree() {
+        return logTree;
+    }
+
+    public IteProject(AbstractFileTree projectTree, AbstractFileTree logTree, Map execModels) {
       this.projectTree = projectTree;
+      this.logTree = logTree;
+      this.execModels = execModels;
    }
 
     public AbstractFileTree getProjectTree() {
