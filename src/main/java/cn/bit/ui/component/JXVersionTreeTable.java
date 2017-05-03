@@ -60,8 +60,8 @@ public class JXVersionTreeTable extends JXTreeTable {
                                             selectedNode.getSelectedCase());
                                     break;
                                 case "testC":
-                                        execProcess = prjMakefile.execBuild("/Users/KlousesSun/ITEtest/test.c",
-                                                "/Users/KlousesSun/ITEtest/test");
+//                                        execProcess = prjMakefile.execBuild("/Users/KlousesSun/ITEtest/test.c",
+//                                                "/Users/KlousesSun/ITEtest/test");
                                     break;
                             }
                             mainFrame.getEdaMsgArea().setText(IOUtils.toString(execProcess.getInputStream()));

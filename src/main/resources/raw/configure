@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <ITEProperties> 
-  <Project projectName="projectTemplate" projectFilePath="src/main/resources/raw/project_template" isActivated="false"/>  
-  <Project projectName="2149" projectFilePath="/Users/KlousesSun/ITEtest/2149/2149.ite" isActivated="true"/> 
+  <Project projectName="projectTemplate" projectFilePath="src/main/resources/raw/project_template" isActivated="true"/>
 </ITEProperties>
