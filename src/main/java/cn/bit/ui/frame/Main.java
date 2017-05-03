@@ -36,9 +36,10 @@ public class Main {
     private JTextArea consoleErrorArea;
     private JScrollPane testPane;
     private JTabbedPane versionTabbedPane;
-
-    public static final int RUN_TAB_INDEX = 0;
-    public static final int ERROR_TAB_INDEX = 1;
+    private JTextArea consoleWarningArea;
+    private JTextArea edaMsgArea;
+    private JTextArea edaErrorArea;
+    private JTextArea edaWarningArea;
 
     private JFrame mainFrame;
 
@@ -60,6 +61,22 @@ public class Main {
 
     public JTextArea getConsoleErrorArea() {
         return consoleErrorArea;
+    }
+
+    public JTextArea getConsoleWarningArea() {
+        return consoleWarningArea;
+    }
+
+    public JTextArea getEdaMsgArea() {
+        return edaMsgArea;
+    }
+
+    public JTextArea getEdaErrorArea() {
+        return edaErrorArea;
+    }
+
+    public JTextArea getEdaWarningArea() {
+        return edaWarningArea;
     }
 
     public Main() {

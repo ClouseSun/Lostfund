@@ -18,9 +18,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import static cn.bit.ui.frame.Main.RUN_TAB_INDEX;
-import static cn.bit.ui.frame.Main.ERROR_TAB_INDEX;
-
 /**
  * Created by KlousesSun on 2017/4/27.
  */
@@ -63,30 +60,29 @@ public class JXVersionTreeTable extends JXTreeTable {
                                             selectedNode.getSelectedCase());
                                     break;
                                 case "testC":
-//                                        execProcess = prjMakefile.execBuild("/Users/KlousesSun/ITEtest/test.c",
-//                                                "/Users/KlousesSun/ITEtest/test");
+                                        execProcess = prjMakefile.execBuild("/Users/KlousesSun/ITEtest/test.c",
+                                                "/Users/KlousesSun/ITEtest/test");
                                     break;
                             }
-                            mainFrame.getVersionTabbedPane().setSelectedIndex(execProcess.waitFor() == RUN_TAB_INDEX ? RUN_TAB_INDEX : ERROR_TAB_INDEX);
-                            mainFrame.getConsoleMsgArea().setText(IOUtils.toString(execProcess.getInputStream()));
+                            mainFrame.getEdaMsgArea().setText(IOUtils.toString(execProcess.getInputStream()));
                             BufferedReader br = new BufferedReader(new InputStreamReader(execProcess.getErrorStream()));
                             String line;
                             while(null != (line = br.readLine())) {
                                 switch (ExecUtils.classifyInputStringFromMakefile(line)) {
                                     case ExecUtils.NORMAL_LINE:
-                                        mainFrame.getConsoleMsgArea().append(line);
+                                        mainFrame.getEdaMsgArea().append(line + "\n");
                                         break;
                                     case ExecUtils.WARNING_LINE:
-
+                                        mainFrame.getEdaWarningArea().append(line + "\n");
                                         break;
                                     case ExecUtils.ERROR_LINE:
-
+                                        mainFrame.getEdaErrorArea().append(line + "\n");
                                         break;
                                 }
                             }
                             //mainFrame.getConsoleErrorArea().setText(IOUtils.toString(execProcess.getErrorStream()));
                         }
-                    } catch (IOException | InterruptedException e1) {
+                    } catch (IOException e1) {
                         e1.printStackTrace();
                     }
                 }
