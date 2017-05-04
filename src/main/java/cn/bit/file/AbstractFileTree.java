@@ -1,6 +1,7 @@
 package cn.bit.file;
 
 import cn.bit.model.FileNodeEntity;
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -28,7 +29,7 @@ public class AbstractFileTree {
         projectTreeRoot.setAllowsChildren(true);
     }
 
-    private void buildPath(TreePath path, Object newValue) {
+    protected DefaultMutableTreeNode getNodeByPath(TreePath path) {
         DefaultMutableTreeNode currentTreeNode = projectTreeRoot;
         for (Object nodeName : path.getPath()) {
             Enumeration children = currentTreeNode.children();
@@ -48,6 +49,43 @@ public class AbstractFileTree {
                 currentTreeNode = newNode;
             }
         }
+        return currentTreeNode;
+    }
+
+    protected List<String> getPathByString(String abstractPath) {
+        abstractPath += '#';
+        int nodeType = FileNodeEntity.NODE_TYPE_FILE;
+        List<String> pathList = new LinkedList<>();
+        StringBuilder dirName = new StringBuilder();
+        for (int i = 0;i < abstractPath.length(); i ++) {
+            switch(abstractPath.charAt(i)) {
+                case '#':
+                    if (dirName.length() == 0) {
+                        nodeType = FileNodeEntity.NODE_TYPE_DIR;
+                    }
+                case '/':
+                    if (dirName.length() > 0) {
+                        pathList.add(dirName.toString());
+                        dirName.setLength(0);
+                        break;
+                    } else {
+                        continue;
+                    }
+                default:
+                    dirName.append(abstractPath.charAt(i));
+                    break;
+            }
+        }
+        // String node type as the last element
+        if (nodeType == FileNodeEntity.NODE_TYPE_DIR)
+            pathList.add("#DIR#");
+        else
+            pathList.add("#FILE#");
+        return pathList;
+    }
+
+    protected void buildPath(TreePath path, Object newValue) {
+        DefaultMutableTreeNode currentTreeNode = getNodeByPath(path);
         currentTreeNode.setAllowsChildren(((FileNodeEntity) newValue).getNodeType() != FileNodeEntity.NODE_TYPE_FILE);
         currentTreeNode.setUserObject(newValue);
     }
@@ -56,33 +94,17 @@ public class AbstractFileTree {
      * Add child given abstract/real path as Strings.
      */
     public void addChild(String abstractPath, String realPath) {
-            abstractPath += '#';
+
             int nodeType = FileNodeEntity.NODE_TYPE_FILE;
 
-            List<String> pathList = new LinkedList<>();
-            StringBuilder dirName = new StringBuilder();
-            for (int i = 0;i < abstractPath.length(); i ++) {
-                switch(abstractPath.charAt(i)) {
-                    case '#':
-                        if (dirName.length() == 0) {
-                            nodeType = FileNodeEntity.NODE_TYPE_DIR;
-                        }
-                    case '/':
-                        if (dirName.length() > 0) {
-                            pathList.add(dirName.toString());
-                            dirName.setLength(0);
-                            break;
-                        } else {
-                            continue;
-                        }
-                    default:
-                        dirName.append(abstractPath.charAt(i));
-                        break;
-                }
-            }
+            List<String> pathList = getPathByString(abstractPath);
+            String nodeTypeString = pathList.remove(pathList.size() - 1);
             TreePath treePath = new TreePath(pathList.toArray());
 
             FileNodeEntity entity = new FileNodeEntity(pathList.get(pathList.size() - 1), realPath);
+            if (nodeTypeString.equals("#DIR#")) {
+                nodeType = FileNodeEntity.NODE_TYPE_DIR;
+            }
             entity.setNodeType(nodeType);
 
             buildPath(treePath, entity);

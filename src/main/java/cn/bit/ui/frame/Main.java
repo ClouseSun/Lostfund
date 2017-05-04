@@ -222,14 +222,18 @@ public class Main {
         projectTree.setShowsRootHandles(true);
         projectTree.putClientProperty("JTree.lineStyle", "");
         projectFilePane.setViewportView(projectTree);
-        final JScrollPane scrollPane1 = new JScrollPane();
+        logPane = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        projectViewPane.add(scrollPane1, gbc);
+        projectViewPane.add(logPane, gbc);
+        logTree = new JTree();
+        logTree.setRootVisible(false);
+        logTree.setShowsRootHandles(true);
+        logPane.setViewportView(logTree);
         testPane = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -240,14 +244,14 @@ public class Main {
         projectViewPane.add(testPane, gbc);
         versionTabbedPane = new JTabbedPane();
         testPane.setViewportView(versionTabbedPane);
-        final JScrollPane scrollPane2 = new JScrollPane();
+        final JScrollPane scrollPane1 = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        projectViewPane.add(scrollPane2, gbc);
+        projectViewPane.add(scrollPane1, gbc);
         consoleTabbedPane = new JTabbedPane();
         consoleTabbedPane.setEnabled(true);
         consoleSplitPane.setRightComponent(consoleTabbedPane);
@@ -263,6 +267,30 @@ public class Main {
         consoleErrorArea = new JTextArea();
         consoleErrorArea.setEnabled(false);
         panel2.add(consoleErrorArea, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        consoleTabbedPane.addTab("系统控制台警告", panel3);
+        consoleWarningArea = new JTextArea();
+        consoleWarningArea.setEnabled(false);
+        panel3.add(consoleWarningArea, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        final JPanel panel4 = new JPanel();
+        panel4.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        consoleTabbedPane.addTab("EDA控制台", panel4);
+        edaMsgArea = new JTextArea();
+        edaMsgArea.setEnabled(false);
+        panel4.add(edaMsgArea, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        final JPanel panel5 = new JPanel();
+        panel5.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        consoleTabbedPane.addTab("EDA控制台错误", panel5);
+        edaErrorArea = new JTextArea();
+        edaErrorArea.setEnabled(false);
+        panel5.add(edaErrorArea, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        final JPanel panel6 = new JPanel();
+        panel6.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        consoleTabbedPane.addTab("EDA控制台警告", panel6);
+        edaWarningArea = new JTextArea();
+        edaWarningArea.setEnabled(false);
+        panel6.add(edaWarningArea, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
     }
 
     /**

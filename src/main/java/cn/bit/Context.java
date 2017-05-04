@@ -3,6 +3,7 @@ package cn.bit;
 import cn.bit.exec.ExecUtils;
 import cn.bit.exec.TestMakefile;
 import cn.bit.file.AbstractFileTree;
+import cn.bit.file.AbstractLogFileTree;
 import cn.bit.file.FileMappingUtils;
 import cn.bit.model.FileNodeEntity;
 import cn.bit.model.IteProject;
@@ -63,7 +64,7 @@ public class Context {
                     document.getRootElement().element("userMapping"), true));
 
             // construct log file tree
-            AbstractFileTree logFileTree = new AbstractFileTree(projectName, prjConfigPath);
+            AbstractLogFileTree logFileTree = new AbstractLogFileTree(projectName, prjConfigPath);
             logFileTree.addAll(FileMappingUtils.loadFileMapping(
                     document.getRootElement().element("userLogMapping"), true));
 

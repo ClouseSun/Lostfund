@@ -3,6 +3,7 @@ package cn.bit.model;
 import cn.bit.exec.ExecUtils;
 import cn.bit.exec.TestMakefile;
 import cn.bit.file.AbstractFileTree;
+import cn.bit.file.AbstractLogFileTree;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class IteProject {
 
     private AbstractFileTree projectTree;
-    private AbstractFileTree logTree;
+    private AbstractLogFileTree logTree;
     private TestMakefile makefile;
     private Map<String, DefaultTreeTableModel> execModels;
 
@@ -96,11 +97,11 @@ public class IteProject {
         this.makefile = makefile;
     }
 
-    public AbstractFileTree getLogTree() {
+    public AbstractLogFileTree getLogTree() {
         return logTree;
     }
 
-    public IteProject(AbstractFileTree projectTree, AbstractFileTree logTree, Map execModels) {
+    public IteProject(AbstractFileTree projectTree, AbstractLogFileTree logTree, Map execModels) {
       this.projectTree = projectTree;
       this.logTree = logTree;
       this.execModels = execModels;
