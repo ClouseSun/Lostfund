@@ -4,10 +4,14 @@ import cn.bit.Context;
 import cn.bit.exec.ExecUtils;
 import cn.bit.exec.TestEntity;
 import cn.bit.exec.TestMakefile;
+import cn.bit.file.FileMappingUtils;
 import cn.bit.ui.ExecTableCellEditor;
 import cn.bit.ui.ExecTreeCellRenderer;
 import cn.bit.ui.frame.Main;
 import org.apache.commons.io.IOUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
@@ -15,6 +19,7 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -80,8 +85,15 @@ public class JXVersionTreeTable extends JXTreeTable {
                                         break;
                                 }
                             }
+                            Document document = new SAXReader().read(new FileInputStream(Context.getContext().getActiveProject().getProjectConfigPath()));
+                            Context.getContext().getActiveProject().getLogTree().rebuildAll(FileMappingUtils.loadFileMapping(
+                                    document.getRootElement().element("userLogMapping"), true));
+                            Context.getContext().getLogFileModel().reload(Context.getContext().getActiveProject().getLogTree().getProjectTreeRoot());
+
                         }
                     } catch (IOException e1) {
+                        e1.printStackTrace();
+                    } catch (DocumentException e1) {
                         e1.printStackTrace();
                     }
                 }

@@ -120,6 +120,11 @@ public class AbstractFileTree {
         }
     }
 
+    public void rebuildAll(Map<String, String> fileMap) {
+        projectTreeRoot.removeAllChildren();
+        addAll(fileMap);
+    }
+
     public DefaultMutableTreeNode getProjectTreeRoot() {
         return projectTreeRoot;
     }
