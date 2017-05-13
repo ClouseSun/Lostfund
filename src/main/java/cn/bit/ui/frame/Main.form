@@ -240,6 +240,14 @@
                   </component>
                 </children>
               </grid>
+              <grid id="74044" binding="terminalPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints>
+                  <tabbedpane title="终端"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </grid>
             </children>
           </tabbedpane>
         </children>

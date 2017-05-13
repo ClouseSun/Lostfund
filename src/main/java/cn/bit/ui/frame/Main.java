@@ -2,6 +2,7 @@ package cn.bit.ui.frame;
 
 import cn.bit.Context;
 import cn.bit.model.FileNodeEntity;
+import cn.bit.plugin.terminal.main.Terminal;
 import cn.bit.ui.FileTreeCellRenderer;
 import cn.bit.ui.component.JXVersionTreeTable;
 import cn.bit.ui.component.JsonMenuBar;
@@ -42,6 +43,7 @@ public class Main {
     private JTextArea edaWarningArea;
     private JScrollPane logPane;
     private JTree logTree;
+    private JPanel terminalPanel;
 
     private JFrame mainFrame;
 
@@ -160,6 +162,9 @@ public class Main {
 
         logTree.setModel(Context.getContext().getLogFileModel());
         logTree.setCellRenderer(fileTreeCellRenderer);
+
+        Terminal terminal = new Terminal();
+        terminalPanel.add(Terminal.getTerminal_panel());
 
         mainFrame.setVisible(true);
         EventQueue.invokeLater(new Runnable() {

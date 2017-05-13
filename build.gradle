@@ -14,6 +14,7 @@ dependencies {
     compile 'com.github.cjwizard:cjwizard:1.0.8'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'org.swinglabs.swingx:swingx-all:1.6.5-1'
+    compile 'com.jcraft:jsch:0.1.54'
     testCompile 'junit:junit:4.12'
 }
 
