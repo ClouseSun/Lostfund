@@ -63,9 +63,7 @@ public class Terminal {
 //		terminal_app.setSize(700, 200);
 //		terminal_app.setLocation(screenSize.width / 4, screenSize.height / 4);
 //		terminal_app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// 锟斤拷取锟斤拷锟斤拷锟斤拷锟斤拷锟斤�?
 //		Container container = terminal_app.getContentPane();
-		// 锟斤拷锟斤拷锟斤拷示锟斤拷锟斤拷
 		Font fontStyle = new Font("YaHei Consolas Hybrid", Font.PLAIN, 12);
 //		terminal_app.setFont(fontStyle);
 		
@@ -86,7 +84,6 @@ public class Terminal {
 		terminal_scroll = new JScrollPane(terminal_textarea);
 		terminal_scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		// terminal_scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		// 锟斤拷锟斤拷锟秸讹拷锟侥憋拷锟斤拷母锟絚omponent
 		terminal_panel = new JPanel(new BorderLayout(2, 2));
 		terminal_panel.add(new JLabel(), BorderLayout.NORTH);
 		terminal_panel.add(new JLabel(), BorderLayout.SOUTH);

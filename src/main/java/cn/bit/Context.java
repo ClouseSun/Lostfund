@@ -50,8 +50,14 @@ public class Context {
         }
     }
 
-    public static IteProject constructAndOpenPrj(String prjConfigPath) {
+    /**
+     * Build and open a project by its ITE file.
+     * Insert new project into the map of all open projects {@link #openProjects}.
+     * @param prjConfigPath the full path of the XML file of the new project.
+     * @return the constructed project.
+     * */
 
+    public static IteProject constructAndOpenPrj(String prjConfigPath) {
         Document document = null;
         try {
             document = new SAXReader().read(new FileInputStream(prjConfigPath));
@@ -91,7 +97,6 @@ public class Context {
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 

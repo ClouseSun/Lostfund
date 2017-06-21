@@ -30,7 +30,7 @@
             </constraints>
             <properties>
               <continuousLayout value="true"/>
-              <dividerLocation value="200"/>
+              <dividerLocation value="85"/>
               <dividerSize value="3"/>
               <enabled value="true"/>
             </properties>
@@ -109,6 +109,19 @@
                   </scrollpane>
                 </children>
               </grid>
+              <scrollpane id="8b84d">
+                <constraints>
+                  <splitpane position="right"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="e5ca6" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+                    <constraints/>
+                    <properties/>
+                  </component>
+                </children>
+              </scrollpane>
             </children>
           </splitpane>
           <tabbedpane id="13f55" binding="consoleTabbedPane" default-binding="true">

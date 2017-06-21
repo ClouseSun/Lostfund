@@ -31,7 +31,6 @@ public class FileMappingUtils {
      */
     public static Map<String, String> loadFileMapping(Element userMappingElement, boolean isAbs2Real) {
         Map<String, String> fileMap = new LinkedHashMap<>();
-
         List<Element> elementList = userMappingElement.elements("mappingEntry");
         for (Element element:elementList) {
             if (isAbs2Real) {
@@ -40,7 +39,6 @@ public class FileMappingUtils {
                 fileMap.put(element.attributeValue("absolutePath"), element.attributeValue("abstractPath"));
             }
         }
-
         return fileMap;
     }
 
@@ -65,7 +63,7 @@ public class FileMappingUtils {
                     newMappingEntry.addAttribute("absolutePath",
                             newPrjPath + element.attributeValue("absolutePath"));
                 });
-
+                
                 List<Element> defaultLogFileList = defaultDocument.
                                                 getRootElement().
                                                 element("defaultLogMapping").

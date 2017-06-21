@@ -48,7 +48,7 @@ public class JsonMenuBar extends JMenuBar {
     }
 
     protected void buildMenuByList(JMenu root, MenuList menuList, JTree jTree) {
-        if(menuList.getMenuList() == null) {
+            if(menuList.getMenuList() == null) {
             JMenuItem jMenuItem = new JMenuItem(menuList.getTitle());
             jMenuItem.setEnabled(menuList.isEnable());
             jMenuItem.setName(menuList.getName());

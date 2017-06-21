@@ -59,6 +59,7 @@ public class NewProjectBasicPage extends WizardPage {
         add(jPanel1);
         add(jPanel2);
         setBorder(new EmptyBorder(5, 10, 10, 5));
+
     }
 
 

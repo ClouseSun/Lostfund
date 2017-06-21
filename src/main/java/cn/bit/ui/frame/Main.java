@@ -44,6 +44,7 @@ public class Main {
     private JScrollPane logPane;
     private JTree logTree;
     private JPanel terminalPanel;
+    private JTextArea textArea1;
 
     private JFrame mainFrame;
 

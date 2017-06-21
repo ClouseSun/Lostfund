@@ -33,30 +33,88 @@
 
     <defaultExecStatus version="ver_0">
         <testClass name="静态工具">
-            <testEntry name="规则检查" arg="cc_run" status="PASSED"/>
-            <testEntry name="跨时钟域检查" arg="cdc_run" status="RUNNING"/>
+            <testEntry name="规则检查" arg="cc_run" status="PASSED">
+                <testEntry name="过程文件删除" arg="cc_clr" status="RUNNING"/>
+                <testEntry name="工具配置" arg="cc_conf" status="PASSED"/>
+                <testEntry name="检查执行" arg="cc_ana" status="PASSED"/>
+            </testEntry>
+            <testEntry name="跨时钟域检查" arg="cdc_run" status="RUNNING">
+                <testEntry name="过程文件删除" arg="cdc_clr" status="RUNNING"/>
+                <testEntry name="工具配置" arg="cdc_conf" status="PASSED"/>
+                <testEntry name="文件编译" arg="cdc_cmp" status="PASSED"/>
+                <testEntry name="检查执行" arg="cdc_ana" status="PASSED"/>
+                <testEntry name="结果分析" arg="cdc_dbg" status="PASSED"/>
+            </testEntry>
+
             <testEntry name="静态时序分析" arg="pt" status="FAILED"/>
-            <testEntry name="testC" status="FAILED"/>
         </testClass>
+
         <testClass name="动态工具">
-            <testEntry name="功能仿真" arg="sim" status="PASSED">
-                <option name="sim_tc001" checked="true"/>
-                <option name="sim_tc002"/>
-                <option name="sim_tc003"/>
-                <option name="sim_tc004"/>
-                <option name="sim_tc005"/>
-                <option name="sim_tc006"/>
+            <testEntry name="测试平台创建" arg="" status="RUNNING">
+                <option name="" checked="true"/>
             </testEntry>
+
+            <testEntry name="测试用例创建" arg="" status="RUNNING">
+                <option name="" checked="true"/>
+            </testEntry>
+
+            <testClass name="功能仿真">
+                <!--仿真模式默认为功能仿真-->
+                <testEntry name="仿真执行" arg="sim" status="RUNNING">
+                    <option name="" checked="true"/>
+                    <testEntry name="过程文件删除" arg="sim_clr" status="RUNNING"/>
+                    <testEntry name="仿真配置" arg="scfg_gen" status="PASSED"/>
+                    <!--需在执行编译文件操作前add-->
+                    <testEntry name="仿真编译" arg="sim_cmp" status="PASSED"/>
+                    <option name="" checked="true"/>
+                    <testEntry name="仿真执行" arg="sim_run" status="PASSED"/>
+                    <option name="" checked="true"/>
+                    <testEntry name="覆盖率收集" arg="sim_cov" status="PASSED"/>
+                </testEntry>
+
+                <testEntry name="仿真调试" status="PASSED" arg="sim">
+                    <option name="" checked="true"/>
+                    <testEntry name="过程文件删除" arg="vd_clr" status="RUNNING"/>
+                    <testEntry name="仿真配置" arg="scfg_gen" status="PASSED"/>
+                    <!--需在执行编译文件操作前add-->
+                    <testEntry name="仿真编译" arg="vd_cmp" status="PASSED">
+                        <option name="" checked="true"/>
+                    </testEntry>
+                    <testEntry name="仿真执行" arg="vd_run" status="PASSED">
+                        <option name="" checked="true"/>
+                    </testEntry>
+                </testEntry>
+
+                <testEntry name="回归测试" arg="sim_rgs" status="FAILED"/>
+            </testClass>
+
+            <testClass name="时序仿真">
+                <testEntry name="仿真执行" arg="sim" status="PASSED">
+                    <option name="" checked="true"/>
+                    <!--仿真模式默认为时序仿真-->
+                    <testEntry name="过程文件删除" arg="sim_clr" status="RUNNING"/>
+                    <testEntry name="仿真配置" arg="scfg_gen" status="PASSED"/>
+                    <!--需在执行编译文件操作前add-->
+                    <testEntry name="仿真编译" arg="sim_cmp" status="PASSED"/>
+                    <testEntry name="仿真执行" arg="sim_run" status="PASSED"/>
+                </testEntry>
+
+                <testEntry name="仿真调试" status="RUNNING" arg="sim">
+                    <option name="" checked="true"/>
+                    <testEntry name="过程文件删除" arg="vd_clr" status="RUNNING"/>
+                    <testEntry name="仿真配置" arg="scfg_gen" status="PASSED"/>
+                    <!--需在执行编译文件操作前add-->
+                    <testEntry name="仿真编译" arg="vd_cmp" status="PASSED">
+                        <option name="" checked="true"/>
+                    </testEntry>
+                    <testEntry name="仿真执行" arg="vd_run" status="PASSED">
+                        <option name="" checked="true"/>
+                    </testEntry>
+                </testEntry>
+                <testEntry name="回归测试" arg="sim_rgs" status="FAILED"/>
+            </testClass>
+
             <testEntry name="回归仿真" arg="sim_rgs" status="FAILED"/>
-            <testEntry name="波形调试" arg="verdi" status="RUNNING">
-                <option name="verdi_tc001"/>
-                <option name="verdi_tc002"/>
-                <option name="verdi_tc003" checked="true"/>
-                <option name="verdi_tc004"/>
-                <option name="verdi_tc005"/>
-                <option name="verdi_tc006"/>
-            </testEntry>
         </testClass>
     </defaultExecStatus>
-
 </defaultConfig>

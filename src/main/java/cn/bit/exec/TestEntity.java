@@ -61,6 +61,11 @@ public class TestEntity {
         return selectedCase;
     }
 
+
+    public String getTestArg() {
+        return testArg;
+    }
+
     public String getSelectedCase() {
         return selectedCase;
     }

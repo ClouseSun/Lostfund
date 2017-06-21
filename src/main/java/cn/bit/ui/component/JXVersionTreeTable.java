@@ -16,8 +16,8 @@ import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import javax.swing.plaf.basic.BasicTableUI;
+import java.awt.event.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,12 +27,21 @@ import java.io.InputStreamReader;
  * Created by KlousesSun on 2017/4/27.
  */
 public class JXVersionTreeTable extends JXTreeTable {
+    @Override
+    public void updateUI() {
+        super.updateUI();
+        setUI(new MyTableUI());
+    }
+
     public JXVersionTreeTable(DefaultTreeTableModel defaultTreeTableModel, Main mainFrame) {
 
         super(defaultTreeTableModel);
         setRowSelectionAllowed(true);
         setTreeCellRenderer(new ExecTreeCellRenderer());
-        setDefaultEditor(TestEntity.class, new ExecTableCellEditor(new JComboBox()));
+        setDefaultEditor(TestEntity.class, new ExecTableCellEditor(new JTextField()));
+
+
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -42,33 +51,7 @@ public class JXVersionTreeTable extends JXTreeTable {
                         TestEntity selectedNode = (TestEntity) getValueAt(selectedRow, 1);
                         if (selectedNode != null) {
                             TestMakefile prjMakefile = Context.getContext().getActiveProject().getMakefile();
-                            Process execProcess = null;
-                            switch (selectedNode.getTestName()) {
-                                case "规则检查":
-                                    execProcess = prjMakefile.execCc("ver_" + String.valueOf(mainFrame.getVersionTabbedPane().getSelectedIndex()));
-                                    break;
-                                case "跨时钟域检查":
-                                    execProcess = prjMakefile.execCdc("ver_" + String.valueOf(mainFrame.getVersionTabbedPane().getSelectedIndex()));
-                                    break;
-                                case "静态时序分析":
-                                    execProcess = prjMakefile.execSta();
-                                    break;
-                                case "功能仿真":
-                                    execProcess = prjMakefile.execSim("ver_" + String.valueOf(mainFrame.getVersionTabbedPane().getSelectedIndex()),
-                                            selectedNode.getSelectedCase());
-                                    break;
-                                case "回归仿真":
-                                    execProcess = prjMakefile.execSimRgs("ver_" + String.valueOf(mainFrame.getVersionTabbedPane().getSelectedIndex()));
-                                    break;
-                                case "波形调试":
-                                    execProcess = prjMakefile.execVerdi("ver_" + String.valueOf(mainFrame.getVersionTabbedPane().getSelectedIndex()),
-                                            selectedNode.getSelectedCase());
-                                    break;
-                                case "testC":
-//                                        execProcess = prjMakefile.execBuild("/Users/KlousesSun/ITEtest/test.c",
-//                                                "/Users/KlousesSun/ITEtest/test");
-                                    break;
-                            }
+                            Process execProcess = prjMakefile.exec(selectedNode.getTestArg());
                             mainFrame.getEdaMsgArea().setText(IOUtils.toString(execProcess.getInputStream()));
                             BufferedReader br = new BufferedReader(new InputStreamReader(execProcess.getErrorStream()));
                             String line;
@@ -99,5 +82,12 @@ public class JXVersionTreeTable extends JXTreeTable {
                 }
             }
         });
+    }
+
+    class MyTableUI extends BasicTableUI {
+        @Override
+        protected void installKeyboardActions() {
+
+        }
     }
 }

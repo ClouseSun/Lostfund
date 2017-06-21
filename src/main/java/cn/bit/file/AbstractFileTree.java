@@ -52,6 +52,20 @@ public class AbstractFileTree {
         return currentTreeNode;
     }
 
+    /**
+     * Transform an abstract path into the form of a String list.
+     * Mark "#DIR" or "#FILE" at the end of list by the type of the file node.
+     *
+     * For example, if a node's abstract path is "A/B/C/",
+     * and the returned List would be:
+     *     "A" - "B" - "C" - "#DIR#"
+     *
+     * Another example, node's abstract path: "a/b/c",
+     * returned List:
+     *     "a" - "b" - "c" - "#FILE"
+     *
+     * */
+
     protected List<String> getPathByString(String abstractPath) {
         abstractPath += '#';
         int nodeType = FileNodeEntity.NODE_TYPE_FILE;
